@@ -1,0 +1,155 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="DbModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+  <EntityContainer Name="DbModelContainer" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="forms" EntityType="DbModel.Form" />
+    <EntitySet Name="Models" EntityType="DbModel.Module" />
+    <EntitySet Name="FormsModels" EntityType="DbModel.FormModule" />
+    <AssociationSet Name="FormModelForm" Association="DbModel.FormModelForm">
+      <End Role="FormModel" EntitySet="FormsModels" />
+      <End Role="Form" EntitySet="forms" />
+    </AssociationSet>
+    <AssociationSet Name="FormModuleModule" Association="DbModel.FormModuleModule">
+      <End Role="FormModule" EntitySet="FormsModels" />
+      <End Role="Module" EntitySet="Models" />
+    </AssociationSet>
+    <EntitySet Name="Users" EntityType="DbModel.User" />
+    <EntitySet Name="Rols" EntityType="DbModel.Rol" />
+    <EntitySet Name="Rols_Users" EntityType="DbModel.Rol_User" />
+    <AssociationSet Name="Rol_UserRol" Association="DbModel.Rol_UserRol">
+      <End Role="Rol_User" EntitySet="Rols_Users" />
+      <End Role="Rol" EntitySet="Rols" />
+    </AssociationSet>
+    <AssociationSet Name="Rol_UserUser" Association="DbModel.Rol_UserUser">
+      <End Role="Rol_User" EntitySet="Rols_Users" />
+      <End Role="User" EntitySet="Users" />
+    </AssociationSet>
+    <EntitySet Name="Permissions" EntityType="DbModel.Permission" />
+    <EntitySet Name="Rol_Form_PermissionSet" EntityType="DbModel.Rol_Form_Permission" />
+    <AssociationSet Name="Rol_Form_PermissionRol" Association="DbModel.Rol_Form_PermissionRol">
+      <End Role="Rol_Form_Permission" EntitySet="Rol_Form_PermissionSet" />
+      <End Role="Rol" EntitySet="Rols" />
+    </AssociationSet>
+    <AssociationSet Name="Rol_Form_PermissionForm" Association="DbModel.Rol_Form_PermissionForm">
+      <End Role="Rol_Form_Permission" EntitySet="Rol_Form_PermissionSet" />
+      <End Role="Form" EntitySet="forms" />
+    </AssociationSet>
+    <AssociationSet Name="Rol_Form_PermissionPermission" Association="DbModel.Rol_Form_PermissionPermission">
+      <End Role="Rol_Form_Permission" EntitySet="Rol_Form_PermissionSet" />
+      <End Role="Permission" EntitySet="Permissions" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Form">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" />
+    <Property Name="Code" Type="String" Nullable="false" />
+    <Property Name="Active" Type="Boolean" Nullable="false" />
+    <Property Name="CreateAt" Type="DateTime" Nullable="false" />
+    <Property Name="DeleteAt" Type="DateTime" Nullable="false" />
+    <NavigationProperty Name="FormModel" Relationship="DbModel.FormModelForm" FromRole="Form" ToRole="FormModel" />
+    <NavigationProperty Name="Rol_Form_Permission" Relationship="DbModel.Rol_Form_PermissionForm" FromRole="Form" ToRole="Rol_Form_Permission" />
+  </EntityType>
+  <EntityType Name="Module">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Code" Type="String" Nullable="false" />
+    <Property Name="Name" Type="String" Nullable="false" />
+    <Property Name="Active" Type="String" Nullable="false" />
+    <Property Name="CreateAt" Type="DateTime" Nullable="false" />
+    <Property Name="DeleteAt" Type="DateTime" Nullable="false" />
+    <NavigationProperty Name="FormModule" Relationship="DbModel.FormModuleModule" FromRole="Module" ToRole="FormModule" />
+  </EntityType>
+  <EntityType Name="FormModule">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <NavigationProperty Name="FormId" Relationship="DbModel.FormModelForm" FromRole="FormModel" ToRole="Form" />
+    <NavigationProperty Name="ModuleId" Relationship="DbModel.FormModuleModule" FromRole="FormModule" ToRole="Module" />
+  </EntityType>
+  <Association Name="FormModelForm">
+    <End Type="DbModel.FormModule" Role="FormModel" Multiplicity="*" />
+    <End Type="DbModel.Form" Role="Form" Multiplicity="1" />
+  </Association>
+  <Association Name="FormModuleModule">
+    <End Type="DbModel.FormModule" Role="FormModule" Multiplicity="*" />
+    <End Type="DbModel.Module" Role="Module" Multiplicity="1" />
+  </Association>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Username" Type="String" Nullable="false" />
+    <Property Name="Email" Type="String" Nullable="false" />
+    <Property Name="Password" Type="String" Nullable="false" />
+    <NavigationProperty Name="Rol_User" Relationship="DbModel.Rol_UserUser" FromRole="User" ToRole="Rol_User" />
+    <Property Name="CreateAt" Type="DateTime" Nullable="false" />
+    <Property Name="DeleteAt" Type="DateTime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Rol">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" />
+    <Property Name="CreateAt" Type="DateTime" Nullable="false" />
+    <Property Name="DeleteAt" Type="DateTime" Nullable="false" />
+    <NavigationProperty Name="Rol_User" Relationship="DbModel.Rol_UserRol" FromRole="Rol" ToRole="Rol_User" />
+    <NavigationProperty Name="Rol_Form_Permission" Relationship="DbModel.Rol_Form_PermissionRol" FromRole="Rol" ToRole="Rol_Form_Permission" />
+  </EntityType>
+  <EntityType Name="Rol_User">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <NavigationProperty Name="RolId" Relationship="DbModel.Rol_UserRol" FromRole="Rol_User" ToRole="Rol" />
+    <NavigationProperty Name="UserId" Relationship="DbModel.Rol_UserUser" FromRole="Rol_User" ToRole="User" />
+  </EntityType>
+  <Association Name="Rol_UserRol">
+    <End Type="DbModel.Rol_User" Role="Rol_User" Multiplicity="*" />
+    <End Type="DbModel.Rol" Role="Rol" Multiplicity="1" />
+  </Association>
+  <Association Name="Rol_UserUser">
+    <End Type="DbModel.Rol_User" Role="Rol_User" Multiplicity="*" />
+    <End Type="DbModel.User" Role="User" Multiplicity="1" />
+  </Association>
+  <EntityType Name="Permission">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Can_Read" Type="String" Nullable="false" />
+    <Property Name="Can_Write" Type="String" Nullable="false" />
+    <Property Name="Can_Update" Type="String" Nullable="false" />
+    <Property Name="Can_Delete" Type="String" Nullable="false" />
+    <Property Name="CreateAt" Type="DateTime" Nullable="false" />
+    <Property Name="DeleteAt" Type="DateTime" Nullable="false" />
+    <NavigationProperty Name="Rol_Form_Permission" Relationship="DbModel.Rol_Form_PermissionPermission" FromRole="Permission" ToRole="Rol_Form_Permission" />
+  </EntityType>
+  <EntityType Name="Rol_Form_Permission">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <NavigationProperty Name="RolId" Relationship="DbModel.Rol_Form_PermissionRol" FromRole="Rol_Form_Permission" ToRole="Rol" />
+    <NavigationProperty Name="FormId" Relationship="DbModel.Rol_Form_PermissionForm" FromRole="Rol_Form_Permission" ToRole="Form" />
+    <NavigationProperty Name="PermissionId" Relationship="DbModel.Rol_Form_PermissionPermission" FromRole="Rol_Form_Permission" ToRole="Permission" />
+  </EntityType>
+  <Association Name="Rol_Form_PermissionRol">
+    <End Type="DbModel.Rol_Form_Permission" Role="Rol_Form_Permission" Multiplicity="*" />
+    <End Type="DbModel.Rol" Role="Rol" Multiplicity="1" />
+  </Association>
+  <Association Name="Rol_Form_PermissionForm">
+    <End Type="DbModel.Rol_Form_Permission" Role="Rol_Form_Permission" Multiplicity="*" />
+    <End Type="DbModel.Form" Role="Form" Multiplicity="1" />
+  </Association>
+  <Association Name="Rol_Form_PermissionPermission">
+    <End Type="DbModel.Rol_Form_Permission" Role="Rol_Form_Permission" Multiplicity="*" />
+    <End Type="DbModel.Permission" Role="Permission" Multiplicity="1" />
+  </Association>
+</Schema>

@@ -50,6 +50,27 @@
             <End Role="Permission" EntitySet="Permissions" />
           </AssociationSet>
           <EntitySet Name="Change_LogSet" EntityType="DbModel.Change_Log" />
+          <EntitySet Name="Workers" EntityType="DbModel.Worker" />
+          <EntitySet Name="Clients" EntityType="DbModel.Client" />
+          <EntitySet Name="PQRSet" EntityType="DbModel.PQR" />
+          <EntitySet Name="Logins" EntityType="DbModel.Login" />
+          <EntitySet Name="Workers_Logins" EntityType="DbModel.Worker_Login" />
+          <AssociationSet Name="Worker_LoginLogin" Association="DbModel.Worker_LoginLogin">
+            <End Role="Worker_Login" EntitySet="Workers_Logins" />
+            <End Role="Login" EntitySet="Logins" />
+          </AssociationSet>
+          <AssociationSet Name="Worker_LoginWorker" Association="DbModel.Worker_LoginWorker">
+            <End Role="Worker_Login" EntitySet="Workers_Logins" />
+            <End Role="Worker" EntitySet="Workers" />
+          </AssociationSet>
+          <AssociationSet Name="PQRWorker" Association="DbModel.PQRWorker">
+            <End Role="PQR" EntitySet="PQRSet" />
+            <End Role="Worker" EntitySet="Workers" />
+          </AssociationSet>
+          <AssociationSet Name="PQRClient" Association="DbModel.PQRClient">
+            <End Role="PQR" EntitySet="PQRSet" />
+            <End Role="Client" EntitySet="Clients" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Form">
           <Key>
@@ -171,6 +192,87 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
         </EntityType>
+        <EntityType Name="Worker">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="First_Name" Type="String" Nullable="false" />
+          <Property Name="Last_Name" Type="String" Nullable="false" />
+          <Property Name="Identity_Document" Type="String" Nullable="false" />
+          <Property Name="Job_Title" Type="String" Nullable="false" />
+          <Property Name="Email" Type="String" Nullable="false" />
+          <Property Name="Phone" Type="String" Nullable="false" />
+          <Property Name="Hire_Date" Type="String" Nullable="false" />
+          <NavigationProperty Name="Worker_Login" Relationship="DbModel.Worker_LoginWorker" FromRole="Worker" ToRole="Worker_Login" />
+          <NavigationProperty Name="PQR" Relationship="DbModel.PQRWorker" FromRole="Worker" ToRole="PQR" />
+        </EntityType>
+        <EntityType Name="Client">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="First_Name" Type="String" Nullable="false" />
+          <Property Name="Last_Name" Type="String" Nullable="false" />
+          <Property Name="Identity_Document" Type="String" Nullable="false" />
+          <Property Name="Client_Type" Type="String" Nullable="false" />
+          <Property Name="Phone" Type="String" Nullable="false" />
+          <Property Name="Email" Type="String" Nullable="false" />
+          <Property Name="Address" Type="String" Nullable="false" />
+          <Property Name="Socioeconomic_Stratification" Type="String" Nullable="false" />
+          <Property Name="Registration_Date" Type="String" Nullable="false" />
+          <NavigationProperty Name="PQR" Relationship="DbModel.PQRClient" FromRole="Client" ToRole="PQR" />
+        </EntityType>
+        <EntityType Name="PQR">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PQR_Type" Type="String" Nullable="false" />
+          <Property Name="Description" Type="String" Nullable="false" />
+          <Property Name="Creation_Date" Type="String" Nullable="false" />
+          <Property Name="PQR_Status" Type="String" Nullable="false" />
+          <Property Name="Resolution_Date" Type="String" Nullable="false" />
+          <NavigationProperty Name="Worker" Relationship="DbModel.PQRWorker" FromRole="PQR" ToRole="Worker" />
+          <NavigationProperty Name="Client" Relationship="DbModel.PQRClient" FromRole="PQR" ToRole="Client" />
+        </EntityType>
+        <EntityType Name="Login">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Username" Type="String" Nullable="false" />
+          <Property Name="Password" Type="String" Nullable="false" />
+          <NavigationProperty Name="Worker_Login" Relationship="DbModel.Worker_LoginLogin" FromRole="Login" ToRole="Worker_Login" />
+        </EntityType>
+        <EntityType Name="Worker_Login">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Username" Type="String" Nullable="false" />
+          <Property Name="Password" Type="String" Nullable="false" />
+          <Property Name="Creation_Date" Type="String" Nullable="false" />
+          <Property Name="Status" Type="String" Nullable="false" />
+          <NavigationProperty Name="Login" Relationship="DbModel.Worker_LoginLogin" FromRole="Worker_Login" ToRole="Login" />
+          <NavigationProperty Name="Worker" Relationship="DbModel.Worker_LoginWorker" FromRole="Worker_Login" ToRole="Worker" />
+        </EntityType>
+        <Association Name="Worker_LoginLogin">
+          <End Type="DbModel.Worker_Login" Role="Worker_Login" Multiplicity="*" />
+          <End Type="DbModel.Login" Role="Login" Multiplicity="1" />
+        </Association>
+        <Association Name="Worker_LoginWorker">
+          <End Type="DbModel.Worker_Login" Role="Worker_Login" Multiplicity="*" />
+          <End Type="DbModel.Worker" Role="Worker" Multiplicity="1" />
+        </Association>
+        <Association Name="PQRWorker">
+          <End Type="DbModel.PQR" Role="PQR" Multiplicity="*" />
+          <End Type="DbModel.Worker" Role="Worker" Multiplicity="*" />
+        </Association>
+        <Association Name="PQRClient">
+          <End Type="DbModel.PQR" Role="PQR" Multiplicity="*" />
+          <End Type="DbModel.Client" Role="Client" Multiplicity="*" />
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->

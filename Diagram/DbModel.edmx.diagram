@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="da373a87898a46d1b44a5c9e212d093a" Name="Diagram1" ZoomLevel="97" >
+      <Diagram DiagramId="da373a87898a46d1b44a5c9e212d093a" Name="Diagram1" ZoomLevel="79" >
         <EntityTypeShape EntityType="DbModel.Form" Width="1.5" PointX="8.875" PointY="6.375" />
         <EntityTypeShape EntityType="DbModel.Module" Width="1.5" PointX="9" PointY="1.375" />
         <EntityTypeShape EntityType="DbModel.FormModule" Width="1.5" PointX="8.875" PointY="4.25" />
@@ -21,7 +21,16 @@
         <AssociationConnector Association="DbModel.Rol_Form_PermissionRol" />
         <AssociationConnector Association="DbModel.Rol_Form_PermissionForm" />
         <AssociationConnector Association="DbModel.Rol_Form_PermissionPermission" />
-        <EntityTypeShape EntityType="DbModel.Change_Log" Width="1.5" PointX="16.25" PointY="2.375" />
+        <EntityTypeShape EntityType="DbModel.Change_Log" Width="1.5" PointX="11" PointY="0.5" />
+        <EntityTypeShape EntityType="DbModel.Worker" Width="1.5" PointX="14.125" PointY="2.75" />
+        <EntityTypeShape EntityType="DbModel.Client" Width="1.5" PointX="20.25" PointY="1.75" />
+        <EntityTypeShape EntityType="DbModel.PQR" Width="1.5" PointX="13.875" PointY="7" />
+        <EntityTypeShape EntityType="DbModel.Worker_Login" Width="1.5" PointX="17.125" PointY="2.375" />
+        <EntityTypeShape EntityType="DbModel.Login" Width="1.5" PointX="16.625" PointY="5.875" />
+        <AssociationConnector Association="DbModel.Worker_LoginLogin" />
+        <AssociationConnector Association="DbModel.Worker_LoginWorker" />
+        <AssociationConnector Association="DbModel.PQRWorker" />
+        <AssociationConnector Association="DbModel.PQRClient" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

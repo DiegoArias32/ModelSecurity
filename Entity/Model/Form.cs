@@ -1,17 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Entity
+namespace Entity.Model
 {
     public class Form
     {
         public int Id { get; set; }
-        public int Code { get; set; }
-        public string Name { get; set; }
-        public string Activate { get; set; }
+        public required string Name { get; set; }
+        public required string Code { get; set; }
+        public bool Active { get; set; }
         public DateTime CreateAt { get; set; }
+        public DateTime DeleteAt { get; set; }
+
     }
 }

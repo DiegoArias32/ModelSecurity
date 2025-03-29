@@ -1,21 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.VisualBasic;
 
-namespace Entity
+namespace Entity.Model
 {
     public class User
     {
         public int Id { get; set; }
-        public string Username { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
-       
-        public User()
-        {
+        public int PersonId { get; set; }
+        public required Person Person { get; set; }
+        public required string Name { get; set; }
+        public required string Email { get; set; }
+        public required string Password { get; set; }
+        public DateTime CreateAt { get; set; } 
+        public DateTime DeleteAt { get; set; }
 
-        }
     }
 }

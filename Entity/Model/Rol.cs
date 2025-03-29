@@ -4,14 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Entity
+namespace Entity.Model
 {
     public class Rol
     {
         public int Id { get; set; }
 
-        public string Name { get; set; }
+        public required string Name { get; set; }
 
         public DateTime CreateAt { get; set; }
+        public bool Active { get; set; }
+
     }
 }

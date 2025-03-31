@@ -19,6 +19,9 @@ namespace Entity.Contexts
         /// </summary>
         protected readonly IConfiguration _configuration;
 
+        public object Clients { get; set; }
+
+
         /// <summary>
         /// Constructor del contexto de la base de datos.
         /// </summary>

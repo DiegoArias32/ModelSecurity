@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Entity;
 using Microsoft.Extensions.Logging;
 using Entity.Contexts;
 using Entity.Model;

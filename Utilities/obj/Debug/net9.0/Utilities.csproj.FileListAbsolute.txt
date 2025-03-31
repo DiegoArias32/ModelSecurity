@@ -9,3 +9,15 @@ C:\Users\User\source\repos\ModelSegurity\Utilities\obj\Debug\net9.0\Utilities.dl
 C:\Users\User\source\repos\ModelSegurity\Utilities\obj\Debug\net9.0\refint\Utilities.dll
 C:\Users\User\source\repos\ModelSegurity\Utilities\obj\Debug\net9.0\Utilities.pdb
 C:\Users\User\source\repos\ModelSegurity\Utilities\obj\Debug\net9.0\ref\Utilities.dll
+C:\Users\User\source\repos\ModelSecurity\Utilities\bin\Debug\net9.0\Utilities.deps.json
+C:\Users\User\source\repos\ModelSecurity\Utilities\bin\Debug\net9.0\Utilities.dll
+C:\Users\User\source\repos\ModelSecurity\Utilities\bin\Debug\net9.0\Utilities.pdb
+C:\Users\User\source\repos\ModelSecurity\Utilities\obj\Debug\net9.0\Utilities.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\User\source\repos\ModelSecurity\Utilities\obj\Debug\net9.0\Utilities.AssemblyInfoInputs.cache
+C:\Users\User\source\repos\ModelSecurity\Utilities\obj\Debug\net9.0\Utilities.AssemblyInfo.cs
+C:\Users\User\source\repos\ModelSecurity\Utilities\obj\Debug\net9.0\Utilities.csproj.CoreCompileInputs.cache
+C:\Users\User\source\repos\ModelSecurity\Utilities\obj\Debug\net9.0\Utilities.sourcelink.json
+C:\Users\User\source\repos\ModelSecurity\Utilities\obj\Debug\net9.0\Utilities.dll
+C:\Users\User\source\repos\ModelSecurity\Utilities\obj\Debug\net9.0\refint\Utilities.dll
+C:\Users\User\source\repos\ModelSecurity\Utilities\obj\Debug\net9.0\Utilities.pdb
+C:\Users\User\source\repos\ModelSecurity\Utilities\obj\Debug\net9.0\ref\Utilities.dll

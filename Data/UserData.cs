@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Entity.Contexts;
+using Entity;
 using Entity.Model;
 
 public class UserData

@@ -19,3 +19,10 @@ C:\Users\User\source\repos\ModelSegurity\Diagram\obj\Debug\Diagram.csproj.Assemb
 C:\Users\User\source\repos\ModelSegurity\Diagram\obj\Debug\Diagram.csproj.CoreCompileInputs.cache
 C:\Users\User\source\repos\ModelSegurity\Diagram\obj\Debug\Diagram.dll
 C:\Users\User\source\repos\ModelSegurity\Diagram\obj\Debug\Diagram.pdb
+C:\Users\User\source\repos\ModelSecurity\Diagram\bin\Debug\Diagram.dll.config
+C:\Users\User\source\repos\ModelSecurity\Diagram\bin\Debug\Diagram.dll
+C:\Users\User\source\repos\ModelSecurity\Diagram\bin\Debug\Diagram.pdb
+C:\Users\User\source\repos\ModelSecurity\Diagram\obj\Debug\Diagram.csproj.AssemblyReference.cache
+C:\Users\User\source\repos\ModelSecurity\Diagram\obj\Debug\Diagram.csproj.CoreCompileInputs.cache
+C:\Users\User\source\repos\ModelSecurity\Diagram\obj\Debug\Diagram.dll
+C:\Users\User\source\repos\ModelSecurity\Diagram\obj\Debug\Diagram.pdb

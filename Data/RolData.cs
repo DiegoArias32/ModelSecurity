@@ -4,10 +4,9 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Entity.Contexts; 
-using Entity.Model;  
+using Entity.Model;
 
-public class RolData
-{
+public class RolData{
     private readonly ApplicationDbContext _context;
     private readonly ILogger _logger;
 

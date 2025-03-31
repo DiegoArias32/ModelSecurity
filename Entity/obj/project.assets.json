@@ -5043,11 +5043,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\User\\source\\repos\\ModelSegurity\\entity\\Entity.csproj",
+      "projectUniqueName": "C:\\Users\\User\\source\\repos\\ModelSecurity\\Entity\\Entity.csproj",
       "projectName": "Entity",
-      "projectPath": "C:\\Users\\User\\source\\repos\\ModelSegurity\\entity\\Entity.csproj",
+      "projectPath": "C:\\Users\\User\\source\\repos\\ModelSecurity\\Entity\\Entity.csproj",
       "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\User\\source\\repos\\ModelSegurity\\entity\\obj\\",
+      "outputPath": "C:\\Users\\User\\source\\repos\\ModelSecurity\\Entity\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

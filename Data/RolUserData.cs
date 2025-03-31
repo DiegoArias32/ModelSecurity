@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Entity.Contexts;
 using Entity.Model;
+using Entity;
 
 public class RolUserData(ApplicationDbContext context, ILogger logger)
 {

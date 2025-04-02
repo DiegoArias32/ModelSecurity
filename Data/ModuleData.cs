@@ -7,6 +7,7 @@ using Entity;
 using Entity.Contexts;
 using Entity.Model;
 
+namespace Data{
 public class ModuleData
 {
     private readonly ApplicationDbContext _context;
@@ -113,4 +114,5 @@ public class ModuleData
             return false;
         }
     }
+}
 }

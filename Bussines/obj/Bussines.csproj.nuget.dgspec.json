@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\User\\source\\repos\\ModelSecurity\\Bussines\\Bussines.csproj": {}
+    "C:\\Users\\SENA\\Documents\\ModelSecurity-master\\Bussines\\Bussines.csproj": {}
   },
   "projects": {
-    "C:\\Users\\User\\source\\repos\\ModelSecurity\\Bussines\\Bussines.csproj": {
+    "C:\\Users\\SENA\\Documents\\ModelSecurity-master\\Bussines\\Bussines.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\User\\source\\repos\\ModelSecurity\\Bussines\\Bussines.csproj",
+        "projectUniqueName": "C:\\Users\\SENA\\Documents\\ModelSecurity-master\\Bussines\\Bussines.csproj",
         "projectName": "Bussines",
-        "projectPath": "C:\\Users\\User\\source\\repos\\ModelSecurity\\Bussines\\Bussines.csproj",
-        "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\User\\source\\repos\\ModelSecurity\\Bussines\\obj\\",
+        "projectPath": "C:\\Users\\SENA\\Documents\\ModelSecurity-master\\Bussines\\Bussines.csproj",
+        "packagesPath": "C:\\Users\\SENA\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\SENA\\Documents\\ModelSecurity-master\\Bussines\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\SENA\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -26,20 +26,21 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\Users\\User\\source\\repos\\ModelSecurity\\Data\\Data.csproj": {
-                "projectPath": "C:\\Users\\User\\source\\repos\\ModelSecurity\\Data\\Data.csproj"
+              "C:\\Users\\SENA\\Documents\\ModelSecurity-master\\Data\\Data.csproj": {
+                "projectPath": "C:\\Users\\SENA\\Documents\\ModelSecurity-master\\Data\\Data.csproj"
               },
-              "C:\\Users\\User\\source\\repos\\ModelSecurity\\Entity\\Entity.csproj": {
-                "projectPath": "C:\\Users\\User\\source\\repos\\ModelSecurity\\Entity\\Entity.csproj"
+              "C:\\Users\\SENA\\Documents\\ModelSecurity-master\\Entity\\Entity.csproj": {
+                "projectPath": "C:\\Users\\SENA\\Documents\\ModelSecurity-master\\Entity\\Entity.csproj"
               },
-              "C:\\Users\\User\\source\\repos\\ModelSecurity\\Utilities\\Utilities.csproj": {
-                "projectPath": "C:\\Users\\User\\source\\repos\\ModelSecurity\\Utilities\\Utilities.csproj"
+              "C:\\Users\\SENA\\Documents\\ModelSecurity-master\\Utilities\\Utilities.csproj": {
+                "projectPath": "C:\\Users\\SENA\\Documents\\ModelSecurity-master\\Utilities\\Utilities.csproj"
               }
             }
           }
@@ -75,24 +76,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.201/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.202/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\User\\source\\repos\\ModelSecurity\\Data\\Data.csproj": {
+    "C:\\Users\\SENA\\Documents\\ModelSecurity-master\\Data\\Data.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\User\\source\\repos\\ModelSecurity\\Data\\Data.csproj",
+        "projectUniqueName": "C:\\Users\\SENA\\Documents\\ModelSecurity-master\\Data\\Data.csproj",
         "projectName": "Data",
-        "projectPath": "C:\\Users\\User\\source\\repos\\ModelSecurity\\Data\\Data.csproj",
-        "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\User\\source\\repos\\ModelSecurity\\Data\\obj\\",
+        "projectPath": "C:\\Users\\SENA\\Documents\\ModelSecurity-master\\Data\\Data.csproj",
+        "packagesPath": "C:\\Users\\SENA\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\SENA\\Documents\\ModelSecurity-master\\Data\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\SENA\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -101,14 +102,15 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\Users\\User\\source\\repos\\ModelSecurity\\Entity\\Entity.csproj": {
-                "projectPath": "C:\\Users\\User\\source\\repos\\ModelSecurity\\Entity\\Entity.csproj"
+              "C:\\Users\\SENA\\Documents\\ModelSecurity-master\\Entity\\Entity.csproj": {
+                "projectPath": "C:\\Users\\SENA\\Documents\\ModelSecurity-master\\Entity\\Entity.csproj"
               }
             }
           }
@@ -160,24 +162,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.201/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.202/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\User\\source\\repos\\ModelSecurity\\Entity\\Entity.csproj": {
+    "C:\\Users\\SENA\\Documents\\ModelSecurity-master\\Entity\\Entity.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\User\\source\\repos\\ModelSecurity\\Entity\\Entity.csproj",
+        "projectUniqueName": "C:\\Users\\SENA\\Documents\\ModelSecurity-master\\Entity\\Entity.csproj",
         "projectName": "Entity",
-        "projectPath": "C:\\Users\\User\\source\\repos\\ModelSecurity\\Entity\\Entity.csproj",
-        "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\User\\source\\repos\\ModelSecurity\\Entity\\obj\\",
+        "projectPath": "C:\\Users\\SENA\\Documents\\ModelSecurity-master\\Entity\\Entity.csproj",
+        "packagesPath": "C:\\Users\\SENA\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\SENA\\Documents\\ModelSecurity-master\\Entity\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\SENA\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -186,6 +188,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -253,24 +256,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.201/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.202/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\User\\source\\repos\\ModelSecurity\\Utilities\\Utilities.csproj": {
+    "C:\\Users\\SENA\\Documents\\ModelSecurity-master\\Utilities\\Utilities.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\User\\source\\repos\\ModelSecurity\\Utilities\\Utilities.csproj",
+        "projectUniqueName": "C:\\Users\\SENA\\Documents\\ModelSecurity-master\\Utilities\\Utilities.csproj",
         "projectName": "Utilities",
-        "projectPath": "C:\\Users\\User\\source\\repos\\ModelSecurity\\Utilities\\Utilities.csproj",
-        "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\User\\source\\repos\\ModelSecurity\\Utilities\\obj\\",
+        "projectPath": "C:\\Users\\SENA\\Documents\\ModelSecurity-master\\Utilities\\Utilities.csproj",
+        "packagesPath": "C:\\Users\\SENA\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\SENA\\Documents\\ModelSecurity-master\\Utilities\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\SENA\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -279,6 +282,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -318,7 +322,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.201/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.202/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

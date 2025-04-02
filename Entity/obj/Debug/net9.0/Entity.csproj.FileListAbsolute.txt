@@ -27,3 +27,17 @@ C:\Users\User\source\repos\ModelSecurity\Entity\obj\Debug\net9.0\refint\Entity.d
 C:\Users\User\source\repos\ModelSecurity\Entity\obj\Debug\net9.0\Entity.pdb
 C:\Users\User\source\repos\ModelSecurity\Entity\obj\Debug\net9.0\Entity.genruntimeconfig.cache
 C:\Users\User\source\repos\ModelSecurity\Entity\obj\Debug\net9.0\ref\Entity.dll
+C:\Users\SENA\Documents\ModelSecurity-master\Entity\bin\Debug\net9.0\Entity.deps.json
+C:\Users\SENA\Documents\ModelSecurity-master\Entity\bin\Debug\net9.0\Entity.runtimeconfig.json
+C:\Users\SENA\Documents\ModelSecurity-master\Entity\bin\Debug\net9.0\Entity.dll
+C:\Users\SENA\Documents\ModelSecurity-master\Entity\bin\Debug\net9.0\Entity.pdb
+C:\Users\SENA\Documents\ModelSecurity-master\Entity\obj\Debug\net9.0\Entity.csproj.AssemblyReference.cache
+C:\Users\SENA\Documents\ModelSecurity-master\Entity\obj\Debug\net9.0\Entity.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\SENA\Documents\ModelSecurity-master\Entity\obj\Debug\net9.0\Entity.AssemblyInfoInputs.cache
+C:\Users\SENA\Documents\ModelSecurity-master\Entity\obj\Debug\net9.0\Entity.AssemblyInfo.cs
+C:\Users\SENA\Documents\ModelSecurity-master\Entity\obj\Debug\net9.0\Entity.csproj.CoreCompileInputs.cache
+C:\Users\SENA\Documents\ModelSecurity-master\Entity\obj\Debug\net9.0\Entity.dll
+C:\Users\SENA\Documents\ModelSecurity-master\Entity\obj\Debug\net9.0\refint\Entity.dll
+C:\Users\SENA\Documents\ModelSecurity-master\Entity\obj\Debug\net9.0\Entity.pdb
+C:\Users\SENA\Documents\ModelSecurity-master\Entity\obj\Debug\net9.0\Entity.genruntimeconfig.cache
+C:\Users\SENA\Documents\ModelSecurity-master\Entity\obj\Debug\net9.0\ref\Entity.dll

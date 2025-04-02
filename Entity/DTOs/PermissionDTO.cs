@@ -1,6 +1,6 @@
 ﻿namespace Entity.DTOs
 {
-    public class PermissionDTO
+    public class PermissionDto
     {
         public int Id { get; set; }
         public bool CanRead { get; set; }

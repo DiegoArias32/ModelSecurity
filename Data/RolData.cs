@@ -6,6 +6,10 @@ using Microsoft.Extensions.Logging;
 using Entity.Contexts; 
 using Entity.Model;
 
+
+
+namespace Data{
+
 public class RolData{
     private readonly ApplicationDbContext _context;
     private readonly ILogger _logger;
@@ -111,4 +115,5 @@ public class RolData{
             return false;
         }
     }
+}
 }

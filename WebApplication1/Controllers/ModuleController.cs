@@ -9,7 +9,7 @@ using Utilities.Exceptions;
 namespace WebApplication1.Controllers
 {
     [ApiController]
-    [Route("api/modules")]
+    [Route("api/[controller]")]
     public class ModuleController : ControllerBase
     {
         private readonly ModuleBusiness _moduleBusiness;

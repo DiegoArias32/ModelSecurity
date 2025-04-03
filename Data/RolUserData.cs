@@ -1,167 +1,153 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Entity.Contexts;
 using Entity.Model;
-using Entity;
+using Entity.DTOs;
 
-public class RolUserData(ApplicationDbContext context, ILogger logger)
+namespace Data
 {
-    private readonly ApplicationDbContext _context = context ?? throw new ArgumentNullException(nameof(context));
-    private readonly ILogger _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-
-    public DateTime CreateAt { get; private set; }
-    public object User { get; private set; }
-    public object Rol { get; private set; }
-    public int Id { get; private set; }
-    public int UserId { get; private set; }
-    public DateTime DeleteAt { get; private set; }
-
-
-    /// <summary>
-    /// Crea una nueva asignación de rol a usuario.
-    /// </summary>
-    /// <param name="rolUser">Instancia de RolUser a crear.</param>
-    /// <returns>La asignación de rol creada.</returns>
-    public async Task<RolUserData> CreateAsync(RolUserData rolUser)
+    public class RolUserData
     {
-        try
-        {
-            rolUser.CreateAt = DateTime.UtcNow;
-            await _context.Set<RolUserData>().AddAsync(rolUser);
-            await _context.SaveChangesAsync();
-            return rolUser;
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error al crear la asignación de rol de usuario: {ErrorMessage}", ex.Message);
-            throw;
-        }
-    }
+        private readonly ApplicationDbContext _context;
+        private readonly ILogger _logger;
 
-    /// <summary>
-    /// Obtiene todas las asignaciones de roles de usuarios.
-    /// </summary>
-    /// <returns>Lista de asignaciones de roles de usuarios.</returns>
-    public async Task<IEnumerable<RolUserData>> GetAllAsync()
-    {
-        return await _context.Set<RolUserData>()
-            .Include(ru => ru.User)
-            .Include(ru => ru.Rol)
-            .ToListAsync();
-    }
-
-    /// <summary>
-    /// Obtiene una asignación de rol de usuario por su identificador.
-    /// </summary>
-    /// <param name="id">Identificador de la asignación.</param>
-    /// <returns>La asignación de rol de usuario encontrada.</returns>
-    public async Task<RolUserData?> GetByIdAsync(int id)
-    {
-        try
+        /// <summary>
+        /// Constructor que recibe el contexto de base de datos.
+        /// </summary>
+        /// <param name="context">Instancia de <see cref="ApplicationDbContext"/> para la conexión con la base de datos.</param>
+        /// <param name="logger">Instancia de <see cref="ILogger"/> para registrar eventos.</param>
+        public RolUserData(ApplicationDbContext context, ILogger logger)
         {
-            return await _context.Set<RolUserData>()
-                .Include(ru => ru.User)
-                .Include(ru => ru.Rol)
-                .FirstOrDefaultAsync(ru => ru.Id == id);
+            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error al obtener asignación de rol de usuario con ID {RolUserId}", id);
-            throw;
-        }
-    }
 
-    /// <summary>
-    /// Obtiene todas las asignaciones de roles para un usuario específico.
-    /// </summary>
-    /// <param name="userId">Identificador del usuario.</param>
-    /// <returns>Lista de asignaciones de roles del usuario.</returns>
-    public async Task<IEnumerable<RolUserData>> GetByUserIdAsync(int userId)
-    {
-        try
+        /// <summary>
+        /// Crea una nueva relación Rol-User en la base de datos.
+        /// </summary>
+        /// <param name="rolUser">Instancia de <see cref="RolUser"/> a crear.</param>
+        /// <returns>La instancia del Rol-User creada.</returns>
+        public async Task<RolUser> CreateAsync(RolUser rolUser)
         {
-            return await _context.Set<RolUserData>()
-                .Where(ru => ru.UserId == userId)
+            try
+            {
+                await _context.Set<RolUser>().AddAsync(rolUser);
+                await _context.SaveChangesAsync();
+                return rolUser;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al crear la relación Rol-User: {ErrorMessage}", ex.Message);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Obtiene todas las relaciones Rol-User almacenadas en la base de datos.
+        /// </summary>
+        /// <returns>Lista de relaciones Rol-User.</returns>
+        public async Task<IEnumerable<RolUser>> GetAllAsync()
+        {
+            return await _context.Set<RolUser>()
                 .Include(ru => ru.User)
                 .Include(ru => ru.Rol)
                 .ToListAsync();
         }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error al obtener roles de usuario para ID {UserId}", userId);
-            throw;
-        }
-    }
 
-    /// <summary>
-    /// Actualiza una asignación de rol de usuario existente.
-    /// </summary>
-    /// <param name="rolUser">Objeto con la información actualizada.</param>
-    /// <returns>True si la operación fue exitosa, False en caso contrario.</returns>
-    public async Task<bool> UpdateAsync(RolUserData rolUser)
-    {
-        try
+        /// <summary>
+        /// Obtiene una relación Rol-User específica por su identificador.
+        /// </summary>
+        /// <param name="id">Identificador de la relación Rol-User.</param>
+        /// <returns>La relación Rol-User encontrada o null si no existe.</returns>
+        public async Task<RolUser?> GetByIdAsync(int id)
         {
-            _context.Set<RolUserData>().Update(rolUser);
-            await _context.SaveChangesAsync();
-            return true;
+            try
+            {
+                return await _context.Set<RolUser>()
+                    .Include(ru => ru.User)
+                    .Include(ru => ru.Rol)
+                    .FirstOrDefaultAsync(ru => ru.Id == id);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al obtener la relación Rol-User con ID {RolUserId}", id);
+                throw;
+            }
         }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error al actualizar la asignación de rol de usuario: {ErrorMessage}", ex.Message);
-            return false;
-        }
-    }
 
-    /// <summary>
-    /// Elimina una asignación de rol de usuario.
-    /// </summary>
-    /// <param name="id">Identificador de la asignación a eliminar.</param>
-    /// <returns>True si la eliminación fue exitosa, False en caso contrario.</returns>
-    public async Task<bool> DeleteAsync(int id)
-    {
-        try
+        /// <summary>
+        /// Actualiza una relación Rol-User existente en la base de datos.
+        /// </summary>
+        /// <param name="rolUser">Objeto con la información actualizada.</param>
+        /// <returns>True si la operación fue exitosa, False en caso contrario.</returns>
+        public async Task<bool> UpdateAsync(RolUser rolUser)
         {
-            var rolUser = await _context.Set<RolUserData>().FindAsync(id);
-            if (rolUser == null)
+            try
+            {
+                _context.Set<RolUser>().Update(rolUser);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al actualizar la relación Rol-User: {ErrorMessage}", ex.Message);
                 return false;
-
-            rolUser.DeleteAt = DateTime.UtcNow;
-            _context.Set<RolUserData>().Update(rolUser);
-            await _context.SaveChangesAsync();
-            return true;
+            }
         }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error al eliminar la asignación de rol de usuario: {ErrorMessage}", ex.Message);
-            return false;
-        }
-    }
 
-    /// <summary>
-    /// Elimina permanentemente una asignación de rol de usuario.
-    /// </summary>
-    /// <param name="id">Identificador de la asignación a eliminar permanentemente.</param>
-    /// <returns>True si la eliminación fue exitosa, False en caso contrario.</returns>
-    public async Task<bool> PermanentDeleteAsync(int id)
-    {
-        try
+        /// <summary>
+        /// Elimina una relación Rol-User de la base de datos.
+        /// </summary>
+        /// <param name="id">Identificador único de la relación Rol-User a eliminar.</param>
+        /// <returns>True si la eliminación fue exitosa, False en caso contrario.</returns>
+        public async Task<bool> DeleteAsync(int id)
         {
-            var rolUser = await _context.Set<RolUserData>().FindAsync(id);
-            if (rolUser == null)
+            try
+            {
+                var rolUser = await _context.Set<RolUser>().FindAsync(id);
+                if (rolUser == null)
+                    return false;
+
+                _context.Set<RolUser>().Remove(rolUser);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al eliminar la relación Rol-User: {ErrorMessage}", ex.Message);
                 return false;
-
-            _context.Set<RolUserData>().Remove(rolUser);
-            await _context.SaveChangesAsync();
-            return true;
+            }
         }
-        catch (Exception ex)
+
+        /// <summary>
+        /// Convierte la entidad RolUser en su equivalente DTO (Data Transfer Object).
+        /// </summary>
+        /// <param name="rolUser">Entidad RolUser.</param>
+        /// <returns>El DTO RolUserDto correspondiente.</returns>
+        public RolUserDto ToDto(RolUser rolUser)
         {
-            _logger.LogError(ex, "Error al eliminar permanentemente la asignación de rol de usuario: {ErrorMessage}", ex.Message);
-            return false;
+            return new RolUserDto
+            {
+                Id = rolUser.Id,
+                UserId = rolUser.UserId,
+                RolId = rolUser.RolId,
+                CreateAt = rolUser.CreateAt,
+                DeleteAt = rolUser.DeleteAt
+            };
+        }
+
+        /// <summary>
+        /// Convierte una lista de entidades RolUser en su equivalente DTO.
+        /// </summary>
+        /// <param name="rolUsers">Lista de entidades RolUser.</param>
+        /// <returns>Lista de DTOs RolUserDto correspondientes.</returns>
+        public IEnumerable<RolUserDto> ToDtoList(IEnumerable<RolUser> rolUsers)
+        {
+            return rolUsers.Select(ru => ToDto(ru));
         }
     }
 }

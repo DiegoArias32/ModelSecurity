@@ -8,6 +8,8 @@ using Entity.Model;
 using Entity;
 using Entity.Enum;
 
+namespace Data{
+
 public class RolFormPermissionData
 {
     private readonly ApplicationDbContext _context;
@@ -185,4 +187,5 @@ public class RolFormPermissionData
             return false;
         }
     }
+}
 }

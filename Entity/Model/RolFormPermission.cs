@@ -10,9 +10,9 @@ namespace Entity.Model
     {
         public int Id { get; set; }
         public int RolId { get; set; }
-        public required Rol Rol { get; set; }
+        public Rol Rol { get; set; }
         public int FormId { get; set; }
-        public required Form Form { get; set; }
+        public Form Form { get; set; }
         public DateTime CreateAt { get; set; }
         public DateTime DeleteAt { get; set; }
 

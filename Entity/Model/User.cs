@@ -7,7 +7,7 @@ namespace Entity.Model
     {
         public int Id { get; set; }
         public int PersonId { get; set; }
-        public required Person Person { get; set; }
+        public Person Person { get; set; }
         public required string Name { get; set; }
         public required string Email { get; set; }
         public required string Password { get; set; }

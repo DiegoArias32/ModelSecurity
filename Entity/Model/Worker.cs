@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Entity.Model
 {
-    public class Worker
+public class Worker
     {
         public int WorkerId { get; set; }
         public required string FirstName { get; set; }
@@ -16,6 +16,9 @@ namespace Entity.Model
         public required string Email { get; set; }
         public int Phone { get; set; }
         public DateTime? HireDate { get; set; }
+
+        // Relación inversa con User
+        public User User { get; set; }
     }
 
 }

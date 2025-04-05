@@ -34,6 +34,9 @@ builder.Services.AddScoped<ModuleBusiness>(); // Lógica de negocio
 builder.Services.AddScoped<UserData>(); // Repositorio de datos
 builder.Services.AddScoped<UserBusiness>(); // Lógica de negocio
 
+builder.Services.AddScoped<PermissionData>(); // Repositorio de datos
+builder.Services.AddScoped<PermissionBusiness>(); // Lógica de negocio
+
 // Registrar el servicio de logging
 builder.Services.AddLogging();
 

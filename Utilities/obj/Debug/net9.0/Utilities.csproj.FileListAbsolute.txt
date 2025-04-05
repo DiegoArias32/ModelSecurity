@@ -68,3 +68,15 @@ C:\Users\SENA\Desktop\ModelSecurity\Utilities\obj\Debug\net9.0\Utilities.dll
 C:\Users\SENA\Desktop\ModelSecurity\Utilities\obj\Debug\net9.0\refint\Utilities.dll
 C:\Users\SENA\Desktop\ModelSecurity\Utilities\obj\Debug\net9.0\Utilities.pdb
 C:\Users\SENA\Desktop\ModelSecurity\Utilities\obj\Debug\net9.0\ref\Utilities.dll
+C:\Users\User\Desktop\ModelSecurity\Utilities\bin\Debug\net9.0\Utilities.deps.json
+C:\Users\User\Desktop\ModelSecurity\Utilities\bin\Debug\net9.0\Utilities.dll
+C:\Users\User\Desktop\ModelSecurity\Utilities\bin\Debug\net9.0\Utilities.pdb
+C:\Users\User\Desktop\ModelSecurity\Utilities\obj\Debug\net9.0\Utilities.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\User\Desktop\ModelSecurity\Utilities\obj\Debug\net9.0\Utilities.AssemblyInfoInputs.cache
+C:\Users\User\Desktop\ModelSecurity\Utilities\obj\Debug\net9.0\Utilities.AssemblyInfo.cs
+C:\Users\User\Desktop\ModelSecurity\Utilities\obj\Debug\net9.0\Utilities.csproj.CoreCompileInputs.cache
+C:\Users\User\Desktop\ModelSecurity\Utilities\obj\Debug\net9.0\Utilities.sourcelink.json
+C:\Users\User\Desktop\ModelSecurity\Utilities\obj\Debug\net9.0\Utilities.dll
+C:\Users\User\Desktop\ModelSecurity\Utilities\obj\Debug\net9.0\refint\Utilities.dll
+C:\Users\User\Desktop\ModelSecurity\Utilities\obj\Debug\net9.0\Utilities.pdb
+C:\Users\User\Desktop\ModelSecurity\Utilities\obj\Debug\net9.0\ref\Utilities.dll

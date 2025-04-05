@@ -14,6 +14,7 @@ namespace Entity.Contexts
         public DbSet<FormModule> FormModules { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Worker> Workers { get; set; } // Agregado para manejar trabajadores
+        public DbSet<Permission> Permissions { get; set; } // Agregado para manejar trabajadores
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

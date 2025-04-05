@@ -4,11 +4,394 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl" Namespace="DbModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2005">
-        <EntityContainer Name="DbModelTargetContainer" >
-        </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+    <Schema Namespace="DbModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="DbModelStoreContainer">
+    <EntitySet Name="forms" EntityType="DbModel.Store.forms" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Models" EntityType="DbModel.Store.Models" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="FormsModels" EntityType="DbModel.Store.FormsModels" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Users" EntityType="DbModel.Store.Users" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Rols" EntityType="DbModel.Store.Rols" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Rols_Users" EntityType="DbModel.Store.Rols_Users" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Permissions" EntityType="DbModel.Store.Permissions" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Rol_Form_PermissionSet" EntityType="DbModel.Store.Rol_Form_PermissionSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Change_LogSet" EntityType="DbModel.Store.Change_LogSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Workers" EntityType="DbModel.Store.Workers" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Clients" EntityType="DbModel.Store.Clients" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="PQRSet" EntityType="DbModel.Store.PQRSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Logins" EntityType="DbModel.Store.Logins" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Workers_Logins" EntityType="DbModel.Store.Workers_Logins" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="PQRWorker" EntityType="DbModel.Store.PQRWorker" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="PQRClient" EntityType="DbModel.Store.PQRClient" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="FormModelForm" Association="DbModel.Store.FormModelForm">
+      <End Role="FormModel" EntitySet="FormsModels" />
+      <End Role="Form" EntitySet="forms" />
+    </AssociationSet>
+    <AssociationSet Name="FormModuleModule" Association="DbModel.Store.FormModuleModule">
+      <End Role="FormModule" EntitySet="FormsModels" />
+      <End Role="Module" EntitySet="Models" />
+    </AssociationSet>
+    <AssociationSet Name="Rol_UserRol" Association="DbModel.Store.Rol_UserRol">
+      <End Role="Rol_User" EntitySet="Rols_Users" />
+      <End Role="Rol" EntitySet="Rols" />
+    </AssociationSet>
+    <AssociationSet Name="Rol_UserUser" Association="DbModel.Store.Rol_UserUser">
+      <End Role="Rol_User" EntitySet="Rols_Users" />
+      <End Role="User" EntitySet="Users" />
+    </AssociationSet>
+    <AssociationSet Name="Rol_Form_PermissionRol" Association="DbModel.Store.Rol_Form_PermissionRol">
+      <End Role="Rol_Form_Permission" EntitySet="Rol_Form_PermissionSet" />
+      <End Role="Rol" EntitySet="Rols" />
+    </AssociationSet>
+    <AssociationSet Name="Rol_Form_PermissionForm" Association="DbModel.Store.Rol_Form_PermissionForm">
+      <End Role="Rol_Form_Permission" EntitySet="Rol_Form_PermissionSet" />
+      <End Role="Form" EntitySet="forms" />
+    </AssociationSet>
+    <AssociationSet Name="Rol_Form_PermissionPermission" Association="DbModel.Store.Rol_Form_PermissionPermission">
+      <End Role="Rol_Form_Permission" EntitySet="Rol_Form_PermissionSet" />
+      <End Role="Permission" EntitySet="Permissions" />
+    </AssociationSet>
+    <AssociationSet Name="Worker_LoginLogin" Association="DbModel.Store.Worker_LoginLogin">
+      <End Role="Worker_Login" EntitySet="Workers_Logins" />
+      <End Role="Login" EntitySet="Logins" />
+    </AssociationSet>
+    <AssociationSet Name="Worker_LoginWorker" Association="DbModel.Store.Worker_LoginWorker">
+      <End Role="Worker_Login" EntitySet="Workers_Logins" />
+      <End Role="Worker" EntitySet="Workers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PQRWorker_PQR" Association="DbModel.Store.FK_PQRWorker_PQR">
+      <End Role="PQR" EntitySet="PQRSet" />
+      <End Role="PQRWorker" EntitySet="PQRWorker" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PQRWorker_Worker" Association="DbModel.Store.FK_PQRWorker_Worker">
+      <End Role="Worker" EntitySet="Workers" />
+      <End Role="PQRWorker" EntitySet="PQRWorker" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PQRClient_PQR" Association="DbModel.Store.FK_PQRClient_PQR">
+      <End Role="PQR" EntitySet="PQRSet" />
+      <End Role="PQRClient" EntitySet="PQRClient" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PQRClient_Client" Association="DbModel.Store.FK_PQRClient_Client">
+      <End Role="Client" EntitySet="Clients" />
+      <End Role="PQRClient" EntitySet="PQRClient" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="forms">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Code" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Active" Type="bit" Nullable="false" />
+    <Property Name="CreateAt" Type="datetime" Nullable="false" />
+    <Property Name="DeleteAt" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Models">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Code" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Active" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="CreateAt" Type="datetime" Nullable="false" />
+    <Property Name="DeleteAt" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="FormsModels">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FormId_Id" Type="int" Nullable="false" />
+    <Property Name="ModuleId_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Users">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Username" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Email" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Password" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="CreateAt" Type="datetime" Nullable="false" />
+    <Property Name="DeleteAt" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Rols">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="CreateAt" Type="datetime" Nullable="false" />
+    <Property Name="DeleteAt" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Rols_Users">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="RolId_Id" Type="int" Nullable="false" />
+    <Property Name="UserId_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Permissions">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Can_Read" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Can_Create" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Can_Update" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Can_Delete" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="CreateAt" Type="datetime" Nullable="false" />
+    <Property Name="DeleteAt" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Rol_Form_PermissionSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="RolId_Id" Type="int" Nullable="false" />
+    <Property Name="FormId_Id" Type="int" Nullable="false" />
+    <Property Name="PermissionId_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Change_LogSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Workers">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="First_Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Last_Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Identity_Document" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Job_Title" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Email" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Phone" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Hire_Date" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Clients">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="First_Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Last_Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Identity_Document" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Client_Type" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Phone" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Email" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Address" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Socioeconomic_Stratification" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Registration_Date" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PQRSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PQR_Type" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Creation_Date" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="PQR_Status" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Resolution_Date" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Logins">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Username" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Password" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Workers_Logins">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Username" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Password" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Creation_Date" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Status" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Login_Id" Type="int" Nullable="false" />
+    <Property Name="Worker_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PQRWorker">
+    <Key>
+      <PropertyRef Name="PQR_Id" />
+      <PropertyRef Name="Worker_Id" />
+    </Key>
+    <Property Name="PQR_Id" Type="int" Nullable="false" />
+    <Property Name="Worker_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PQRClient">
+    <Key>
+      <PropertyRef Name="PQR_Id" />
+      <PropertyRef Name="Client_Id" />
+    </Key>
+    <Property Name="PQR_Id" Type="int" Nullable="false" />
+    <Property Name="Client_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="FormModelForm">
+    <End Role="FormModel" Type="DbModel.Store.FormsModels" Multiplicity="*" />
+    <End Role="Form" Type="DbModel.Store.forms" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Form">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="FormModel">
+        <PropertyRef Name="FormId_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FormModuleModule">
+    <End Role="FormModule" Type="DbModel.Store.FormsModels" Multiplicity="*" />
+    <End Role="Module" Type="DbModel.Store.Models" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Module">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="FormModule">
+        <PropertyRef Name="ModuleId_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="Rol_UserRol">
+    <End Role="Rol_User" Type="DbModel.Store.Rols_Users" Multiplicity="*" />
+    <End Role="Rol" Type="DbModel.Store.Rols" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Rol">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Rol_User">
+        <PropertyRef Name="RolId_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="Rol_UserUser">
+    <End Role="Rol_User" Type="DbModel.Store.Rols_Users" Multiplicity="*" />
+    <End Role="User" Type="DbModel.Store.Users" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Rol_User">
+        <PropertyRef Name="UserId_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="Rol_Form_PermissionRol">
+    <End Role="Rol_Form_Permission" Type="DbModel.Store.Rol_Form_PermissionSet" Multiplicity="*" />
+    <End Role="Rol" Type="DbModel.Store.Rols" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Rol">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Rol_Form_Permission">
+        <PropertyRef Name="RolId_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="Rol_Form_PermissionForm">
+    <End Role="Rol_Form_Permission" Type="DbModel.Store.Rol_Form_PermissionSet" Multiplicity="*" />
+    <End Role="Form" Type="DbModel.Store.forms" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Form">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Rol_Form_Permission">
+        <PropertyRef Name="FormId_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="Rol_Form_PermissionPermission">
+    <End Role="Rol_Form_Permission" Type="DbModel.Store.Rol_Form_PermissionSet" Multiplicity="*" />
+    <End Role="Permission" Type="DbModel.Store.Permissions" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Permission">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Rol_Form_Permission">
+        <PropertyRef Name="PermissionId_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="Worker_LoginLogin">
+    <End Role="Worker_Login" Type="DbModel.Store.Workers_Logins" Multiplicity="*" />
+    <End Role="Login" Type="DbModel.Store.Logins" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Login">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Worker_Login">
+        <PropertyRef Name="Login_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="Worker_LoginWorker">
+    <End Role="Worker_Login" Type="DbModel.Store.Workers_Logins" Multiplicity="*" />
+    <End Role="Worker" Type="DbModel.Store.Workers" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Worker">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Worker_Login">
+        <PropertyRef Name="Worker_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PQRWorker_PQR">
+    <End Role="PQR" Type="DbModel.Store.PQRSet" Multiplicity="1" />
+    <End Role="PQRWorker" Type="DbModel.Store.PQRWorker" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PQR">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PQRWorker">
+        <PropertyRef Name="PQR_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PQRWorker_Worker">
+    <End Role="PQRWorker" Type="DbModel.Store.PQRWorker" Multiplicity="*" />
+    <End Role="Worker" Type="DbModel.Store.Workers" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Worker">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PQRWorker">
+        <PropertyRef Name="Worker_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PQRClient_PQR">
+    <End Role="PQR" Type="DbModel.Store.PQRSet" Multiplicity="1" />
+    <End Role="PQRClient" Type="DbModel.Store.PQRClient" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PQR">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PQRClient">
+        <PropertyRef Name="PQR_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PQRClient_Client">
+    <End Role="PQRClient" Type="DbModel.Store.PQRClient" Multiplicity="*" />
+    <End Role="Client" Type="DbModel.Store.Clients" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Client">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PQRClient">
+        <PropertyRef Name="Client_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="DbModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
@@ -277,13 +660,247 @@
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
-      <Mapping xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs" Space="C-S">
-        <Alias Key="Model" Value="DbModel" />
-        <Alias Key="Target" Value="DbModel.Store" />
-        <EntityContainerMapping CdmEntityContainer="DbModelContainer" StorageEntityContainer="DbModelTargetContainer">
-        </EntityContainerMapping>
-      </Mapping>
-    </edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="DbModelStoreContainer" CdmEntityContainer="DbModelContainer">
+    <EntitySetMapping Name="forms">
+      <EntityTypeMapping TypeName="IsTypeOf(DbModel.Form)">
+        <MappingFragment StoreEntitySet="forms">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Code" ColumnName="Code" />
+          <ScalarProperty Name="Active" ColumnName="Active" />
+          <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
+          <ScalarProperty Name="DeleteAt" ColumnName="DeleteAt" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Models">
+      <EntityTypeMapping TypeName="IsTypeOf(DbModel.Module)">
+        <MappingFragment StoreEntitySet="Models">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Code" ColumnName="Code" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Active" ColumnName="Active" />
+          <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
+          <ScalarProperty Name="DeleteAt" ColumnName="DeleteAt" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="FormsModels">
+      <EntityTypeMapping TypeName="IsTypeOf(DbModel.FormModule)">
+        <MappingFragment StoreEntitySet="FormsModels">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Users">
+      <EntityTypeMapping TypeName="IsTypeOf(DbModel.User)">
+        <MappingFragment StoreEntitySet="Users">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Username" ColumnName="Username" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
+          <ScalarProperty Name="DeleteAt" ColumnName="DeleteAt" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Rols">
+      <EntityTypeMapping TypeName="IsTypeOf(DbModel.Rol)">
+        <MappingFragment StoreEntitySet="Rols">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
+          <ScalarProperty Name="DeleteAt" ColumnName="DeleteAt" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Rols_Users">
+      <EntityTypeMapping TypeName="IsTypeOf(DbModel.Rol_User)">
+        <MappingFragment StoreEntitySet="Rols_Users">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Permissions">
+      <EntityTypeMapping TypeName="IsTypeOf(DbModel.Permission)">
+        <MappingFragment StoreEntitySet="Permissions">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Can_Read" ColumnName="Can_Read" />
+          <ScalarProperty Name="Can_Create" ColumnName="Can_Create" />
+          <ScalarProperty Name="Can_Update" ColumnName="Can_Update" />
+          <ScalarProperty Name="Can_Delete" ColumnName="Can_Delete" />
+          <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
+          <ScalarProperty Name="DeleteAt" ColumnName="DeleteAt" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Rol_Form_PermissionSet">
+      <EntityTypeMapping TypeName="IsTypeOf(DbModel.Rol_Form_Permission)">
+        <MappingFragment StoreEntitySet="Rol_Form_PermissionSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Change_LogSet">
+      <EntityTypeMapping TypeName="IsTypeOf(DbModel.Change_Log)">
+        <MappingFragment StoreEntitySet="Change_LogSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Workers">
+      <EntityTypeMapping TypeName="IsTypeOf(DbModel.Worker)">
+        <MappingFragment StoreEntitySet="Workers">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="First_Name" ColumnName="First_Name" />
+          <ScalarProperty Name="Last_Name" ColumnName="Last_Name" />
+          <ScalarProperty Name="Identity_Document" ColumnName="Identity_Document" />
+          <ScalarProperty Name="Job_Title" ColumnName="Job_Title" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Phone" ColumnName="Phone" />
+          <ScalarProperty Name="Hire_Date" ColumnName="Hire_Date" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Clients">
+      <EntityTypeMapping TypeName="IsTypeOf(DbModel.Client)">
+        <MappingFragment StoreEntitySet="Clients">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="First_Name" ColumnName="First_Name" />
+          <ScalarProperty Name="Last_Name" ColumnName="Last_Name" />
+          <ScalarProperty Name="Identity_Document" ColumnName="Identity_Document" />
+          <ScalarProperty Name="Client_Type" ColumnName="Client_Type" />
+          <ScalarProperty Name="Phone" ColumnName="Phone" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="Socioeconomic_Stratification" ColumnName="Socioeconomic_Stratification" />
+          <ScalarProperty Name="Registration_Date" ColumnName="Registration_Date" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PQRSet">
+      <EntityTypeMapping TypeName="IsTypeOf(DbModel.PQR)">
+        <MappingFragment StoreEntitySet="PQRSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="PQR_Type" ColumnName="PQR_Type" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Creation_Date" ColumnName="Creation_Date" />
+          <ScalarProperty Name="PQR_Status" ColumnName="PQR_Status" />
+          <ScalarProperty Name="Resolution_Date" ColumnName="Resolution_Date" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Logins">
+      <EntityTypeMapping TypeName="IsTypeOf(DbModel.Login)">
+        <MappingFragment StoreEntitySet="Logins">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Username" ColumnName="Username" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Workers_Logins">
+      <EntityTypeMapping TypeName="IsTypeOf(DbModel.Worker_Login)">
+        <MappingFragment StoreEntitySet="Workers_Logins">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Username" ColumnName="Username" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="Creation_Date" ColumnName="Creation_Date" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="FormModelForm" TypeName="DbModel.FormModelForm" StoreEntitySet="FormsModels">
+      <EndProperty Name="Form">
+        <ScalarProperty Name="Id" ColumnName="FormId_Id" />
+      </EndProperty>
+      <EndProperty Name="FormModel">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="FormModuleModule" TypeName="DbModel.FormModuleModule" StoreEntitySet="FormsModels">
+      <EndProperty Name="Module">
+        <ScalarProperty Name="Id" ColumnName="ModuleId_Id" />
+      </EndProperty>
+      <EndProperty Name="FormModule">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="Rol_UserRol" TypeName="DbModel.Rol_UserRol" StoreEntitySet="Rols_Users">
+      <EndProperty Name="Rol">
+        <ScalarProperty Name="Id" ColumnName="RolId_Id" />
+      </EndProperty>
+      <EndProperty Name="Rol_User">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="Rol_UserUser" TypeName="DbModel.Rol_UserUser" StoreEntitySet="Rols_Users">
+      <EndProperty Name="User">
+        <ScalarProperty Name="Id" ColumnName="UserId_Id" />
+      </EndProperty>
+      <EndProperty Name="Rol_User">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="Rol_Form_PermissionRol" TypeName="DbModel.Rol_Form_PermissionRol" StoreEntitySet="Rol_Form_PermissionSet">
+      <EndProperty Name="Rol">
+        <ScalarProperty Name="Id" ColumnName="RolId_Id" />
+      </EndProperty>
+      <EndProperty Name="Rol_Form_Permission">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="Rol_Form_PermissionForm" TypeName="DbModel.Rol_Form_PermissionForm" StoreEntitySet="Rol_Form_PermissionSet">
+      <EndProperty Name="Form">
+        <ScalarProperty Name="Id" ColumnName="FormId_Id" />
+      </EndProperty>
+      <EndProperty Name="Rol_Form_Permission">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="Rol_Form_PermissionPermission" TypeName="DbModel.Rol_Form_PermissionPermission" StoreEntitySet="Rol_Form_PermissionSet">
+      <EndProperty Name="Permission">
+        <ScalarProperty Name="Id" ColumnName="PermissionId_Id" />
+      </EndProperty>
+      <EndProperty Name="Rol_Form_Permission">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="Worker_LoginLogin" TypeName="DbModel.Worker_LoginLogin" StoreEntitySet="Workers_Logins">
+      <EndProperty Name="Login">
+        <ScalarProperty Name="Id" ColumnName="Login_Id" />
+      </EndProperty>
+      <EndProperty Name="Worker_Login">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="Worker_LoginWorker" TypeName="DbModel.Worker_LoginWorker" StoreEntitySet="Workers_Logins">
+      <EndProperty Name="Worker">
+        <ScalarProperty Name="Id" ColumnName="Worker_Id" />
+      </EndProperty>
+      <EndProperty Name="Worker_Login">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="PQRWorker" TypeName="DbModel.PQRWorker" StoreEntitySet="PQRWorker">
+      <EndProperty Name="PQR">
+        <ScalarProperty Name="Id" ColumnName="PQR_Id" />
+      </EndProperty>
+      <EndProperty Name="Worker">
+        <ScalarProperty Name="Id" ColumnName="Worker_Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="PQRClient" TypeName="DbModel.PQRClient" StoreEntitySet="PQRClient">
+      <EndProperty Name="PQR">
+        <ScalarProperty Name="Id" ColumnName="PQR_Id" />
+      </EndProperty>
+      <EndProperty Name="Client">
+        <ScalarProperty Name="Id" ColumnName="Client_Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
   </edmx:Runtime>
   <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
@@ -297,6 +914,7 @@
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
         <DesignerProperty Name="EnablePluralization" Value="False" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
       </DesignerInfoPropertySet>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->

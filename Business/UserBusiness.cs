@@ -42,25 +42,13 @@ namespace Business
                 }
 
                 // Mapeo DTO -> Entidad
-                var user = new User
-                {
-                    Name = userDto.Name,
-                    Email = userDto.Email,
-                    Password = "", // Debería de manejarse un hash de la contraseña en la lógica real.
-                    CreateAt = DateTime.UtcNow,
-                    DeleteAt = DateTime.MinValue // Se podría establecer un valor predeterminado.
-                };
+                var user = MapToEntity(userDto);
 
                 // Llamar al método de la capa de datos para crear el usuario
                 var createdUser = await _userData.CreateAsync(user);
 
                 // Mapeo de la entidad creada a DTO
-                return new UserDto
-                {
-                    Id = createdUser.Id,
-                    Name = createdUser.Name,
-                    Email = createdUser.Email
-                };
+                return MapToDTO(createdUser);
             }
             catch (Exception ex)
             {
@@ -78,12 +66,7 @@ namespace Business
             try
             {
                 var users = await _userData.GetAllAsync();
-                return users.Select(user => new UserDto
-                {
-                    Id = user.Id,
-                    Name = user.Name,
-                    Email = user.Email
-                });
+                return MapToDTOList(users); // Usamos el método MapToDTOList aquí
             }
             catch (Exception ex)
             {
@@ -104,12 +87,7 @@ namespace Business
                 var user = await _userData.GetByIdAsync(id);
                 if (user != null)
                 {
-                    return new UserDto
-                    {
-                        Id = user.Id,
-                        Name = user.Name,
-                        Email = user.Email
-                    };
+                    return MapToDTO(user); // Usamos el método MapToDTO aquí
                 }
 
                 return null;
@@ -145,9 +123,7 @@ namespace Business
                 }
 
                 // Mapeo DTO -> Entidad para actualizar
-                user.Name = userDto.Name;
-                user.Email = userDto.Email;
-                user.Password = user.Password; // Asegurarse de manejar la contraseña correctamente
+                MapToEntity(userDto, user);
 
                 var updated = await _userData.UpdateAsync(user);
                 return updated;
@@ -182,6 +158,44 @@ namespace Business
                 _logger.LogError(ex, "Error al eliminar el usuario con ID {UserId}.", id);
                 return false;
             }
+        }
+
+        // Método para mapear de User a UserDto
+        private UserDto MapToDTO(User user)
+        {
+            return new UserDto
+            {
+                Id = user.Id,
+                Name = user.Name,
+                Email = user.Email,
+                Password = user.Password,
+            };
+        }
+
+        // Método para mapear de UserDto a User
+        private User MapToEntity(UserDto userDto)
+        {
+            return new User
+            {
+                Id = userDto.Id,
+                Name = userDto.Name,
+                Email = userDto.Email,
+                Password = userDto.Password, // Aquí debería implementarse el hash de la contraseña
+            };
+        }
+
+        // Método para mapear de UserDto a User (cuando ya tenemos un usuario)
+        private void MapToEntity(UserDto userDto, User user)
+        {
+            user.Name = userDto.Name;
+            user.Email = userDto.Email;
+            user.Password = userDto.Password; // Asegurarse de manejar la contraseña correctamente
+        }
+
+        // Método para mapear una lista de User a una lista de UserDto
+        private IEnumerable<UserDto> MapToDTOList(IEnumerable<User> users)
+        {
+            return users.Select(user => MapToDTO(user)).ToList();
         }
     }
 }

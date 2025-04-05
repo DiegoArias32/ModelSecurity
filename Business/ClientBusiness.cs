@@ -32,21 +32,7 @@ namespace Business
             try
             {
                 var clients = await _clientData.GetAllAsync();
-                var clientsDto = clients.Select(client => new ClientDto
-                {
-                    ClientId = client.ClientId,
-                    FirstName = client.FirstName,
-                    LastName = client.LastName,
-                    IdentityDocument = client.IdentityDocument,
-                    ClientType = client.ClientType,
-                    Phone = client.Phone,
-                    Email = client.Email,
-                    Address = client.Address,
-                    SocioeconomicStratification = client.SocioeconomicStratification ?? 0, // Usar 0 si es nulo
-                    RegistrationDate = client.RegistrationDate ?? DateTime.MinValue // Asumir una fecha mínima si es nula
-                }).ToList();
-
-                return clientsDto;
+                return MapToDTOList(clients); // Usamos el método MapToDTOList aquí
             }
             catch (Exception ex)
             {
@@ -77,19 +63,7 @@ namespace Business
                     throw new EntityNotFoundException("Cliente", id);
                 }
 
-                return new ClientDto
-                {
-                    ClientId = client.ClientId,
-                    FirstName = client.FirstName,
-                    LastName = client.LastName,
-                    IdentityDocument = client.IdentityDocument,
-                    ClientType = client.ClientType,
-                    Phone = client.Phone,
-                    Email = client.Email,
-                    Address = client.Address,
-                    SocioeconomicStratification = client.SocioeconomicStratification ?? 0,
-                    RegistrationDate = client.RegistrationDate ?? DateTime.MinValue
-                };
+                return MapToDTO(client); // Usamos el método MapToDTO aquí
             }
             catch (Exception ex)
             {
@@ -109,34 +83,10 @@ namespace Business
             {
                 ValidateClient(clientDto); // Validar los datos del cliente
 
-                var client = new Client
-                {
-                    FirstName = clientDto.FirstName,
-                    LastName = clientDto.LastName,
-                    IdentityDocument = clientDto.IdentityDocument,
-                    ClientType = clientDto.ClientType,
-                    Phone = clientDto.Phone,
-                    Email = clientDto.Email,
-                    Address = clientDto.Address,
-                    SocioeconomicStratification = clientDto.SocioeconomicStratification,
-                    RegistrationDate = clientDto.RegistrationDate
-                };
-
+                var client = MapToEntity(clientDto); // Usamos el método MapToEntity aquí
                 var createdClient = await _clientData.CreateAsync(client);
 
-                return new ClientDto
-                {
-                    ClientId = createdClient.ClientId,
-                    FirstName = createdClient.FirstName,
-                    LastName = createdClient.LastName,
-                    IdentityDocument = createdClient.IdentityDocument,
-                    ClientType = createdClient.ClientType,
-                    Phone = createdClient.Phone,
-                    Email = createdClient.Email,
-                    Address = createdClient.Address,
-                    SocioeconomicStratification = createdClient.SocioeconomicStratification ?? 0,
-                    RegistrationDate = createdClient.RegistrationDate ?? DateTime.MinValue
-                };
+                return MapToDTO(createdClient); // Usamos el método MapToDTO aquí
             }
             catch (Exception ex)
             {
@@ -161,15 +111,7 @@ namespace Business
                     throw new EntityNotFoundException("Cliente", clientDto.ClientId);
                 }
 
-                existingClient.FirstName = clientDto.FirstName;
-                existingClient.LastName = clientDto.LastName;
-                existingClient.IdentityDocument = clientDto.IdentityDocument;
-                existingClient.ClientType = clientDto.ClientType;
-                existingClient.Phone = clientDto.Phone;
-                existingClient.Email = clientDto.Email;
-                existingClient.Address = clientDto.Address;
-                existingClient.SocioeconomicStratification = clientDto.SocioeconomicStratification;
-                existingClient.RegistrationDate = clientDto.RegistrationDate;
+                existingClient = MapToEntity(clientDto); // Usamos el método MapToEntity aquí
 
                 var updated = await _clientData.UpdateAsync(existingClient);
 
@@ -248,6 +190,48 @@ namespace Business
                 _logger.LogWarning("Se intentó crear o actualizar un cliente con Phone inválido.");
                 throw new ValidationException("Phone", "El número de teléfono del cliente es obligatorio.");
             }
+        }
+
+        // Método para mapear de Client a ClientDTO
+        private ClientDto MapToDTO(Client client)
+        {
+            return new ClientDto
+            {
+                ClientId = client.ClientId,
+                FirstName = client.FirstName,
+                LastName = client.LastName,
+                IdentityDocument = client.IdentityDocument,
+                ClientType = client.ClientType,
+                Phone = client.Phone,
+                Email = client.Email,
+                Address = client.Address,
+                SocioeconomicStratification = client.SocioeconomicStratification ?? 0,
+                RegistrationDate = client.RegistrationDate ?? DateTime.MinValue
+            };
+        }
+
+        // Método para mapear de ClientDTO a Client
+        private Client MapToEntity(ClientDto clientDto)
+        {
+            return new Client
+            {
+                ClientId = clientDto.ClientId,
+                FirstName = clientDto.FirstName,
+                LastName = clientDto.LastName,
+                IdentityDocument = clientDto.IdentityDocument,
+                ClientType = clientDto.ClientType,
+                Phone = clientDto.Phone,
+                Email = clientDto.Email,
+                Address = clientDto.Address,
+                SocioeconomicStratification = clientDto.SocioeconomicStratification,
+                RegistrationDate = clientDto.RegistrationDate
+            };
+        }
+
+        // Método para mapear una lista de Client a una lista de ClientDTO
+        private IEnumerable<ClientDto> MapToDTOList(IEnumerable<Client> clients)
+        {
+            return clients.Select(client => MapToDTO(client)).ToList();
         }
     }
 }

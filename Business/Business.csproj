@@ -10,6 +10,9 @@
     <ProjectReference Include="..\Data\Data.csproj" />
     <ProjectReference Include="..\Entity\Entity.csproj" />
     <ProjectReference Include="..\Utilities\Utilities.csproj" />
+    
+    <!-- Agregar la referencia al paquete Microsoft.Extensions.Logging -->
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.3" />
   </ItemGroup>
 
 </Project>

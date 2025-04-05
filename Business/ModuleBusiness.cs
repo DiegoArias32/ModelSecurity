@@ -25,20 +25,7 @@ namespace Business
             try
             {
                 var modules = await _moduleData.GetAllAsync();
-                var moduleDtos = new List<ModuleDto>();
-
-                foreach (var module in modules)
-                {
-                    moduleDtos.Add(new ModuleDto
-                    {
-                        Id = module.Id,
-                        Code = module.Code,
-                        Active = module.Active,
-                        CreateAt = module.CreateAt
-                    });
-                }
-
-                return moduleDtos;
+                return MapToDTOList(modules); // Usamos MapToDTOList para convertir la lista de módulos
             }
             catch (Exception ex)
             {
@@ -64,13 +51,7 @@ namespace Business
                     throw new EntityNotFoundException("Módulo", id);
                 }
 
-                return new ModuleDto
-                {
-                    Id = module.Id,
-                    Code = module.Code,
-                    Active = module.Active,
-                    CreateAt = module.CreateAt
-                };
+                return MapToDTO(module); // Usamos MapToDTO aquí para convertir el módulo a DTO
             }
             catch (Exception ex)
             {
@@ -85,22 +66,11 @@ namespace Business
             {
                 ValidateModule(moduleDto);
 
-                var module = new Module
-                {
-                    Code = moduleDto.Code,
-                    Active = moduleDto.Active,
-                    CreateAt = DateTime.Now
-                };
+                var module = MapToEntity(moduleDto); // Usamos MapToEntity para convertir el DTO a la entidad
 
                 var createdModule = await _moduleData.CreateAsync(module);
 
-                return new ModuleDto
-                {
-                    Id = createdModule.Id,
-                    Code = createdModule.Code,
-                    Active = createdModule.Active,
-                    CreateAt = createdModule.CreateAt
-                };
+                return MapToDTO(createdModule); // Usamos MapToDTO para convertir la entidad creada a DTO
             }
             catch (Exception ex)
             {
@@ -129,13 +99,7 @@ namespace Business
             {
                 ValidateModule(moduleDto);
 
-                var module = new Module
-                {
-                    Id = moduleDto.Id,
-                    Code = moduleDto.Code,
-                    Active = moduleDto.Active,
-                    CreateAt = moduleDto.CreateAt
-                };
+                var module = MapToEntity(moduleDto); // Convertimos el DTO a la entidad para actualizar
 
                 return await _moduleData.UpdateAsync(module);
             }
@@ -163,6 +127,34 @@ namespace Business
                 _logger.LogError(ex, "Error al eliminar el módulo con ID: {ModuleId}", id);
                 return false;
             }
+        }
+
+        // Método para mapear de Module a ModuleDto
+        private ModuleDto MapToDTO(Module module)
+        {
+            return new ModuleDto
+            {
+                Id = module.Id,
+                Code = module.Code,
+                Active = module.Active,
+            };
+        }
+
+        // Método para mapear de ModuleDto a Module
+        private Module MapToEntity(ModuleDto moduleDto)
+        {
+            return new Module
+            {
+                Id = moduleDto.Id,
+                Code = moduleDto.Code,
+                Active = moduleDto.Active,
+};
+        }
+
+        // Método para mapear una lista de Module a una lista de ModuleDto
+        private IEnumerable<ModuleDto> MapToDTOList(IEnumerable<Module> modules)
+        {
+            return modules.Select(module => MapToDTO(module)).ToList();
         }
     }
 }

@@ -10,6 +10,7 @@
         "dependencies": {
           "Data": "1.0.0",
           "Entity": "1.0.0",
+          "Microsoft.Extensions.Logging": "9.0.3",
           "Utilities": "1.0.0"
         },
         "runtime": {

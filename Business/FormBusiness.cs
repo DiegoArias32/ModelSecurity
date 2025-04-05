@@ -32,16 +32,7 @@ namespace Business
             try
             {
                 var forms = await _formData.GetAllAsync();
-                var formsDto = forms.Select(form => new FormDto
-                {
-                    Id = form.Id,
-                    Name = form.Name,
-                    Code = form.Code,
-                    Active = form.Active,
-                    CreateAt = form.CreateAt
-                }).ToList();
-
-                return formsDto;
+                return MapToDTOList(forms); // Usamos el método MapToDTOList aquí
             }
             catch (Exception ex)
             {
@@ -72,14 +63,7 @@ namespace Business
                     throw new EntityNotFoundException("Formulario", id);
                 }
 
-                return new FormDto
-                {
-                    Id = form.Id,
-                    Name = form.Name,
-                    Code = form.Code,
-                    Active = form.Active,
-                    CreateAt = form.CreateAt
-                };
+                return MapToDTO(form); // Usamos el método MapToDTO aquí
             }
             catch (Exception ex)
             {
@@ -99,24 +83,12 @@ namespace Business
             {
                 ValidateForm(formDto); // Validar los datos del formulario
 
-                var form = new Form
-                {
-                    Name = formDto.Name,
-                    Code = formDto.Code,
-                    Active = formDto.Active,
-                    CreateAt = DateTime.UtcNow // Asegurarse de que la fecha de creación se establezca correctamente
-                };
+                var form = MapToEntity(formDto); // Usamos el método MapToEntity aquí
+                form.CreateAt = DateTime.UtcNow; // Establecer la fecha de creación
 
                 var createdForm = await _formData.CreateAsync(form);
 
-                return new FormDto
-                {
-                    Id = createdForm.Id,
-                    Name = createdForm.Name,
-                    Code = createdForm.Code,
-                    Active = createdForm.Active,
-                    CreateAt = createdForm.CreateAt
-                };
+                return MapToDTO(createdForm); // Usamos el método MapToDTO aquí
             }
             catch (Exception ex)
             {
@@ -204,6 +176,38 @@ namespace Business
                 _logger.LogWarning("Se intentó crear o actualizar un formulario con Code vacío.");
                 throw new ValidationException("Code", "El código del formulario es obligatorio.");
             }
+        }
+
+        // Método para mapear de Form a FormDto
+        private FormDto MapToDTO(Form form)
+        {
+            return new FormDto
+            {
+                Id = form.Id,
+                Name = form.Name,
+                Code = form.Code,
+                Active = form.Active,
+                CreateAt = form.CreateAt
+            };
+        }
+
+        // Método para mapear de FormDto a Form
+        private Form MapToEntity(FormDto formDto)
+        {
+            return new Form
+            {
+                Id = formDto.Id,
+                Name = formDto.Name,
+                Code = formDto.Code,
+                Active = formDto.Active,
+                CreateAt = formDto.CreateAt
+            };
+        }
+
+        // Método para mapear una lista de Form a una lista de FormDto
+        private IEnumerable<FormDto> MapToDTOList(IEnumerable<Form> forms)
+        {
+            return forms.Select(form => MapToDTO(form)).ToList();
         }
     }
 }

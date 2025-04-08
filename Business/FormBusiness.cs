@@ -134,25 +134,27 @@ namespace Business
         /// <param name="id">ID del formulario a eliminar.</param>
         /// <returns>True si la eliminación fue exitosa.</returns>
         public async Task<bool> DeleteFormAsync(int id)
+{
+    try
+    {
+        var form = await _formData.GetByIdAsync(id);
+        if (form == null)
         {
-            try
-            {
-                var form = await _formData.GetByIdAsync(id);
-                if (form == null)
-                {
-                    _logger.LogWarning("Formulario con ID {FormId} no encontrado.", id);
-                    throw new EntityNotFoundException("Formulario", id);
-                }
-
-                var deleted = await _formData.DeleteAsync(id);
-                return deleted;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error al eliminar el formulario con ID {FormId}", id);
-                throw new ExternalServiceException("Base de datos", "Error al eliminar el formulario", ex);
-            }
+            _logger.LogWarning("Formulario con ID {FormId} no encontrado.", id);
+            throw new EntityNotFoundException("Formulario", id);
         }
+
+        form.DeleteAt = DateTime.UtcNow;
+        var deleted = await _formData.UpdateAsync(form);
+        return deleted;
+    }
+    catch (Exception ex)
+    {
+        _logger.LogError(ex, "Error al eliminar lógicamente el formulario con ID {FormId}", id);
+        throw new ExternalServiceException("Base de datos", "Error al eliminar el formulario", ex);
+    }
+}
+
 
         /// <summary>
         /// Método para validar el DTO del formulario.

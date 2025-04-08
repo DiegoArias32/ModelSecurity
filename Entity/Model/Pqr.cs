@@ -17,8 +17,8 @@ namespace Entity.Model
         public int WorkerId { get; set; }
         public int ClientId { get; set; }
 
-        public required Worker Worker { get; set; }
-        public required Client Client { get; set; }
+        public Worker Worker { get; set; }
+        public Client Client { get; set; }
     }
 
 }

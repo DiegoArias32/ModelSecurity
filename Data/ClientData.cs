@@ -82,19 +82,29 @@ namespace Data
         /// <param name="client">Cliente con los datos actualizados.</param>
         /// <returns>True si la actualización fue exitosa, False si no lo fue.</returns>
         public async Task<bool> UpdateAsync(Client client)
+{
+    try
+    {
+        var existingClient = await _context.Set<Client>().FindAsync(client.ClientId);
+        if (existingClient == null)
         {
-            try
-            {
-                _context.Set<Client>().Update(client);
-                await _context.SaveChangesAsync();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error al actualizar el cliente con ID {ClientId}: {ErrorMessage}", client.ClientId, ex.Message);
-                return false;
-            }
+            _logger.LogWarning("No se encontró el cliente con ID {ClientId} para actualizar.", client.ClientId);
+            return false;
         }
+
+        // Actualizar valores evitando conflictos de tracking
+        _context.Entry(existingClient).CurrentValues.SetValues(client);
+        await _context.SaveChangesAsync();
+
+        return true;
+    }
+    catch (Exception ex)
+    {
+        _logger.LogError(ex, "Error al actualizar el cliente con ID {ClientId}: {ErrorMessage}", client.ClientId, ex.Message);
+        return false;
+    }
+}
+
 
         /// <summary>
         /// Elimina un cliente por su ID.

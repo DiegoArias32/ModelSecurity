@@ -11,7 +11,7 @@ namespace Business
     public class PermissionBusiness
     {
         private readonly PermissionData _permissionData;
-        private readonly ILogger _logger;
+        private readonly ILogger<PermissionBusiness> _logger;
 
         public PermissionBusiness(PermissionData permissionData, ILogger<PermissionBusiness> logger)
         {
@@ -21,45 +21,17 @@ namespace Business
 
         public async Task<PermissionDto> CreateAsync(PermissionDto permissionDto)
         {
-            var permission = new Permission
-            {
-                Can_Read = permissionDto.CanRead,
-                Can_Create = permissionDto.CanCreate,
-                Can_Update = permissionDto.CanUpdate,
-                Can_Delete = permissionDto.CanDelete,
-                CreateAt = DateTime.UtcNow
-            };
+            var permission = MapToEntity(permissionDto);
+            permission.CreateAt = DateTime.UtcNow;
 
             var createdPermission = await _permissionData.CreateAsync(permission);
-
-            return new PermissionDto
-            {
-                Id = createdPermission.Id,
-                CanRead = createdPermission.Can_Read,
-                CanCreate = createdPermission.Can_Create,
-                CanUpdate = createdPermission.Can_Update,
-                CanDelete = createdPermission.Can_Delete
-            };
+            return MapToDTO(createdPermission);
         }
 
         public async Task<IEnumerable<PermissionDto>> GetAllAsync()
         {
             var permissions = await _permissionData.GetAllAsync();
-
-            var permissionDtos = new List<PermissionDto>();
-            foreach (var permission in permissions)
-            {
-                permissionDtos.Add(new PermissionDto
-                {
-                    Id = permission.Id,
-                    CanRead = permission.Can_Read,
-                    CanCreate = permission.Can_Create,
-                    CanUpdate = permission.Can_Update,
-                    CanDelete = permission.Can_Delete
-                });
-            }
-
-            return permissionDtos;
+            return MapToDTOList(permissions);
         }
 
         public async Task<PermissionDto?> GetByIdAsync(int id)
@@ -68,14 +40,7 @@ namespace Business
             if (permission == null)
                 return null;
 
-            return new PermissionDto
-            {
-                Id = permission.Id,
-                CanRead = permission.Can_Read,
-                CanCreate = permission.Can_Create,
-                CanUpdate = permission.Can_Update,
-                CanDelete = permission.Can_Delete
-            };
+            return MapToDTO(permission);
         }
 
         public async Task<bool> UpdateAsync(PermissionDto permissionDto)
@@ -96,5 +61,39 @@ namespace Business
         {
             return await _permissionData.DeleteAsync(id);
         }
+
+        // -----------------------
+        // MÉTODOS DE MAPEADO
+        // -----------------------
+
+        private PermissionDto MapToDTO(Permission permission)
+        {
+            return new PermissionDto
+            {
+                Id = permission.Id,
+                CanRead = permission.Can_Read,
+                CanCreate = permission.Can_Create,
+                CanUpdate = permission.Can_Update,
+                CanDelete = permission.Can_Delete
+            };
+        }
+
+        private Permission MapToEntity(PermissionDto dto)
+        {
+            return new Permission
+            {
+                Id = dto.Id,
+                Can_Read = dto.CanRead,
+                Can_Create = dto.CanCreate,
+                Can_Update = dto.CanUpdate,
+                Can_Delete = dto.CanDelete
+            };
+        }
+
+        private IEnumerable<PermissionDto> MapToDTOList(IEnumerable<Permission> permissions)
+        {
+            return permissions.Select(MapToDTO).ToList();
+        }
+
     }
 }

@@ -49,10 +49,13 @@ namespace Data
         /// Obtiene todos los forms almacenados en la base de datos.
         /// </summary>
         /// <returns>Lista de form.</returns>
-        public async Task<IEnumerable<Form>> GetAllAsync()
-        {
-            return await _context.Set<Form>().ToListAsync();
-        }
+       public async Task<IEnumerable<Form>> GetAllAsync()
+{
+    return await _context.Set<Form>()
+        .Where(f => f.DeleteAt == null)
+        .ToListAsync();
+}
+
 
         /// <summary>
         /// Obtiene un form específico por su identificador.

@@ -191,9 +191,8 @@ namespace Business
             return new RolDto
             {
                 Id = rol.Id,
-                Code = rol.Code,
                 Name = rol.Name,
-                Active = rol.Active
+                Description = rol.Description,
             };
         }
 
@@ -203,9 +202,8 @@ namespace Business
             return new Rol
             {
                 Id = rolDto.Id,
-                Code = rolDto.Code,
                 Name = rolDto.Name,
-                Active = rolDto.Active
+                Description = rolDto.Description
             };
         }
 

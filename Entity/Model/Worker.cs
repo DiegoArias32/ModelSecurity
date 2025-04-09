@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Entity.Model
 {
-public class Worker
+    public class Worker
     {
         public int WorkerId { get; set; }
         public string FirstName { get; set; }
@@ -17,8 +14,10 @@ public class Worker
         public int Phone { get; set; }
         public DateTime? HireDate { get; set; }
 
-        // Relación inversa con User
+        // Relación uno a uno con User
         public User User { get; set; }
-    }
 
+        // Relación uno a muchos con WorkerLogin
+        public ICollection<WorkerLogin> WorkerLogins { get; set; }
+    }
 }

@@ -1,6 +1,7 @@
 using Business;
 using Data;
 using Entity.Contexts;
+using Entity.DTOs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -57,6 +58,19 @@ builder.Services.AddScoped<WorkerBusiness>();
 
 builder.Services.AddScoped<PqrData>();
 builder.Services.AddScoped<PqrBusiness>();
+
+builder.Services.AddScoped<RolUserData>();
+builder.Services.AddScoped<RolUserBusiness>();
+
+builder.Services.AddScoped<RolFormPermissionData>();
+builder.Services.AddScoped<RolFormPermissionBusiness>();
+
+builder.Services.AddScoped<LoginData>();
+builder.Services.AddScoped<LoginBusiness>();
+
+builder.Services.AddScoped<WorkerLoginData>();
+builder.Services.AddScoped<WorkerLoginBusiness>();
+
 
 
 // 🔹 Logging (opcional si lo vas a usar)

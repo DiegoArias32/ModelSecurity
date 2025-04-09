@@ -13,9 +13,9 @@ namespace Data{
 public class RolFormPermissionData
 {
     private readonly ApplicationDbContext _context;
-    private readonly ILogger _logger;
+    private readonly ILogger<RolFormPermissionData> _logger;
 
-    public RolFormPermissionData(ApplicationDbContext context, ILogger logger)
+    public RolFormPermissionData(ApplicationDbContext context, ILogger<RolFormPermissionData> logger)
     {
         _context = context ?? throw new ArgumentNullException(nameof(context));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -51,6 +51,7 @@ public class RolFormPermissionData
         return await _context.Set<RolFormPermission>()
             .Include(rfp => rfp.Rol)
             .Include(rfp => rfp.Form)
+            .Include(rfp => rfp.Permission)
             .ToListAsync();
     }
 
@@ -66,6 +67,7 @@ public class RolFormPermissionData
             return await _context.Set<RolFormPermission>()
                 .Include(rfp => rfp.Rol)
                 .Include(rfp => rfp.Form)
+                .Include(rfp => rfp.Permission)
                 .FirstOrDefaultAsync(rfp => rfp.Id == id);
         }
         catch (Exception ex)
@@ -88,6 +90,7 @@ public class RolFormPermissionData
                 .Where(rfp => rfp.RolId == rolId)
                 .Include(rfp => rfp.Rol)
                 .Include(rfp => rfp.Form)
+                .Include(rfp => rfp.Permission)
                 .ToListAsync();
         }
         catch (Exception ex)
@@ -110,6 +113,7 @@ public class RolFormPermissionData
                 .Where(rfp => rfp.FormId == formId)
                 .Include(rfp => rfp.Rol)
                 .Include(rfp => rfp.Form)
+                .Include(rfp => rfp.Permission)
                 .ToListAsync();
         }
         catch (Exception ex)

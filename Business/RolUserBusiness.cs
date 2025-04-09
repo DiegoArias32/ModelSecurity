@@ -12,37 +12,37 @@ namespace Business
     public class RolUserBusiness
     {
         private readonly RolUserData _rolUserData;
-        private readonly ILogger _logger;
+        private readonly ILogger<RolUserBusiness> _logger;
 
-        public RolUserBusiness(RolUserData rolUserData, ILogger logger)
+        public RolUserBusiness(RolUserData rolUserData, ILogger<RolUserBusiness> logger)
         {
             _rolUserData = rolUserData ?? throw new ArgumentNullException(nameof(rolUserData));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<RolUserDto> CreateAsync(RolUserDto rolUserDto)
+public async Task<RolUserDto> CreateAsync(RolUserDto rolUserDto)
+{
+    try
+    {
+        if (rolUserDto.UserId <= 0 || rolUserDto.RolId <= 0)
         {
-            try
-            {
-                if (rolUserDto.UserId <= 0 || rolUserDto.RolId <= 0)
-                {
-                    _logger.LogWarning("Usuario o Rol no son válidos.");
-                    throw new ArgumentException("El usuario o rol no son válidos.");
-                }
-
-                var rolUser = MapToEntity(rolUserDto);
-                rolUser.CreateAt = DateTime.UtcNow;
-                rolUser.DeleteAt = DateTime.MinValue;
-
-                var createdRolUser = await _rolUserData.CreateAsync(rolUser);
-                return MapToDTO(createdRolUser);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error al crear la relación Rol-User.");
-                throw;
-            }
+            _logger.LogWarning("Usuario o Rol no son válidos.");
+            throw new ArgumentException("El usuario o rol no son válidos.");
         }
+
+        var rolUser = MapToEntity(rolUserDto);
+        // No necesitamos establecer CreateAt ni DeleteAt aquí
+        // ya que se manejan automáticamente en la capa de datos
+        
+        var createdRolUser = await _rolUserData.CreateAsync(rolUser);
+        return MapToDTO(createdRolUser);
+    }
+    catch (Exception ex)
+    {
+        _logger.LogError(ex, "Error al crear la relación Rol-User.");
+        throw;
+    }
+}
 
         public async Task<IEnumerable<RolUserDto>> GetAllAsync()
         {
@@ -116,8 +116,6 @@ namespace Business
                 Id = entity.Id,
                 UserId = entity.UserId,
                 RolId = entity.RolId,
-                CreateAt = entity.CreateAt,
-                DeleteAt = entity.DeleteAt
             };
         }
 
@@ -128,8 +126,6 @@ namespace Business
                 Id = dto.Id,
                 UserId = dto.UserId,
                 RolId = dto.RolId,
-                CreateAt = dto.CreateAt,
-                DeleteAt = dto.DeleteAt
             };
         }
 

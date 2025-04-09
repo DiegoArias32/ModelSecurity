@@ -85,17 +85,5 @@ public class FormModuleController : ControllerBase
             return NotFound();
         return NoContent();
     }
-
-    /// <summary>
-    /// Elimina permanentemente una asignación de formulario a módulo.
-    /// </summary>
-    [HttpDelete("{id}/permanent")]
-    public async Task<IActionResult> PermanentDelete(int id)
-    {
-        var success = await _formModuleBusiness.PermanentDeleteAsync(id);
-        if (!success)
-            return NotFound();
-        return NoContent();
-    }
 }
 }

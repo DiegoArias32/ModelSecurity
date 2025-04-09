@@ -13,8 +13,9 @@ namespace Entity.Model
         public Rol Rol { get; set; }
         public int FormId { get; set; }
         public Form Form { get; set; }
+        public int PermissionId { get; set; }
+        public Permission Permission { get; set; }
         public DateTime CreateAt { get; set; }
-        public DateTime DeleteAt { get; set; }
-
+        public DateTime? DeleteAt { get; set; }
     }
 }

@@ -15,15 +15,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// 🔹 Configurar CORS
+
+// Agregar CORS
 var OrigenesPermitidos = builder.Configuration.GetValue<string>("OrigenesPermitidos")!.Split(",");
-builder.Services.AddCors(options =>
+builder.Services.AddCors(opciones =>
 {
-    options.AddDefaultPolicy(policy =>
+    opciones.AddDefaultPolicy(politica =>
     {
-        policy.WithOrigins(OrigenesPermitidos)
-              .AllowAnyHeader()
-              .AllowAnyMethod();
+        politica.WithOrigins(OrigenesPermitidos).AllowAnyHeader().AllowAnyMethod();
     });
 });
 

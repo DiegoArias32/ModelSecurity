@@ -158,6 +158,7 @@ namespace Business
         {
             return new WorkerLoginDto
             {
+                id = workerLogin.id,
                 LoginId = workerLogin.LoginId,
                 WorkerId = workerLogin.WorkerId,
                 Username = workerLogin.Username,
@@ -172,6 +173,7 @@ namespace Business
         {
             return new WorkerLogin
             {
+                id = WorkerLoginDto.id,
                 LoginId = WorkerLoginDto.LoginId,
                 WorkerId = WorkerLoginDto.WorkerId,
                 Username = WorkerLoginDto.Username,

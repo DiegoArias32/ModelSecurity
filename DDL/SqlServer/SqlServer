@@ -1,0 +1,193 @@
+-- Crear la base de datos
+USE [master]
+GO
+CREATE DATABASE [SecurityPQRDB]
+GO
+USE [SecurityPQRDB]
+GO
+
+-- Tabla de Clientes
+CREATE TABLE [dbo].[Clients](
+	[ClientId] [int] IDENTITY(1,1) NOT NULL,
+	[FirstName] [nvarchar](255) NOT NULL,
+	[LastName] [nvarchar](255) NOT NULL,
+	[IdentityDocument] [nvarchar](50) NOT NULL,
+	[ClientType] [nvarchar](50) NOT NULL,
+	[Phone] [bigint] NULL,
+	[Email] [nvarchar](255) NOT NULL,
+	[Address] [nvarchar](255) NOT NULL,
+	[SocioeconomicStratification] [int] NULL,
+	[RegistrationDate] [datetime2](7) NULL CONSTRAINT [DF_Clients_RegistrationDate] DEFAULT (getdate()),
+	CONSTRAINT [PK_Clients] PRIMARY KEY CLUSTERED ([ClientId] ASC),
+	CONSTRAINT [UQ_Clients_IdentityDocument] UNIQUE NONCLUSTERED ([IdentityDocument] ASC),
+	CONSTRAINT [UQ_Clients_Email] UNIQUE NONCLUSTERED ([Email] ASC)
+)
+GO
+
+-- Crear índice para documento de identidad
+CREATE NONCLUSTERED INDEX [IDX_Client_Document] ON [dbo].[Clients] ([IdentityDocument] ASC)
+GO
+
+-- Tabla de Formularios
+CREATE TABLE [dbo].[Forms](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [nvarchar](255) NOT NULL,
+	[Code] [nvarchar](50) NOT NULL,
+	[Active] [bit] NOT NULL DEFAULT ((1)),
+	[CreateAt] [datetime2](3) NULL DEFAULT (getdate()),
+	[DeleteAt] [datetime2](7) NULL,
+	CONSTRAINT [PK_Forms] PRIMARY KEY CLUSTERED ([Id] ASC),
+	CONSTRAINT [UQ_Forms_Code] UNIQUE NONCLUSTERED ([Code] ASC)
+)
+GO
+
+-- Tabla de Módulos
+CREATE TABLE [dbo].[Modules](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Code] [nvarchar](50) NOT NULL,
+	[Active] [bit] NOT NULL DEFAULT ((1)),
+	[CreateAt] [datetime2](7) NULL DEFAULT (getdate()),
+	[DeleteAt] [datetime2](7) NULL,
+	CONSTRAINT [PK_Modules] PRIMARY KEY CLUSTERED ([Id] ASC),
+	CONSTRAINT [UQ_Modules_Code] UNIQUE NONCLUSTERED ([Code] ASC)
+)
+GO
+
+-- Tabla de relación FormModules
+CREATE TABLE [dbo].[FormModules](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[FormId] [int] NOT NULL,
+	[ModuleId] [int] NOT NULL,
+	[CreateAt] [datetime] NOT NULL DEFAULT (getdate()),
+	[DeleteAt] [datetime] NULL,
+	CONSTRAINT [PK_FormModules] PRIMARY KEY CLUSTERED ([Id] ASC),
+	CONSTRAINT [FK_FormModules_Forms] FOREIGN KEY([FormId]) REFERENCES [dbo].[Forms] ([Id]) ON DELETE CASCADE,
+	CONSTRAINT [FK_FormModules_Modules] FOREIGN KEY([ModuleId]) REFERENCES [dbo].[Modules] ([Id]) ON DELETE CASCADE
+)
+GO
+
+-- Tabla de Logins
+CREATE TABLE [dbo].[Logins](
+	[LoginId] [int] IDENTITY(1,1) NOT NULL,
+	[Username] [nvarchar](100) NOT NULL,
+	[Password] [varchar](256) NOT NULL,
+	CONSTRAINT [PK_Logins] PRIMARY KEY CLUSTERED ([LoginId] ASC),
+	CONSTRAINT [UQ_Logins_Username] UNIQUE NONCLUSTERED ([Username] ASC)
+)
+GO
+
+-- Tabla de Permisos
+CREATE TABLE [dbo].[Permissions](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Can_Read] [bit] NOT NULL DEFAULT ((0)),
+	[Can_Create] [bit] NOT NULL DEFAULT ((0)),
+	[Can_Update] [bit] NOT NULL DEFAULT ((0)),
+	[Can_Delete] [bit] NOT NULL DEFAULT ((0)),
+	[CreateAt] [datetime] NOT NULL DEFAULT (getdate()),
+	[DeleteAt] [datetime] NULL,
+	CONSTRAINT [PK_Permissions] PRIMARY KEY CLUSTERED ([Id] ASC)
+)
+GO
+
+-- Tabla de Roles
+CREATE TABLE [dbo].[Roles](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [nvarchar](255) NOT NULL,
+	[CreateAt] [datetime] NOT NULL DEFAULT (getdate()),
+	[DeleteAt] [datetime] NULL,
+	[Description] [varchar](255) NULL,
+	CONSTRAINT [PK_Roles] PRIMARY KEY CLUSTERED ([Id] ASC),
+	CONSTRAINT [UQ_Roles_Name] UNIQUE NONCLUSTERED ([Name] ASC)
+)
+GO
+
+-- Tabla de Trabajadores
+CREATE TABLE [dbo].[Workers](
+	[WorkerId] [int] IDENTITY(1,1) NOT NULL,
+	[FirstName] [nvarchar](100) NOT NULL,
+	[LastName] [nvarchar](100) NOT NULL,
+	[IdentityDocument] [nvarchar](50) NOT NULL,
+	[JobTitle] [nvarchar](100) NOT NULL,
+	[Email] [nvarchar](255) NOT NULL,
+	[Phone] [int] NOT NULL,
+	[HireDate] [datetime] NULL,
+	CONSTRAINT [PK_Workers] PRIMARY KEY CLUSTERED ([WorkerId] ASC)
+)
+GO
+
+-- Tabla de PQR (Peticiones, Quejas, Reclamos)
+CREATE TABLE [dbo].[Pqr](
+	[PqrId] [int] IDENTITY(1,1) NOT NULL,
+	[PqrType] [nvarchar](255) NOT NULL,
+	[Description] [nvarchar](max) NOT NULL,
+	[CreationDate] [datetime] NOT NULL,
+	[PqrStatus] [nvarchar](100) NOT NULL,
+	[ResolutionDate] [datetime] NOT NULL,
+	[WorkerId] [int] NOT NULL,
+	[ClientId] [int] NOT NULL,
+	CONSTRAINT [PK_Pqr] PRIMARY KEY CLUSTERED ([PqrId] ASC),
+	CONSTRAINT [FK_Pqr_Workers] FOREIGN KEY([WorkerId]) REFERENCES [dbo].[Workers] ([WorkerId]),
+	CONSTRAINT [FK_Pqr_Clients] FOREIGN KEY([ClientId]) REFERENCES [dbo].[Clients] ([ClientId])
+)
+GO
+
+-- Tabla de relación RolFormPermissions
+CREATE TABLE [dbo].[RolFormPermissions](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[RolId] [int] NOT NULL,
+	[FormId] [int] NOT NULL,
+	[PermissionId] [int] NOT NULL,
+	[CreateAt] [datetime2](7) NULL DEFAULT (getdate()),
+	[DeleteAt] [datetime2](7) NULL,
+	CONSTRAINT [PK_RolFormPermissions] PRIMARY KEY CLUSTERED ([Id] ASC),
+	CONSTRAINT [FK_RolFormPermissions_Roles] FOREIGN KEY([RolId]) REFERENCES [dbo].[Roles] ([Id]) ON DELETE CASCADE,
+	CONSTRAINT [FK_RolFormPermissions_Forms] FOREIGN KEY([FormId]) REFERENCES [dbo].[Forms] ([Id]) ON DELETE CASCADE,
+	CONSTRAINT [FK_RolFormPermissions_Permissions] FOREIGN KEY([PermissionId]) REFERENCES [dbo].[Permissions] ([Id]) ON DELETE CASCADE
+)
+GO
+
+-- Tabla de Usuarios
+CREATE TABLE [dbo].[Users](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Email] [nvarchar](255) NOT NULL,
+	[Password] [nvarchar](255) NOT NULL,
+	[CreateAt] [datetime2](7) NOT NULL DEFAULT (getdate()),
+	[DeleteAt] [datetime2](7) NULL,
+	[Name] [nvarchar](100) NULL,
+	[WorkerId] [int] NULL,
+	CONSTRAINT [PK_Users] PRIMARY KEY CLUSTERED ([Id] ASC),
+	CONSTRAINT [UQ_Users_Email] UNIQUE NONCLUSTERED ([Email] ASC)
+)
+GO
+
+-- Crear índice para email
+CREATE NONCLUSTERED INDEX [IDX_User_Email] ON [dbo].[Users] ([Email] ASC)
+GO
+
+-- Tabla de relación RolUsers
+CREATE TABLE [dbo].[RolUsers](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[UserId] [int] NOT NULL,
+	[RolId] [int] NOT NULL,
+	[CreateAt] [datetime2](7) NULL DEFAULT (getdate()),
+	[DeleteAt] [datetime2](7) NULL,
+	CONSTRAINT [PK_RolUsers] PRIMARY KEY CLUSTERED ([Id] ASC),
+	CONSTRAINT [FK_RolUsers_Users] FOREIGN KEY([UserId]) REFERENCES [dbo].[Users] ([Id]) ON DELETE CASCADE,
+	CONSTRAINT [FK_RolUsers_Roles] FOREIGN KEY([RolId]) REFERENCES [dbo].[Roles] ([Id]) ON DELETE CASCADE
+)
+GO
+
+-- Tabla de WorkerLogins
+CREATE TABLE [dbo].[WorkerLogins](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[WorkerId] [int] NOT NULL,
+	[Username] [nvarchar](255) NOT NULL,
+	[Password] [nvarchar](255) NOT NULL,
+	[CreationDate] [datetime] NOT NULL DEFAULT (getdate()),
+	[Status] [bit] NOT NULL DEFAULT ((1)),
+	[LoginId] [int] NULL,
+	CONSTRAINT [PK_WorkerLogins] PRIMARY KEY CLUSTERED ([Id] ASC),
+	CONSTRAINT [UQ_WorkerLogins_Username] UNIQUE NONCLUSTERED ([Username] ASC),
+	CONSTRAINT [FK_WorkerLogins_Workers] FOREIGN KEY([WorkerId]) REFERENCES [dbo].[Workers] ([WorkerId])
+)
+GO

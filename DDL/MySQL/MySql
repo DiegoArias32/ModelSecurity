@@ -1,0 +1,174 @@
+-- Create database
+CREATE DATABASE SecurityPQRDB;
+USE SecurityPQRDB;
+
+-- Clients table
+CREATE TABLE Clients (
+    ClientId INT AUTO_INCREMENT NOT NULL,
+    FirstName VARCHAR(255) NOT NULL,
+    LastName VARCHAR(255) NOT NULL,
+    IdentityDocument VARCHAR(50) NOT NULL,
+    ClientType VARCHAR(50) NOT NULL,
+    Phone BIGINT NULL,
+    Email VARCHAR(255) NOT NULL,
+    Address VARCHAR(255) NOT NULL,
+    SocioeconomicStratification INT NULL,
+    RegistrationDate DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (ClientId),
+    UNIQUE KEY (IdentityDocument),
+    UNIQUE KEY (Email)
+);
+
+-- Create index on IdentityDocument
+CREATE INDEX IDX_Client_Document ON Clients (IdentityDocument);
+
+-- Forms table
+CREATE TABLE Forms (
+    Id INT AUTO_INCREMENT NOT NULL,
+    Name VARCHAR(255) NOT NULL,
+    Code VARCHAR(50) NOT NULL,
+    Active BOOLEAN NOT NULL DEFAULT TRUE,
+    CreateAt DATETIME(3) NULL DEFAULT CURRENT_TIMESTAMP(3),
+    DeleteAt DATETIME(6) NULL,
+    PRIMARY KEY (Id),
+    UNIQUE KEY (Code)
+);
+
+-- Modules table
+CREATE TABLE Modules (
+    Id INT AUTO_INCREMENT NOT NULL,
+    Code VARCHAR(50) NOT NULL,
+    Active BOOLEAN NOT NULL DEFAULT TRUE,
+    CreateAt DATETIME(6) NULL DEFAULT CURRENT_TIMESTAMP(6),
+    DeleteAt DATETIME(6) NULL,
+    PRIMARY KEY (Id),
+    UNIQUE KEY (Code)
+);
+
+-- FormModules table
+CREATE TABLE FormModules (
+    Id INT AUTO_INCREMENT NOT NULL,
+    FormId INT NOT NULL,
+    ModuleId INT NOT NULL,
+    CreateAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    DeleteAt DATETIME NULL,
+    PRIMARY KEY (Id),
+    FOREIGN KEY (FormId) REFERENCES Forms (Id) ON DELETE CASCADE,
+    FOREIGN KEY (ModuleId) REFERENCES Modules (Id) ON DELETE CASCADE
+);
+
+-- Logins table
+CREATE TABLE Logins (
+    LoginId INT AUTO_INCREMENT NOT NULL,
+    Username VARCHAR(100) NOT NULL,
+    Password VARCHAR(256) NOT NULL,
+    PRIMARY KEY (LoginId),
+    UNIQUE KEY (Username)
+);
+
+-- Permissions table
+CREATE TABLE Permissions (
+    Id INT AUTO_INCREMENT NOT NULL,
+    Can_Read BOOLEAN NOT NULL DEFAULT FALSE,
+    Can_Create BOOLEAN NOT NULL DEFAULT FALSE,
+    Can_Update BOOLEAN NOT NULL DEFAULT FALSE,
+    Can_Delete BOOLEAN NOT NULL DEFAULT FALSE,
+    CreateAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    DeleteAt DATETIME NULL,
+    PRIMARY KEY (Id)
+);
+
+-- Roles table
+CREATE TABLE Roles (
+    Id INT AUTO_INCREMENT NOT NULL,
+    Name VARCHAR(255) NOT NULL,
+    CreateAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    DeleteAt DATETIME NULL,
+    Description VARCHAR(255) NULL,
+    PRIMARY KEY (Id),
+    UNIQUE KEY (Name)
+);
+
+-- Workers table
+CREATE TABLE Workers (
+    WorkerId INT AUTO_INCREMENT NOT NULL,
+    FirstName VARCHAR(100) NOT NULL,
+    LastName VARCHAR(100) NOT NULL,
+    IdentityDocument VARCHAR(50) NOT NULL,
+    JobTitle VARCHAR(100) NOT NULL,
+    Email VARCHAR(255) NOT NULL,
+    Phone INT NOT NULL,
+    HireDate DATETIME NULL,
+    PRIMARY KEY (WorkerId)
+);
+
+-- Pqr table
+CREATE TABLE Pqr (
+    PqrId INT AUTO_INCREMENT NOT NULL,
+    PqrType VARCHAR(255) NOT NULL,
+    Description TEXT NOT NULL,
+    CreationDate DATETIME NOT NULL,
+    PqrStatus VARCHAR(100) NOT NULL,
+    ResolutionDate DATETIME NOT NULL,
+    WorkerId INT NOT NULL,
+    ClientId INT NOT NULL,
+    PRIMARY KEY (PqrId),
+    FOREIGN KEY (WorkerId) REFERENCES Workers (WorkerId),
+    FOREIGN KEY (ClientId) REFERENCES Clients (ClientId)
+);
+
+-- RolFormPermissions table
+CREATE TABLE RolFormPermissions (
+    Id INT AUTO_INCREMENT NOT NULL,
+    RolId INT NOT NULL,
+    FormId INT NOT NULL,
+    PermissionId INT NOT NULL,
+    CreateAt DATETIME(6) NULL DEFAULT CURRENT_TIMESTAMP(6),
+    DeleteAt DATETIME(6) NULL,
+    PRIMARY KEY (Id),
+    FOREIGN KEY (RolId) REFERENCES Roles (Id) ON DELETE CASCADE,
+    FOREIGN KEY (FormId) REFERENCES Forms (Id) ON DELETE CASCADE,
+    FOREIGN KEY (PermissionId) REFERENCES Permissions (Id) ON DELETE CASCADE
+);
+
+-- Users table
+CREATE TABLE Users (
+    Id INT AUTO_INCREMENT NOT NULL,
+    Email VARCHAR(255) NOT NULL,
+    Password VARCHAR(255) NOT NULL,
+    CreateAt DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+    DeleteAt DATETIME(6) NULL,
+    Name VARCHAR(100) NULL,
+    WorkerId INT NULL,
+    PRIMARY KEY (Id),
+    UNIQUE KEY (Email)
+);
+
+-- Create index on Email
+CREATE INDEX IDX_User_Email ON Users (Email);
+
+-- RolUsers table
+CREATE TABLE RolUsers (
+    Id INT AUTO_INCREMENT NOT NULL,
+    UserId INT NOT NULL,
+    RolId INT NOT NULL,
+    CreateAt DATETIME(6) NULL DEFAULT CURRENT_TIMESTAMP(6),
+    DeleteAt DATETIME(6) NULL,
+    PRIMARY KEY (Id),
+    FOREIGN KEY (UserId) REFERENCES Users (Id) ON DELETE CASCADE,
+    FOREIGN KEY (RolId) REFERENCES Roles (Id) ON DELETE CASCADE
+);
+
+-- WorkerLogins table
+CREATE TABLE WorkerLogins (
+    Id INT AUTO_INCREMENT NOT NULL,
+    WorkerId INT NOT NULL,
+    Username VARCHAR(255) NOT NULL,
+    Password VARCHAR(255) NOT NULL,
+    CreationDate DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    Status BOOLEAN NOT NULL DEFAULT TRUE,
+    LoginId INT NULL,
+    PRIMARY KEY (Id),
+    UNIQUE KEY (Username),
+    FOREIGN KEY (WorkerId) REFERENCES Workers (WorkerId)
+);

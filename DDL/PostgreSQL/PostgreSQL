@@ -1,0 +1,204 @@
+-- Create database
+CREATE DATABASE "SecurityPQRDB";
+\c "SecurityPQRDB"
+
+-- Clients table
+CREATE TABLE "Clients" (
+    "ClientId" SERIAL NOT NULL,
+    "FirstName" VARCHAR(255) NOT NULL,
+    "LastName" VARCHAR(255) NOT NULL,
+    "IdentityDocument" VARCHAR(50) NOT NULL,
+    "ClientType" VARCHAR(50) NOT NULL,
+    "Phone" BIGINT NULL,
+    "Email" VARCHAR(255) NOT NULL,
+    "Address" VARCHAR(255) NOT NULL,
+    "SocioeconomicStratification" INT NULL,
+    "RegistrationDate" TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY ("ClientId")
+);
+
+-- Add unique constraints
+ALTER TABLE "Clients" ADD CONSTRAINT "UQ_Clients_IdentityDocument" UNIQUE ("IdentityDocument");
+ALTER TABLE "Clients" ADD CONSTRAINT "UQ_Clients_Email" UNIQUE ("Email");
+
+-- Create index on IdentityDocument
+CREATE INDEX "IDX_Client_Document" ON "Clients" ("IdentityDocument");
+
+-- Forms table
+CREATE TABLE "Forms" (
+    "Id" SERIAL NOT NULL,
+    "Name" VARCHAR(255) NOT NULL,
+    "Code" VARCHAR(50) NOT NULL,
+    "Active" BOOLEAN NOT NULL DEFAULT TRUE,
+    "CreateAt" TIMESTAMP(3) NULL DEFAULT CURRENT_TIMESTAMP,
+    "DeleteAt" TIMESTAMP NULL,
+    PRIMARY KEY ("Id")
+);
+
+-- Add unique constraint
+ALTER TABLE "Forms" ADD CONSTRAINT "UQ_Forms_Code" UNIQUE ("Code");
+
+-- Modules table
+CREATE TABLE "Modules" (
+    "Id" SERIAL NOT NULL,
+    "Code" VARCHAR(50) NOT NULL,
+    "Active" BOOLEAN NOT NULL DEFAULT TRUE,
+    "CreateAt" TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    "DeleteAt" TIMESTAMP NULL,
+    PRIMARY KEY ("Id")
+);
+
+-- Add unique constraint
+ALTER TABLE "Modules" ADD CONSTRAINT "UQ_Modules_Code" UNIQUE ("Code");
+
+-- FormModules table
+CREATE TABLE "FormModules" (
+    "Id" SERIAL NOT NULL,
+    "FormId" INT NOT NULL,
+    "ModuleId" INT NOT NULL,
+    "CreateAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "DeleteAt" TIMESTAMP NULL,
+    PRIMARY KEY ("Id")
+);
+
+-- Logins table
+CREATE TABLE "Logins" (
+    "LoginId" SERIAL NOT NULL,
+    "Username" VARCHAR(100) NOT NULL,
+    "Password" VARCHAR(256) NOT NULL,
+    PRIMARY KEY ("LoginId")
+);
+
+-- Add unique constraint
+ALTER TABLE "Logins" ADD CONSTRAINT "UQ_Logins_Username" UNIQUE ("Username");
+
+-- Permissions table
+CREATE TABLE "Permissions" (
+    "Id" SERIAL NOT NULL,
+    "Can_Read" BOOLEAN NOT NULL DEFAULT FALSE,
+    "Can_Create" BOOLEAN NOT NULL DEFAULT FALSE,
+    "Can_Update" BOOLEAN NOT NULL DEFAULT FALSE,
+    "Can_Delete" BOOLEAN NOT NULL DEFAULT FALSE,
+    "CreateAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "DeleteAt" TIMESTAMP NULL,
+    PRIMARY KEY ("Id")
+);
+
+-- Roles table
+CREATE TABLE "Roles" (
+    "Id" SERIAL NOT NULL,
+    "Name" VARCHAR(255) NOT NULL,
+    "CreateAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "DeleteAt" TIMESTAMP NULL,
+    "Description" VARCHAR(255) NULL,
+    PRIMARY KEY ("Id")
+);
+
+-- Add unique constraint
+ALTER TABLE "Roles" ADD CONSTRAINT "UQ_Roles_Name" UNIQUE ("Name");
+
+-- Workers table
+CREATE TABLE "Workers" (
+    "WorkerId" SERIAL NOT NULL,
+    "FirstName" VARCHAR(100) NOT NULL,
+    "LastName" VARCHAR(100) NOT NULL,
+    "IdentityDocument" VARCHAR(50) NOT NULL,
+    "JobTitle" VARCHAR(100) NOT NULL,
+    "Email" VARCHAR(255) NOT NULL,
+    "Phone" INT NOT NULL,
+    "HireDate" TIMESTAMP NULL,
+    PRIMARY KEY ("WorkerId")
+);
+
+-- Pqr table
+CREATE TABLE "Pqr" (
+    "PqrId" SERIAL NOT NULL,
+    "PqrType" VARCHAR(255) NOT NULL,
+    "Description" TEXT NOT NULL,
+    "CreationDate" TIMESTAMP NOT NULL,
+    "PqrStatus" VARCHAR(100) NOT NULL,
+    "ResolutionDate" TIMESTAMP NOT NULL,
+    "WorkerId" INT NOT NULL,
+    "ClientId" INT NOT NULL,
+    PRIMARY KEY ("PqrId")
+);
+
+-- RolFormPermissions table
+CREATE TABLE "RolFormPermissions" (
+    "Id" SERIAL NOT NULL,
+    "RolId" INT NOT NULL,
+    "FormId" INT NOT NULL,
+    "PermissionId" INT NOT NULL,
+    "CreateAt" TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    "DeleteAt" TIMESTAMP NULL,
+    PRIMARY KEY ("Id")
+);
+
+-- Users table
+CREATE TABLE "Users" (
+    "Id" SERIAL NOT NULL,
+    "Email" VARCHAR(255) NOT NULL,
+    "Password" VARCHAR(255) NOT NULL,
+    "CreateAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "DeleteAt" TIMESTAMP NULL,
+    "Name" VARCHAR(100) NULL,
+    "WorkerId" INT NULL,
+    PRIMARY KEY ("Id")
+);
+
+-- Add unique constraint
+ALTER TABLE "Users" ADD CONSTRAINT "UQ_Users_Email" UNIQUE ("Email");
+
+-- Create index on Email
+CREATE INDEX "IDX_User_Email" ON "Users" ("Email");
+
+-- RolUsers table
+CREATE TABLE "RolUsers" (
+    "Id" SERIAL NOT NULL,
+    "UserId" INT NOT NULL,
+    "RolId" INT NOT NULL,
+    "CreateAt" TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    "DeleteAt" TIMESTAMP NULL,
+    PRIMARY KEY ("Id")
+);
+
+-- WorkerLogins table
+CREATE TABLE "WorkerLogins" (
+    "Id" SERIAL NOT NULL,
+    "WorkerId" INT NOT NULL,
+    "Username" VARCHAR(255) NOT NULL,
+    "Password" VARCHAR(255) NOT NULL,
+    "CreationDate" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "Status" BOOLEAN NOT NULL DEFAULT TRUE,
+    "LoginId" INT NULL,
+    PRIMARY KEY ("Id")
+);
+
+-- Add unique constraint
+ALTER TABLE "WorkerLogins" ADD CONSTRAINT "UQ_WorkerLogins_Username" UNIQUE ("Username");
+
+-- Add foreign key constraints
+ALTER TABLE "FormModules" ADD CONSTRAINT "FK_FormModules_Forms" 
+    FOREIGN KEY ("FormId") REFERENCES "Forms" ("Id") ON DELETE CASCADE;
+ALTER TABLE "FormModules" ADD CONSTRAINT "FK_FormModules_Modules" 
+    FOREIGN KEY ("ModuleId") REFERENCES "Modules" ("Id") ON DELETE CASCADE;
+
+ALTER TABLE "Pqr" ADD CONSTRAINT "FK_Pqr_Workers" 
+    FOREIGN KEY ("WorkerId") REFERENCES "Workers" ("WorkerId");
+ALTER TABLE "Pqr" ADD CONSTRAINT "FK_Pqr_Clients" 
+    FOREIGN KEY ("ClientId") REFERENCES "Clients" ("ClientId");
+
+ALTER TABLE "RolFormPermissions" ADD CONSTRAINT "FK_RolFormPermissions_Roles" 
+    FOREIGN KEY ("RolId") REFERENCES "Roles" ("Id") ON DELETE CASCADE;
+ALTER TABLE "RolFormPermissions" ADD CONSTRAINT "FK_RolFormPermissions_Forms" 
+    FOREIGN KEY ("FormId") REFERENCES "Forms" ("Id") ON DELETE CASCADE;
+ALTER TABLE "RolFormPermissions" ADD CONSTRAINT "FK_RolFormPermissions_Permissions" 
+    FOREIGN KEY ("PermissionId") REFERENCES "Permissions" ("Id") ON DELETE CASCADE;
+
+ALTER TABLE "RolUsers" ADD CONSTRAINT "FK_RolUsers_Users" 
+    FOREIGN KEY ("UserId") REFERENCES "Users" ("Id") ON DELETE CASCADE;
+ALTER TABLE "RolUsers" ADD CONSTRAINT "FK_RolUsers_Roles" 
+    FOREIGN KEY ("RolId") REFERENCES "Roles" ("Id") ON DELETE CASCADE;
+
+ALTER TABLE "WorkerLogins" ADD CONSTRAINT "FK_WorkerLogins_Workers" 
+    FOREIGN KEY ("WorkerId") REFERENCES "Workers" ("WorkerId");

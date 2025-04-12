@@ -31,6 +31,7 @@
         <AssociationConnector Association="DbModel.Worker_LoginWorker" />
         <AssociationConnector Association="DbModel.PQRWorker" />
         <AssociationConnector Association="DbModel.PQRClient" />
+        <AssociationConnector Association="DbModel.UserWorker" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

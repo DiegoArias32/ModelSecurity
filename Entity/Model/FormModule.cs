@@ -13,7 +13,7 @@ namespace Entity.Model
         public Module Module { get; set; }
         public int FormId { get; set; }
         public Form Form { get; set; }
-        public DateTime DeleteAt { get; set; }
+        public DateTime? DeleteAt { get; set; }
         public DateTime CreateAt { get; set; }
     }
 }

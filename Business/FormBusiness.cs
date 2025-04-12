@@ -188,8 +188,7 @@ namespace Business
                 Id = form.Id,
                 Name = form.Name,
                 Code = form.Code,
-                Active = form.Active,
-                CreateAt = form.CreateAt
+                Active = form.Active
             };
         }
 
@@ -201,8 +200,7 @@ namespace Business
                 Id = formDto.Id,
                 Name = formDto.Name,
                 Code = formDto.Code,
-                Active = formDto.Active,
-                CreateAt = formDto.CreateAt
+                Active = formDto.Active
             };
         }
 

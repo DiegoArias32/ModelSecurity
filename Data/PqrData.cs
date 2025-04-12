@@ -29,6 +29,7 @@ namespace Data
         {
             try
             {
+                pqr.CreationDate = DateTime.UtcNow; // Establece la fecha actual en UTC
                 await _context.Pqr.AddAsync(pqr);
                 await _context.SaveChangesAsync();
                 return pqr;

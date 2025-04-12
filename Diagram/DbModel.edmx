@@ -454,6 +454,10 @@
             <End Role="PQR" EntitySet="PQRSet" />
             <End Role="Client" EntitySet="Clients" />
           </AssociationSet>
+          <AssociationSet Name="UserWorker" Association="DbModel.UserWorker">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Worker" EntitySet="Workers" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Form">
           <Key>
@@ -507,6 +511,7 @@
           <NavigationProperty Name="Rol_User" Relationship="DbModel.Rol_UserUser" FromRole="User" ToRole="Rol_User" />
           <Property Name="CreateAt" Type="DateTime" Nullable="false" />
           <Property Name="DeleteAt" Type="DateTime" Nullable="false" />
+          <NavigationProperty Name="WorkerID" Relationship="DbModel.UserWorker" FromRole="User" ToRole="Worker" />
         </EntityType>
         <EntityType Name="Rol">
           <Key>
@@ -589,6 +594,7 @@
           <Property Name="Hire_Date" Type="String" Nullable="false" />
           <NavigationProperty Name="Worker_Login" Relationship="DbModel.Worker_LoginWorker" FromRole="Worker" ToRole="Worker_Login" />
           <NavigationProperty Name="PQR" Relationship="DbModel.PQRWorker" FromRole="Worker" ToRole="PQR" />
+          <NavigationProperty Name="UserID" Relationship="DbModel.UserWorker" FromRole="Worker" ToRole="User" />
         </EntityType>
         <EntityType Name="Client">
           <Key>
@@ -655,6 +661,10 @@
         <Association Name="PQRClient">
           <End Type="DbModel.PQR" Role="PQR" Multiplicity="*" />
           <End Type="DbModel.Client" Role="Client" Multiplicity="*" />
+        </Association>
+        <Association Name="UserWorker">
+          <End Type="DbModel.User" Role="User" Multiplicity="1" />
+          <End Type="DbModel.Worker" Role="Worker" Multiplicity="1" />
         </Association>
       </Schema>
     </edmx:ConceptualModels>

@@ -12,5 +12,6 @@ namespace Entity.Model
         public bool Can_Delete { get; set; }
 
         public DateTime CreateAt { get; set; }
+        public DateTime? DeleteAt { get; set;}
     }
 }

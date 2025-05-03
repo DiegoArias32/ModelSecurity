@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.JsonPatch;
 using System.Threading.Tasks;
+using Utilities.Exceptions;
 
 namespace WebApplication1.Controllers
 {
@@ -32,10 +34,10 @@ namespace WebApplication1.Controllers
                 var logins = await _loginBusiness.GetAllAsync();
                 return Ok(logins);
             }
-            catch (Exception ex)
+            catch (ExternalServiceException ex)
             {
-                _logger.LogError("Error al obtener logins");
-                return StatusCode(500, new { message = "Error al recuperar la lista de logins" });
+                _logger.LogError(ex, "Error al obtener los logins.");
+                return StatusCode(500, new { message = ex.Message });
             }
         }
 
@@ -48,7 +50,7 @@ namespace WebApplication1.Controllers
         {
             if (id <= 0)
             {
-                return BadRequest(new { message = "El ID del login debe ser mayor que cero" });
+                return BadRequest(new { message = "El ID del login debe ser mayor que cero." });
             }
 
             try
@@ -56,15 +58,25 @@ namespace WebApplication1.Controllers
                 var login = await _loginBusiness.GetByIdAsync(id);
                 if (login == null)
                 {
-                    return NotFound(new { message = $"No se encontró el login con ID {id}" });
+                    return NotFound(new { message = $"No se encontró el login con ID {id}." });
                 }
 
                 return Ok(login);
             }
-            catch (Exception ex)
+            catch (ValidationException ex)
             {
-                _logger.LogError("Error al obtener el login con ID: {LoginId}", id);
-                return StatusCode(500, new { message = $"Error al recuperar el login con ID {id}" });
+                _logger.LogWarning(ex, "ID de login inválido: {LoginId}", id);
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (EntityNotFoundException ex)
+            {
+                _logger.LogInformation(ex, "Login no encontrado con ID: {LoginId}", id);
+                return NotFound(new { message = ex.Message });
+            }
+            catch (ExternalServiceException ex)
+            {
+                _logger.LogError(ex, "Error al obtener el login con ID: {LoginId}", id);
+                return StatusCode(500, new { message = ex.Message });
             }
         }
 
@@ -76,7 +88,7 @@ namespace WebApplication1.Controllers
         {
             if (loginDto == null)
             {
-                return BadRequest(new { message = "El objeto login no puede ser nulo" });
+                return BadRequest(new { message = "El objeto login no puede ser nulo." });
             }
 
             try
@@ -84,14 +96,15 @@ namespace WebApplication1.Controllers
                 var createdLogin = await _loginBusiness.CreateAsync(loginDto);
                 return CreatedAtAction(nameof(GetLoginById), new { id = createdLogin.LoginId }, createdLogin);
             }
-            catch (ArgumentException ex)
+            catch (ValidationException ex)
             {
+                _logger.LogWarning(ex, "Validación fallida al crear login.");
                 return BadRequest(new { message = ex.Message });
             }
-            catch (Exception ex)
+            catch (ExternalServiceException ex)
             {
-                _logger.LogError("Error al crear login");
-                return StatusCode(500, new { message = "Error al crear el login" });
+                _logger.LogError(ex, "Error al crear el login.");
+                return StatusCode(500, new { message = ex.Message });
             }
         }
 
@@ -104,7 +117,7 @@ namespace WebApplication1.Controllers
         {
             if (loginDto == null || loginDto.LoginId <= 0)
             {
-                return BadRequest(new { message = "Datos de login inválidos o ID no proporcionado" });
+                return BadRequest(new { message = "Datos de login inválidos o ID no proporcionado." });
             }
 
             try
@@ -112,21 +125,87 @@ namespace WebApplication1.Controllers
                 var result = await _loginBusiness.UpdateAsync(loginDto);
                 if (!result)
                 {
-                    return NotFound(new { message = $"No se encontró el login con ID {loginDto.LoginId}" });
+                    return NotFound(new { message = $"No se encontró el login con ID {loginDto.LoginId}." });
                 }
 
                 return Ok(loginDto);
             }
-            catch (ArgumentException ex)
+            catch (ValidationException ex)
             {
+                _logger.LogWarning(ex, "Validación fallida al actualizar el login con ID: {LoginId}", loginDto.LoginId);
                 return BadRequest(new { message = ex.Message });
             }
-            catch (Exception ex)
+            catch (ExternalServiceException ex)
             {
-                _logger.LogError("Error al actualizar el login con ID: {LoginId}", loginDto.LoginId);
-                return StatusCode(500, new { message = $"Error al actualizar el login con ID {loginDto.LoginId}" });
+                _logger.LogError(ex, "Error al actualizar el login con ID: {LoginId}", loginDto.LoginId);
+                return StatusCode(500, new { message = ex.Message });
             }
         }
+
+        [HttpPatch("{id}")]
+[ProducesResponseType(typeof(LoginDto), 200)]
+[ProducesResponseType(400)]
+[ProducesResponseType(404)]
+[ProducesResponseType(500)]
+public async Task<IActionResult> PartialUpdateLogin(int id, [FromBody] JsonPatchDocument<LoginDto> patchDoc)
+{
+    if (patchDoc == null)
+    {
+        return BadRequest(new { message = "El objeto patch no puede ser nulo." });
+    }
+
+    // Validar que solo se puede modificar campos específicos
+    var allowedPaths = new[] { "/Username", "/Password" };  // Asumimos que solo se puede actualizar el nombre de usuario y la contraseña
+
+    foreach (var op in patchDoc.Operations)
+    {
+        // Asegurarse de que el 'path' no tiene espacios adicionales
+        var trimmedPath = op.path.Trim();
+
+        // Verificar si la propiedad está permitida
+        if (!allowedPaths.Contains(trimmedPath, StringComparer.OrdinalIgnoreCase))
+        {
+            return BadRequest(new { message = $"Solo se permite modificar los siguientes campos: {string.Join(", ", allowedPaths)}" });
+        }
+    }
+
+    try
+    {
+        var existingLogin = await _loginBusiness.GetByIdAsync(id);
+        if (existingLogin == null)
+        {
+            return NotFound(new { message = "Login no encontrado." });
+        }
+
+        patchDoc.ApplyTo(existingLogin, error =>
+        {
+            ModelState.AddModelError(error.Operation.path, error.ErrorMessage);
+        });
+
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        var updatedLogin = await _loginBusiness.UpdateAsync(existingLogin);
+        return Ok(updatedLogin);
+    }
+    catch (ValidationException ex)
+    {
+        _logger.LogWarning(ex, "Validación fallida al actualizar parcialmente el login con ID: {LoginId}", id);
+        return BadRequest(new { message = ex.Message });
+    }
+    catch (EntityNotFoundException ex)
+    {
+        _logger.LogInformation(ex, "Login no encontrado con ID: {LoginId}", id);
+        return NotFound(new { message = ex.Message });
+    }
+    catch (ExternalServiceException ex)
+    {
+        _logger.LogError(ex, "Error al actualizar parcialmente el login con ID: {LoginId}", id);
+        return StatusCode(500, new { message = ex.Message });
+    }
+}
 
         [HttpDelete("{id}")]
         [ProducesResponseType(204)]
@@ -137,7 +216,7 @@ namespace WebApplication1.Controllers
         {
             if (id <= 0)
             {
-                return BadRequest(new { message = "El ID del login debe ser mayor que cero" });
+                return BadRequest(new { message = "El ID del login debe ser mayor que cero." });
             }
 
             try
@@ -145,15 +224,25 @@ namespace WebApplication1.Controllers
                 var result = await _loginBusiness.DeleteAsync(id);
                 if (!result)
                 {
-                    return NotFound(new { message = $"No se encontró el login con ID {id}" });
+                    return NotFound(new { message = $"No se encontró el login con ID {id}." });
                 }
 
                 return NoContent();
             }
-            catch (Exception ex)
+            catch (ValidationException ex)
             {
-                _logger.LogError("Error al eliminar el login con ID: {LoginId}", id);
-                return StatusCode(500, new { message = $"Error al eliminar el login con ID {id}" });
+                _logger.LogWarning(ex, "Validación fallida al eliminar el login con ID: {LoginId}", id);
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (EntityNotFoundException ex)
+            {
+                _logger.LogInformation(ex, "Login no encontrado con ID: {LoginId}", id);
+                return NotFound(new { message = ex.Message });
+            }
+            catch (ExternalServiceException ex)
+            {
+                _logger.LogError(ex, "Error al eliminar el login con ID: {LoginId}", id);
+                return StatusCode(500, new { message = ex.Message });
             }
         }
     }

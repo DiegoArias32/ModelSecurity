@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Seguridad - Panel de Control</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h3>Sistema de Seguridad</h3>
+            </div>
+            <div class="user-info">
+                <span id="userDisplayName">Usuario</span>
+                <span id="userRole">Rol</span>
+            </div>
+            <ul class="menu">
+                <li><a href="#" data-section="dashboard" class="active">Inicio</a></li>
+                <li><a href="#" data-section="profile">Mi Perfil</a></li>
+                <li class="admin-only"><a href="#" data-section="users">Usuarios</a></li>
+                <li class="admin-only"><a href="#" data-section="roles">Roles</a></li>
+                <li class="admin-only"><a href="#" data-section="modules">Módulos</a></li>
+                <li class="admin-only"><a href="#" data-section="forms">Formularios</a></li>
+                <li class="admin-only"><a href="#" data-section="permissions">Permisos</a></li>
+                <li><a href="#" id="logoutBtn">Cerrar Sesión</a></li>
+            </ul>
+        </nav>
+        
+        <main class="content">
+            <header class="content-header">
+                <h2 id="sectionTitle">Panel de Control</h2>
+            </header>
+            
+            <!-- Sección de Inicio -->
+            <div class="section-content" id="dashboardSection">
+                <div class="welcome-message">
+                    <h3>Bienvenido/a al Sistema de Gestión de Seguridad</h3>
+                    <p>Este es tu panel de control. Aquí podrás administrar tu cuenta y acceder a las diferentes funcionalidades del sistema según tu rol.</p>
+                </div>
+                
+                <div class="role-info card">
+                    <h3>Información de Rol</h3>
+                    <p>Tu rol actual es: <span id="currentRole">Usuario</span></p>
+                    <div id="rolePermissions"></div>
+                </div>
+            </div>
+            
+            <!-- Sección de Perfil -->
+            <div class="section-content hidden" id="profileSection">
+                <div class="card">
+                    <h3>Mi Perfil</h3>
+                    
+                    <form id="profileForm">
+                        <div class="form-group">
+                            <label for="profileName">Nombre Completo:</label>
+                            <input type="text" id="profileName" name="name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="profileEmail">Correo Electrónico:</label>
+                            <input type="email" id="profileEmail" name="email" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="profileUsername">Nombre de Usuario:</label>
+                            <input type="text" id="profileUsername" name="username" readonly>
+                            <small>El nombre de usuario no puede ser modificado.</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <h4>Cambiar Contraseña</h4>
+                            <label for="currentPassword">Contraseña Actual:</label>
+                            <input type="password" id="currentPassword" name="currentPassword">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="newPassword">Nueva Contraseña:</label>
+                            <input type="password" id="newPassword" name="newPassword">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="confirmNewPassword">Confirmar Nueva Contraseña:</label>
+                            <input type="password" id="confirmNewPassword" name="confirmNewPassword">
+                        </div>
+                        
+                        <div class="form-group">
+                            <button type="submit" class="button primary">Guardar Cambios</button>
+                        </div>
+                        
+                        <div id="profileMessage" class="message"></div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Sección de Usuarios (Solo Admin) -->
+            <div class="section-content hidden" id="usersSection">
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3>Lista de Usuarios</h3>
+                        <button id="addUserBtn" class="button primary">Agregar Usuario</button>
+                    </div>
+                    
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Email</th>
+                                <th>Rol</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTableBody">
+                            <!-- Se cargará dinámicamente -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div id="userMessage" class="message"></div>
+            </div>
+            
+            <!-- Sección de Roles (Solo Admin) -->
+            <div class="section-content hidden" id="rolesSection">
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3>Lista de Roles</h3>
+                        <button id="addRoleBtn" class="button primary">Agregar Rol</button>
+                    </div>
+                    
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Descripción</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="rolesTableBody">
+                            <!-- Se cargará dinámicamente -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div id="roleMessage" class="message"></div>
+            </div>
+            
+            <!-- Sección de Módulos -->
+            <div class="section-content hidden" id="modulesSection">
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3>Lista de Módulos</h3>
+                        <button id="addModuleBtn" class="button primary">Agregar Módulo</button>
+                    </div>
+                    
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Código</th>
+                                <th>Activo</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="modulesTableBody">
+                            <!-- Se cargará dinámicamente -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div id="moduleMessage" class="message"></div>
+            </div>
+            
+            <!-- Sección de Formularios -->
+            <div class="section-content hidden" id="formsSection">
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3>Lista de Formularios</h3>
+                        <button id="addFormBtn" class="button primary">Agregar Formulario</button>
+                    </div>
+                    
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Código</th>
+                                <th>Activo</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="formsTableBody">
+                            <!-- Se cargará dinámicamente -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3>Asignación de Formularios a Módulos</h3>
+                        <button id="addFormModuleBtn" class="button primary">Asignar Formulario</button>
+                    </div>
+                    
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Módulo</th>
+                                <th>Formulario</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="formModulesTableBody">
+                            <!-- Se cargará dinámicamente -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div id="formMessage" class="message"></div>
+            </div>
+            
+            <!-- Sección de Permisos -->
+            <div class="section-content hidden" id="permissionsSection">
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3>Lista de Permisos</h3>
+                        <button id="addPermissionBtn" class="button primary">Agregar Permiso</button>
+                    </div>
+                    
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Lectura</th>
+                                <th>Creación</th>
+                                <th>Actualización</th>
+                                <th>Eliminación</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="permissionsTableBody">
+                            <!-- Se cargará dinámicamente -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3>Asignación de Permisos a Roles y Formularios</h3>
+                        <button id="addRolFormPermissionBtn" class="button primary">Asignar Permiso</button>
+                    </div>
+                    
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Rol</th>
+                                <th>Formulario</th>
+                                <th>Permisos</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="rolFormPermissionsTableBody">
+                            <!-- Se cargará dinámicamente -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div id="permissionMessage" class="message"></div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Modal para editar roles y sus permisos -->
+    <div class="modal" id="editRolePermissionsModal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3>Editar Permisos del Rol</h3>
+            
+            <form id="editRolePermissionsForm">
+                <input type="hidden" id="editRoleId">
+                
+                <div class="form-group">
+                    <h4 id="editRoleName">Nombre del Rol</h4>
+                    <p id="editRoleDescription">Descripción del rol</p>
+                </div>
+                
+                <div class="form-group">
+                    <h4>Asignación de Permisos</h4>
+                    <div class="table-container">
+                        <table class="data-table" id="roleFormPermissionsTable">
+                            <thead>
+                                <tr>
+                                    <th>Formulario</th>
+                                    <th>Lectura</th>
+                                    <th>Creación</th>
+                                    <th>Actualización</th>
+                                    <th>Eliminación</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="roleFormPermissionsTableBody">
+                                <!-- Se cargará dinámicamente -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <button type="button" id="addFormToRoleBtn" class="button primary">Agregar Formulario al Rol</button>
+                </div>
+                
+                <div class="form-group">
+                    <button type="submit" class="button primary">Guardar Cambios</button>
+                    <button type="button" id="closeEditRoleBtn" class="button">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script src="../js/config.js"></script>
+    <script src="../js/dashboard.js"></script>
+    <script src="../js/forms-modules.js"></script>
+    <script src="../js/permissions.js"></script>
+    <script src="../js/role-permissions.js"></script>
+</body>
+</html>

@@ -94,6 +94,27 @@ namespace Data
             }
         }
 
+public async Task<bool> PermanentDeleteAsync(int id)
+{
+    try
+    {
+        var login = await _context.Set<Login>()
+            .FirstOrDefaultAsync(l => l.LoginId == id);
+
+        if (login == null)
+            return false;
+
+        _context.Set<Login>().Remove(login);
+        await _context.SaveChangesAsync();
+        return true;
+    }
+    catch (Exception ex)
+    {
+        _logger.LogError("Error al eliminar permanentemente el login: {Message}", ex.Message);
+        return false;
+    }
+}
+
         /// <summary>
         /// Actualiza un login existente.
         /// </summary>

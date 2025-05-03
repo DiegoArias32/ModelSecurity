@@ -128,6 +128,26 @@ namespace Business
             }
         }
 
+        public async Task<bool> PermanentDeleteAsync(int id)
+{
+    try
+    {
+        var existing = await _workerData.GetByIdAsync(id);
+        if (existing == null)
+        {
+            _logger.LogWarning("Trabajador no encontrado para eliminación permanente.");
+            return false;
+        }
+
+        return await _workerData.PermanentDeleteAsync(id);
+    }
+    catch (Exception ex)
+    {
+        _logger.LogError(ex, "Error al eliminar permanentemente el trabajador con ID {WorkerId}.", id);
+        return false;
+    }
+}
+
         /// <summary>
         /// Elimina un trabajador.
         /// </summary>

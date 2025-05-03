@@ -1,16 +1,19 @@
 using Business;
 using Entity.DTOs;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Utilities.Exceptions;
 
 namespace WebApplication1.Controllers
 {
-    [ApiController]
     [Route("api/[controller]")]
+    [ApiController]
+    [Produces("application/json")]
     public class FormController : ControllerBase
     {
         private readonly FormBusiness _formBusiness;
@@ -18,16 +21,15 @@ namespace WebApplication1.Controllers
 
         public FormController(FormBusiness formBusiness, ILogger<FormController> logger)
         {
-            _formBusiness = formBusiness ?? throw new ArgumentNullException(nameof(formBusiness));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _formBusiness = formBusiness;
+            _logger = logger;
         }
 
-        /// <summary>
-        /// Obtiene todos los formularios.
-        /// </summary>
-        /// <returns>Lista de formularios.</returns>
+        // GET api/Form
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<FormDto>>> GetAllForms()
+        [ProducesResponseType(typeof(IEnumerable<FormDto>), 200)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> GetAllForms()
         {
             try
             {
@@ -36,18 +38,18 @@ namespace WebApplication1.Controllers
             }
             catch (ExternalServiceException ex)
             {
-                _logger.LogError(ex, "Error al obtener los formularios.");
+                _logger.LogError(ex, "Error al obtener formularios");
                 return StatusCode(500, new { message = ex.Message });
             }
         }
 
-        /// <summary>
-        /// Obtiene un formulario por ID.
-        /// </summary>
-        /// <param name="id">ID del formulario.</param>
-        /// <returns>Formulario encontrado.</returns>
+        // GET api/Form/{id}
         [HttpGet("{id}")]
-        public async Task<ActionResult<FormDto>> GetFormById(int id)
+        [ProducesResponseType(typeof(FormDto), 200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> GetFormById(int id)
         {
             try
             {
@@ -56,26 +58,27 @@ namespace WebApplication1.Controllers
             }
             catch (ValidationException ex)
             {
+                _logger.LogWarning(ex, "ID de formulario inválido: {FormId}", id);
                 return BadRequest(new { message = ex.Message });
             }
             catch (EntityNotFoundException ex)
             {
+                _logger.LogInformation(ex, "Formulario no encontrado con ID: {FormId}", id);
                 return NotFound(new { message = ex.Message });
             }
             catch (ExternalServiceException ex)
             {
-                _logger.LogError(ex, "Error al obtener el formulario con ID {FormId}", id);
+                _logger.LogError(ex, "Error al obtener formulario con ID: {FormId}", id);
                 return StatusCode(500, new { message = ex.Message });
             }
         }
 
-        /// <summary>
-        /// Crea un nuevo formulario.
-        /// </summary>
-        /// <param name="formDto">Datos del formulario.</param>
-        /// <returns>Formulario creado.</returns>
+        // POST api/Form
         [HttpPost]
-        public async Task<ActionResult<FormDto>> CreateForm([FromBody] FormDto formDto)
+        [ProducesResponseType(typeof(FormDto), 201)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> CreateForm([FromBody] FormDto formDto)
         {
             try
             {
@@ -84,71 +87,185 @@ namespace WebApplication1.Controllers
             }
             catch (ValidationException ex)
             {
+                _logger.LogWarning(ex, "Validación fallida al crear formulario");
                 return BadRequest(new { message = ex.Message });
             }
             catch (ExternalServiceException ex)
             {
-                _logger.LogError(ex, "Error al crear el formulario.");
+                _logger.LogError(ex, "Error al crear formulario");
+
+                if (ex.InnerException is InvalidOperationException inner &&
+                    inner.Message.Contains("Ya existe un formulario con"))
+                {
+                    return BadRequest(new { message = inner.Message });
+                }
+
                 return StatusCode(500, new { message = ex.Message });
             }
         }
 
-        /// <summary>
-        /// Actualiza un formulario existente.
-        /// </summary>
-        /// <param name="id">ID del formulario.</param>
-        /// <param name="formDto">Datos actualizados.</param>
-        /// <returns>Resultado de la operación.</returns>
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateForm(int id, [FromBody] FormDto formDto)
+        // PUT api/Form
+        [HttpPut]
+        [ProducesResponseType(typeof(FormDto), 200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> UpdateForm([FromBody] FormDto formDto)
         {
-            if (id != formDto.Id)
-                return BadRequest(new { message = "El ID en la URL no coincide con el del formulario." });
-
             try
             {
-                var result = await _formBusiness.UpdateFormAsync(formDto);
-                if (!result) return NotFound(new { message = "Formulario no encontrado." });
+                var updatedForm = await _formBusiness.UpdateFormAsync(formDto);
+                return Ok(updatedForm);
+            }
+            catch (ValidationException ex)
+            {
+                _logger.LogWarning(ex, "Validación fallida al actualizar formulario");
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (EntityNotFoundException ex)
+            {
+                _logger.LogInformation(ex, "Formulario no encontrado con ID: {FormId}", formDto.Id);
+                return NotFound(new { message = ex.Message });
+            }
+            catch (ExternalServiceException ex)
+            {
+                _logger.LogError(ex, "Error al actualizar formulario");
+
+                if (ex.InnerException is InvalidOperationException inner &&
+                    inner.Message.Contains("Ya existe un formulario con"))
+                {
+                    return BadRequest(new { message = inner.Message });
+                }
+
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
+        // DELETE api/Form/{id}
+        [HttpDelete("{id}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> DeleteForm(int id)
+        {
+            try
+            {
+                var deleted = await _formBusiness.DeleteFormAsync(id);
+                if (!deleted)
+                {
+                    return NotFound(new { message = "No se encontró el formulario a eliminar" });
+                }
 
                 return NoContent();
             }
             catch (ValidationException ex)
             {
+                _logger.LogWarning(ex, "Validación fallida al eliminar formulario con ID: {FormId}", id);
                 return BadRequest(new { message = ex.Message });
             }
             catch (EntityNotFoundException ex)
             {
+                _logger.LogInformation(ex, "Formulario no encontrado con ID: {FormId}", id);
                 return NotFound(new { message = ex.Message });
             }
             catch (ExternalServiceException ex)
             {
-                _logger.LogError(ex, "Error al actualizar el formulario.");
+                _logger.LogError(ex, "Error al eliminar formulario con ID: {FormId}", id);
                 return StatusCode(500, new { message = ex.Message });
             }
         }
 
-        /// <summary>
-        /// Elimina un formulario.
-        /// </summary>
-        /// <param name="id">ID del formulario.</param>
-        /// <returns>Resultado de la operación.</returns>
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteForm(int id)
+        // PATCH api/Form/{id}
+        [HttpPatch("{id}")]
+        [ProducesResponseType(typeof(FormDto), 200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> PartialUpdateForm(int id, [FromBody] JsonPatchDocument<FormDto> patchDoc)
         {
+            if (patchDoc == null)
+            {
+                return BadRequest(new { message = "El objeto patch no puede ser nulo" });
+            }
+
+            // Validar que solo se quiere modificar campos permitidos
+            var allowedPaths = new[] { "/Field1", "/Field2", "/Field3" }; // Ajustar según los campos permitidos
+
+            foreach (var op in patchDoc.Operations)
+            {
+                var trimmedPath = op.path.Trim();
+                if (!allowedPaths.Contains(trimmedPath, StringComparer.OrdinalIgnoreCase))
+                {
+                    return BadRequest(new { message = $"Solo se permite modificar los siguientes campos: {string.Join(", ", allowedPaths)}" });
+                }
+            }
+
             try
             {
-                var result = await _formBusiness.DeleteFormAsync(id);
-                if (!result) return NotFound(new { message = "Formulario no encontrado." });
+                var existingForm = await _formBusiness.GetFormByIdAsync(id);
 
-                return NoContent();
+                patchDoc.ApplyTo(existingForm, error =>
+                {
+                    ModelState.AddModelError(error.Operation.path, error.ErrorMessage);
+                });
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                var updatedForm = await _formBusiness.UpdateFormAsync(existingForm);
+                return Ok(updatedForm);
+            }
+            catch (ValidationException ex)
+            {
+                _logger.LogWarning(ex, "Validación fallida al actualizar parcialmente formulario");
+                return BadRequest(new { message = ex.Message });
             }
             catch (EntityNotFoundException ex)
             {
+                _logger.LogInformation(ex, "Formulario no encontrado con ID: {FormId}", id);
+                return NotFound(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al actualizar parcialmente formulario");
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
+        // DELETE PERMANENTE api/Form/permanent/{id}
+        [HttpDelete("permanent/{id}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> PermanentDeleteForm(int id)
+        {
+            try
+            {
+                var deleted = await _formBusiness.PermanentDeleteFormAsync(id);
+                if (!deleted)
+                {
+                    return NotFound(new { message = "No se encontró el formulario a eliminar permanentemente" });
+                }
+
+                return NoContent();
+            }
+            catch (ValidationException ex)
+            {
+                _logger.LogWarning(ex, "Validación fallida al eliminar permanentemente formulario con ID: {FormId}", id);
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (EntityNotFoundException ex)
+            {
+                _logger.LogInformation(ex, "Formulario no encontrado con ID: {FormId}", id);
                 return NotFound(new { message = ex.Message });
             }
             catch (ExternalServiceException ex)
             {
-                _logger.LogError(ex, "Error al eliminar el formulario.");
+                _logger.LogError(ex, "Error al eliminar permanentemente formulario con ID: {FormId}", id);
                 return StatusCode(500, new { message = ex.Message });
             }
         }

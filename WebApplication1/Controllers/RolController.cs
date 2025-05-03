@@ -3,6 +3,7 @@ using Entity.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.JsonPatch;
 using System.Threading.Tasks;
 using Utilities.Exceptions;
 using System;
@@ -14,12 +15,12 @@ namespace WebApplication1.Controllers
     [Produces("application/json")]
     public class RolController : ControllerBase
     {
-        private readonly RolBusiness _RolBusiness;
+        private readonly RolBusiness _rolBusiness;
         private readonly ILogger<RolController> _logger;
 
-        public RolController(RolBusiness RolBusiness, ILogger<RolController> logger)
+        public RolController(RolBusiness rolBusiness, ILogger<RolController> logger)
         {
-            _RolBusiness = RolBusiness;
+            _rolBusiness = rolBusiness;
             _logger = logger;
         }
 
@@ -30,7 +31,7 @@ namespace WebApplication1.Controllers
         {
             try
             {
-                var roles = await _RolBusiness.GetAllRolesAsync();
+                var roles = await _rolBusiness.GetAllRolesAsync();
                 return Ok(roles);
             }
             catch (ExternalServiceException ex)
@@ -49,7 +50,11 @@ namespace WebApplication1.Controllers
         {
             try
             {
-                var rol = await _RolBusiness.GetRolByIdAsync(id);
+                var rol = await _rolBusiness.GetRolByIdAsync(id);
+                if (rol == null)
+                {
+                    return NotFound(new { message = "Rol no encontrado" });
+                }
                 return Ok(rol);
             }
             catch (ValidationException ex)
@@ -77,7 +82,7 @@ namespace WebApplication1.Controllers
         {
             try
             {
-                var createdRol = await _RolBusiness.CreateRolAsync(rolDto);
+                var createdRol = await _rolBusiness.CreateRolAsync(rolDto);
                 return CreatedAtAction(nameof(GetRolById), new { id = createdRol.Id }, createdRol);
             }
             catch (ValidationException ex)
@@ -90,8 +95,7 @@ namespace WebApplication1.Controllers
                 _logger.LogError(ex, "Error al crear rol");
 
                 // ⚠️ Manejo personalizado de errores de rol duplicado
-                if (ex.InnerException is InvalidOperationException inner &&
-                    inner.Message.Contains("Ya existe un rol con el nombre"))
+                if (ex.InnerException is InvalidOperationException inner && inner.Message.Contains("Ya existe un rol con el nombre"))
                 {
                     return BadRequest(new { message = inner.Message });
                 }
@@ -109,7 +113,7 @@ namespace WebApplication1.Controllers
         {
             try
             {
-                var updatedRol = await _RolBusiness.UpdateRolAsync(rolDto);
+                var updatedRol = await _rolBusiness.UpdateRolAsync(rolDto);
                 return Ok(updatedRol);
             }
             catch (ValidationException ex)
@@ -126,8 +130,7 @@ namespace WebApplication1.Controllers
             {
                 _logger.LogError(ex, "Error al actualizar rol");
 
-                if (ex.InnerException is InvalidOperationException inner &&
-                    inner.Message.Contains("Ya existe un rol con el nombre"))
+                if (ex.InnerException is InvalidOperationException inner && inner.Message.Contains("Ya existe un rol con el nombre"))
                 {
                     return BadRequest(new { message = inner.Message });
                 }
@@ -145,7 +148,7 @@ namespace WebApplication1.Controllers
         {
             try
             {
-                var eliminado = await _RolBusiness.DeleteRolAsync(id);
+                var eliminado = await _rolBusiness.DeleteRolAsync(id);
                 if (!eliminado)
                 {
                     return NotFound(new { message = "No se encontró el rol a eliminar" });
@@ -166,6 +169,104 @@ namespace WebApplication1.Controllers
             catch (ExternalServiceException ex)
             {
                 _logger.LogError(ex, "Error al eliminar rol con ID: {RolId}", id);
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
+        // PATCH api/Rol/{id}
+        [HttpPatch("{id}")]
+        [ProducesResponseType(typeof(RolDto), 200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> PartialUpdateRol(int id, [FromBody] JsonPatchDocument<RolDto> patchDoc)
+        {
+            if (patchDoc == null)
+            {
+                return BadRequest(new { message = "El objeto patch no puede ser nulo" });
+            }
+
+            // Validar que solo se quiere modificar los campos permitidos
+            var allowedPaths = new[] { "/Name", "/Description" };
+
+            foreach (var op in patchDoc.Operations)
+            {
+                // Asegúrate de que el 'path' no tiene espacios adicionales
+                var trimmedPath = op.path.Trim();
+
+                // Verificamos si la propiedad está permitida (ignorando mayúsculas/minúsculas)
+                if (!allowedPaths.Contains(trimmedPath, StringComparer.OrdinalIgnoreCase))
+                {
+                    return BadRequest(new { message = $"Solo se permite modificar los siguientes campos: {string.Join(", ", allowedPaths)}" });
+                }
+            }
+
+            try
+            {
+                var existingRol = await _rolBusiness.GetRolByIdAsync(id);
+
+                patchDoc.ApplyTo(existingRol, error =>
+                {
+                    ModelState.AddModelError(error.Operation.path, error.ErrorMessage);
+                });
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                var updatedRol = await _rolBusiness.UpdateRolAsync(existingRol);
+
+                return Ok(updatedRol);
+            }
+            catch (ValidationException ex)
+            {
+                _logger.LogWarning(ex, "Validación fallida al actualizar parcialmente rol");
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (EntityNotFoundException ex)
+            {
+                _logger.LogInformation(ex, "Rol no encontrado con ID: {RolId}", id);
+                return NotFound(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al actualizar parcialmente rol");
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
+        // DELETE PERMANENTE api/Rol/permanent/{id}
+        [HttpDelete("permanent/{id}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> PermanentDeleteRol(int id)
+        {
+            try
+            {
+                var deleted = await _rolBusiness.PermanentDeleteRolAsync(id);
+                if (!deleted)
+                {
+                    return NotFound(new { message = "No se encontró el rol a eliminar permanentemente" });
+                }
+
+                return NoContent();
+            }
+            catch (ValidationException ex)
+            {
+                _logger.LogWarning(ex, "Validación fallida al eliminar permanentemente rol con ID: {RolId}", id);
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (EntityNotFoundException ex)
+            {
+                _logger.LogInformation(ex, "Rol no encontrado con ID: {RolId}", id);
+                return NotFound(new { message = ex.Message });
+            }
+            catch (ExternalServiceException ex)
+            {
+                _logger.LogError(ex, "Error al eliminar permanentemente rol con ID: {RolId}", id);
                 return StatusCode(500, new { message = ex.Message });
             }
         }

@@ -99,6 +99,32 @@ namespace Business
             }
         }
 
+        public async Task<bool> PermanentDeleteAsync(int id)
+{
+    try
+    {
+        if (id <= 0)
+        {
+            _logger.LogWarning("ID de usuario inválido para eliminación permanente: {UserId}", id);
+            throw new ArgumentException("El ID debe ser mayor que cero");
+        }
+        
+        var user = await _userData.GetByIdAsync(id);
+        if (user == null)
+        {
+            _logger.LogWarning("Usuario no encontrado para eliminación permanente.");
+            return false;
+        }
+
+        return await _userData.PermanentDeleteAsync(id);
+    }
+    catch (Exception ex)
+    {
+        _logger.LogError(ex, "Error al eliminar permanentemente el usuario con ID {UserId}.", id);
+        return false;
+    }
+}
+
         /// <summary>
         /// Actualiza un usuario existente.
         /// </summary>

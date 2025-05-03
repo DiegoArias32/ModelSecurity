@@ -1,16 +1,15 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Business;
 using Entity.DTOs;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.JsonPatch;
 using System.Threading.Tasks;
 using Utilities.Exceptions;
+using System;
 
 namespace WebApplication1.Controllers
 {
-    /// <summary>
-    /// Controlador para la gestión de permisos del sistema
-    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     [Produces("application/json")]
@@ -25,9 +24,6 @@ namespace WebApplication1.Controllers
             _logger = logger;
         }
 
-        /// <summary>
-        /// Obtiene todos los permisos disponibles
-        /// </summary>
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<PermissionDto>), 200)]
         [ProducesResponseType(500)]
@@ -45,11 +41,9 @@ namespace WebApplication1.Controllers
             }
         }
 
-        /// <summary>
-        /// Obtiene un permiso por su ID
-        /// </summary>
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(PermissionDto), 200)]
+        [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
         public async Task<IActionResult> GetPermissionById(int id)
@@ -69,9 +63,6 @@ namespace WebApplication1.Controllers
             }
         }
 
-        /// <summary>
-        /// Crea un nuevo permiso
-        /// </summary>
         [HttpPost]
         [ProducesResponseType(typeof(PermissionDto), 201)]
         [ProducesResponseType(400)]
@@ -95,12 +86,10 @@ namespace WebApplication1.Controllers
             }
         }
 
-        /// <summary>
-        /// Actualiza un permiso existente
-        /// </summary>
         [HttpPut("{id}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
         [ProducesResponseType(500)]
         public async Task<IActionResult> UpdatePermission(int id, [FromBody] PermissionDto permissionDto)
         {
@@ -119,11 +108,8 @@ namespace WebApplication1.Controllers
             }
         }
 
-        /// <summary>
-        /// Elimina un permiso por ID
-        /// </summary>
         [HttpDelete("{id}")]
-        [ProducesResponseType(200)]
+        [ProducesResponseType(204)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
         public async Task<IActionResult> DeletePermission(int id)
@@ -131,11 +117,96 @@ namespace WebApplication1.Controllers
             try
             {
                 var deleted = await _permissionBusiness.DeleteAsync(id);
-                return deleted ? Ok() : NotFound(new { message = "Permiso no encontrado" });
+                if (!deleted)
+                {
+                    return NotFound(new { message = "Permiso no encontrado" });
+                }
+
+                return NoContent();
             }
             catch (ExternalServiceException ex)
             {
                 _logger.LogError(ex, "Error al eliminar el permiso");
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
+        // PATCH api/Permission/{id}
+        [HttpPatch("{id}")]
+        [ProducesResponseType(typeof(PermissionDto), 200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> PartialUpdatePermission(int id, [FromBody] JsonPatchDocument<PermissionDto> patchDoc)
+        {
+            if (patchDoc == null)
+            {
+                return BadRequest(new { message = "El objeto patch no puede ser nulo" });
+            }
+
+            // Validar que solo se quiere modificar campos específicos
+            var allowedPaths = new[] { "/Name", "/Description" };  // Ajusta los campos según tus necesidades
+
+            foreach (var op in patchDoc.Operations)
+            {
+                var trimmedPath = op.path.Trim();
+
+                if (!allowedPaths.Contains(trimmedPath, StringComparer.OrdinalIgnoreCase))
+                {
+                    return BadRequest(new { message = $"Solo se permite modificar los siguientes campos: {string.Join(", ", allowedPaths)}" });
+                }
+            }
+
+            try
+            {
+                var existingPermission = await _permissionBusiness.GetByIdAsync(id);
+
+                if (existingPermission == null)
+                {
+                    return NotFound(new { message = "Permiso no encontrado" });
+                }
+
+                patchDoc.ApplyTo(existingPermission, error =>
+                {
+                    ModelState.AddModelError(error.Operation.path, error.ErrorMessage);
+                });
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                var updatedPermission = await _permissionBusiness.UpdateAsync(existingPermission);
+
+                return Ok(updatedPermission);
+            }
+            catch (ExternalServiceException ex)
+            {
+                _logger.LogError(ex, "Error al actualizar parcialmente el permiso");
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
+        // DELETE PERMANENTE api/Permission/permanent/{id}
+        [HttpDelete("permanent/{id}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> PermanentDeletePermission(int id)
+        {
+            try
+            {
+                var deleted = await _permissionBusiness.PermanentDeleteAsync(id);
+                if (!deleted)
+                {
+                    return NotFound(new { message = "Permiso no encontrado para eliminar permanentemente" });
+                }
+
+                return NoContent();
+            }
+            catch (ExternalServiceException ex)
+            {
+                _logger.LogError(ex, "Error al eliminar permanentemente el permiso");
                 return StatusCode(500, new { message = ex.Message });
             }
         }

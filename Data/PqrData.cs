@@ -29,6 +29,7 @@ namespace Data
         {
             try
             {
+                pqr.CreationDate = DateTime.UtcNow; // Establece la fecha actual en UTC
                 await _context.Pqr.AddAsync(pqr);
                 await _context.SaveChangesAsync();
                 return pqr;
@@ -95,6 +96,25 @@ namespace Data
                 return false;
             }
         }
+
+        public async Task<bool> PermanentDeleteAsync(int id)
+{
+    try
+    {
+        var pqr = await _context.Pqr.FindAsync(id);
+        if (pqr == null)
+            return false;
+
+        _context.Pqr.Remove(pqr);
+        await _context.SaveChangesAsync();
+        return true;
+    }
+    catch (Exception ex)
+    {
+        _logger.LogError(ex, "Error al eliminar permanentemente el PQR: {ErrorMessage}", ex.Message);
+        return false;
+    }
+}
 
         /// <summary>
         /// Elimina un PQR de la base de datos (borrado físico).

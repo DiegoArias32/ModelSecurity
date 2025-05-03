@@ -71,12 +71,12 @@ builder.Services.AddScoped<WorkerLoginData>();
 builder.Services.AddScoped<WorkerLoginBusiness>();
 
 
-
 // 🔹 Logging (opcional si lo vas a usar)
 builder.Services.AddLogging();
 
 // 🔹 Agregar controladores
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddNewtonsoftJson();
+
 
 var app = builder.Build();
 

@@ -132,6 +132,42 @@ namespace Business
             }
         }
 
+public async Task<bool> PermanentDeleteRolAsync(int id)
+{
+    if (id <= 0)
+    {
+        _logger.LogWarning("Se intentó eliminar permanentemente un rol con ID inválido: {RolId}", id);
+        throw new ValidationException("id", "El ID del rol debe ser mayor que cero");
+    }
+
+    try
+    {
+        // Verificar si el rol existe
+        var rolExistente = await _rolData.GetByIdAsync(id);
+        if (rolExistente == null)
+        {
+            _logger.LogInformation("No se encontró ningún rol con ID: {RolId}", id);
+            throw new EntityNotFoundException("Rol", id);
+        }
+
+        return await _rolData.PermanentDeleteAsync(id);
+    }
+    catch (EntityNotFoundException)
+    {
+        throw;
+    }
+    catch (ValidationException)
+    {
+        throw;
+    }
+    catch (Exception ex)
+    {
+        _logger.LogError(ex, "Error al eliminar permanentemente el rol con ID: {RolId}", id);
+        throw new ExternalServiceException("Base de datos", $"Error al eliminar permanentemente el rol con ID {id}", ex);
+    }
+}
+
+
         // Método para eliminar un rol
         public async Task<bool> DeleteRolAsync(int id)
         {

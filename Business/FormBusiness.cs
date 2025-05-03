@@ -97,6 +97,26 @@ namespace Business
             }
         }
 
+        public async Task<bool> PermanentDeleteFormAsync(int id)
+{
+    try
+    {
+        var form = await _formData.GetByIdAsync(id);
+        if (form == null)
+        {
+            _logger.LogWarning("Formulario con ID {FormId} no encontrado para eliminación permanente.", id);
+            throw new EntityNotFoundException("Formulario", id);
+        }
+
+        return await _formData.PermanentDeleteAsync(id);
+    }
+    catch (Exception ex)
+    {
+        _logger.LogError(ex, "Error al eliminar permanentemente el formulario con ID {FormId}", id);
+        throw new ExternalServiceException("Base de datos", "Error al eliminar permanentemente el formulario", ex);
+    }
+}
+
         /// <summary>
         /// Actualiza un formulario existente.
         /// </summary>
@@ -188,8 +208,7 @@ namespace Business
                 Id = form.Id,
                 Name = form.Name,
                 Code = form.Code,
-                Active = form.Active,
-                CreateAt = form.CreateAt
+                Active = form.Active
             };
         }
 
@@ -201,8 +220,7 @@ namespace Business
                 Id = formDto.Id,
                 Name = formDto.Name,
                 Code = formDto.Code,
-                Active = formDto.Active,
-                CreateAt = formDto.CreateAt
+                Active = formDto.Active
             };
         }
 

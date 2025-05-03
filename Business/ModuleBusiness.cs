@@ -93,6 +93,33 @@ namespace Business
             }
         }
 
+        public async Task<bool> PermanentDeleteModuleAsync(int id)
+{
+    try
+    {
+        if (id <= 0)
+        {
+            _logger.LogWarning("Se intentó eliminar permanentemente un módulo con ID inválido: {ModuleId}", id);
+            throw new ValidationException("id", "El ID del módulo debe ser mayor que cero");
+        }
+
+        // Verificar que exista el módulo
+        var module = await _moduleData.GetByIdAsync(id);
+        if (module == null)
+        {
+            _logger.LogInformation("No se encontró ningún módulo con ID: {ModuleId}", id);
+            throw new EntityNotFoundException("Módulo", id);
+        }
+
+        return await _moduleData.PermanentDeleteAsync(id);
+    }
+    catch (Exception ex)
+    {
+        _logger.LogError(ex, "Error al eliminar permanentemente el módulo con ID: {ModuleId}", id);
+        return false;
+    }
+}
+
         public async Task<bool> UpdateModuleAsync(ModuleDto moduleDto)
         {
             try

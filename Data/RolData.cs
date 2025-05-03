@@ -84,6 +84,30 @@ namespace Data
             }
         }
 
+public async Task<bool> PermanentDeleteAsync(int id)
+{
+    try
+    {
+        var rol = await _context.Set<Rol>().FindAsync(id);
+        if (rol == null)
+        {
+            return false;
+        }
+
+        // Eliminación física
+        _context.Remove(rol);
+        await _context.SaveChangesAsync();
+
+        return true;
+    }
+    catch (Exception ex)
+    {
+        _logger.LogError(ex, "Error al eliminar permanentemente el rol con ID {RolId}: {ErrorMessage}", id, ex.Message);
+        throw;
+    }
+}
+
+
         /// <summary>
         /// Busca un rol por su ID.
         /// </summary>

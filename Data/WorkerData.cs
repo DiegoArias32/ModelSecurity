@@ -84,6 +84,27 @@ namespace Data
             }
         }
 
+public async Task<bool> PermanentDeleteAsync(int id)
+{
+    try
+    {
+        var worker = await _context.Set<Worker>()
+            .FirstOrDefaultAsync(w => w.WorkerId == id);
+
+        if (worker == null)
+            return false;
+
+        _context.Set<Worker>().Remove(worker);
+        await _context.SaveChangesAsync();
+        return true;
+    }
+    catch (Exception ex)
+    {
+        _logger.LogError("Error al eliminar permanentemente el trabajador: {Message}", ex.Message);
+        return false;
+    }
+}
+
         /// <summary>
         /// Actualiza un trabajador existente.
         /// </summary>

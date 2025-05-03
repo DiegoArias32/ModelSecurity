@@ -101,3 +101,33 @@ C:\Users\User\Documents\ModelSecurity\Entity\obj\Debug\net9.0\refint\Entity.dll
 C:\Users\User\Documents\ModelSecurity\Entity\obj\Debug\net9.0\Entity.pdb
 C:\Users\User\Documents\ModelSecurity\Entity\obj\Debug\net9.0\Entity.genruntimeconfig.cache
 C:\Users\User\Documents\ModelSecurity\Entity\obj\Debug\net9.0\ref\Entity.dll
+C:\Users\User\3D Objects\ModelSecurity\Entity\bin\Debug\net9.0\Entity.deps.json
+C:\Users\User\3D Objects\ModelSecurity\Entity\bin\Debug\net9.0\Entity.runtimeconfig.json
+C:\Users\User\3D Objects\ModelSecurity\Entity\bin\Debug\net9.0\Entity.dll
+C:\Users\User\3D Objects\ModelSecurity\Entity\bin\Debug\net9.0\Entity.pdb
+C:\Users\User\3D Objects\ModelSecurity\Entity\obj\Debug\net9.0\Entity.csproj.AssemblyReference.cache
+C:\Users\User\3D Objects\ModelSecurity\Entity\obj\Debug\net9.0\Entity.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\User\3D Objects\ModelSecurity\Entity\obj\Debug\net9.0\Entity.AssemblyInfoInputs.cache
+C:\Users\User\3D Objects\ModelSecurity\Entity\obj\Debug\net9.0\Entity.AssemblyInfo.cs
+C:\Users\User\3D Objects\ModelSecurity\Entity\obj\Debug\net9.0\Entity.csproj.CoreCompileInputs.cache
+C:\Users\User\3D Objects\ModelSecurity\Entity\obj\Debug\net9.0\Entity.sourcelink.json
+C:\Users\User\3D Objects\ModelSecurity\Entity\obj\Debug\net9.0\Entity.dll
+C:\Users\User\3D Objects\ModelSecurity\Entity\obj\Debug\net9.0\refint\Entity.dll
+C:\Users\User\3D Objects\ModelSecurity\Entity\obj\Debug\net9.0\Entity.pdb
+C:\Users\User\3D Objects\ModelSecurity\Entity\obj\Debug\net9.0\Entity.genruntimeconfig.cache
+C:\Users\User\3D Objects\ModelSecurity\Entity\obj\Debug\net9.0\ref\Entity.dll
+C:\Users\User\3D Objects\ModelSecurity - copia\Entity\bin\Debug\net9.0\Entity.deps.json
+C:\Users\User\3D Objects\ModelSecurity - copia\Entity\bin\Debug\net9.0\Entity.runtimeconfig.json
+C:\Users\User\3D Objects\ModelSecurity - copia\Entity\bin\Debug\net9.0\Entity.dll
+C:\Users\User\3D Objects\ModelSecurity - copia\Entity\bin\Debug\net9.0\Entity.pdb
+C:\Users\User\3D Objects\ModelSecurity - copia\Entity\obj\Debug\net9.0\Entity.csproj.AssemblyReference.cache
+C:\Users\User\3D Objects\ModelSecurity - copia\Entity\obj\Debug\net9.0\Entity.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\User\3D Objects\ModelSecurity - copia\Entity\obj\Debug\net9.0\Entity.AssemblyInfoInputs.cache
+C:\Users\User\3D Objects\ModelSecurity - copia\Entity\obj\Debug\net9.0\Entity.AssemblyInfo.cs
+C:\Users\User\3D Objects\ModelSecurity - copia\Entity\obj\Debug\net9.0\Entity.csproj.CoreCompileInputs.cache
+C:\Users\User\3D Objects\ModelSecurity - copia\Entity\obj\Debug\net9.0\Entity.sourcelink.json
+C:\Users\User\3D Objects\ModelSecurity - copia\Entity\obj\Debug\net9.0\Entity.dll
+C:\Users\User\3D Objects\ModelSecurity - copia\Entity\obj\Debug\net9.0\refint\Entity.dll
+C:\Users\User\3D Objects\ModelSecurity - copia\Entity\obj\Debug\net9.0\Entity.pdb
+C:\Users\User\3D Objects\ModelSecurity - copia\Entity\obj\Debug\net9.0\Entity.genruntimeconfig.cache
+C:\Users\User\3D Objects\ModelSecurity - copia\Entity\obj\Debug\net9.0\ref\Entity.dll

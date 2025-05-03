@@ -92,6 +92,33 @@ public async Task<RolUserDto> CreateAsync(RolUserDto rolUserDto)
             }
         }
 
+        
+public async Task<bool> PermanentDeleteAsync(int id)
+{
+    try
+    {
+        if (id <= 0)
+        {
+            _logger.LogWarning("ID de relación Rol-User inválido para eliminación permanente: {RolUserId}", id);
+            throw new ArgumentException("El ID debe ser mayor que cero");
+        }
+        
+        var rolUser = await _rolUserData.GetByIdAsync(id);
+        if (rolUser == null)
+        {
+            _logger.LogWarning("Relación Rol-User no encontrada para eliminación permanente.");
+            return false;
+        }
+
+        return await _rolUserData.PermanentDeleteAsync(id);
+    }
+    catch (Exception ex)
+    {
+        _logger.LogError(ex, "Error al eliminar permanentemente la relación Rol-User con ID {RolUserId}.", id);
+        return false;
+    }
+}
+
         public async Task<bool> DeleteAsync(int id)
         {
             try

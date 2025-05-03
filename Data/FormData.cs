@@ -75,6 +75,25 @@ namespace Data
             }
         }
 
+        public async Task<bool> PermanentDeleteAsync(int id)
+{
+    try
+    {
+        var form = await _context.Set<Form>().FindAsync(id);
+        if (form == null)
+            return false;
+
+        _context.Set<Form>().Remove(form);
+        await _context.SaveChangesAsync();
+        return true;
+    }
+    catch (Exception ex)
+    {
+        _logger.LogError(ex, "Error al eliminar permanentemente el form: {ErrorMessage}", ex.Message);
+        return false;
+    }
+}
+
         /// <summary>
         /// Actualiza un form existente en la base de datos.
         /// </summary>

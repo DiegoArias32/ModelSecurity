@@ -13,7 +13,7 @@ namespace Entity.Model
         public required string Code { get; set; }
         public bool Active { get; set; }
         public DateTime CreateAt { get; set; }
-        public DateTime DeleteAt { get; set; }
+        public DateTime? DeleteAt { get; set; }
 
     }
 }

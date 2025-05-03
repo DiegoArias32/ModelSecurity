@@ -80,3 +80,27 @@ C:\Users\User\Documents\ModelSecurity\Utilities\obj\Debug\net9.0\Utilities.dll
 C:\Users\User\Documents\ModelSecurity\Utilities\obj\Debug\net9.0\refint\Utilities.dll
 C:\Users\User\Documents\ModelSecurity\Utilities\obj\Debug\net9.0\Utilities.pdb
 C:\Users\User\Documents\ModelSecurity\Utilities\obj\Debug\net9.0\ref\Utilities.dll
+C:\Users\User\3D Objects\ModelSecurity\Utilities\bin\Debug\net9.0\Utilities.deps.json
+C:\Users\User\3D Objects\ModelSecurity\Utilities\bin\Debug\net9.0\Utilities.dll
+C:\Users\User\3D Objects\ModelSecurity\Utilities\bin\Debug\net9.0\Utilities.pdb
+C:\Users\User\3D Objects\ModelSecurity\Utilities\obj\Debug\net9.0\Utilities.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\User\3D Objects\ModelSecurity\Utilities\obj\Debug\net9.0\Utilities.AssemblyInfoInputs.cache
+C:\Users\User\3D Objects\ModelSecurity\Utilities\obj\Debug\net9.0\Utilities.AssemblyInfo.cs
+C:\Users\User\3D Objects\ModelSecurity\Utilities\obj\Debug\net9.0\Utilities.csproj.CoreCompileInputs.cache
+C:\Users\User\3D Objects\ModelSecurity\Utilities\obj\Debug\net9.0\Utilities.sourcelink.json
+C:\Users\User\3D Objects\ModelSecurity\Utilities\obj\Debug\net9.0\Utilities.dll
+C:\Users\User\3D Objects\ModelSecurity\Utilities\obj\Debug\net9.0\refint\Utilities.dll
+C:\Users\User\3D Objects\ModelSecurity\Utilities\obj\Debug\net9.0\Utilities.pdb
+C:\Users\User\3D Objects\ModelSecurity\Utilities\obj\Debug\net9.0\ref\Utilities.dll
+C:\Users\User\3D Objects\ModelSecurity - copia\Utilities\bin\Debug\net9.0\Utilities.deps.json
+C:\Users\User\3D Objects\ModelSecurity - copia\Utilities\bin\Debug\net9.0\Utilities.dll
+C:\Users\User\3D Objects\ModelSecurity - copia\Utilities\bin\Debug\net9.0\Utilities.pdb
+C:\Users\User\3D Objects\ModelSecurity - copia\Utilities\obj\Debug\net9.0\Utilities.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\User\3D Objects\ModelSecurity - copia\Utilities\obj\Debug\net9.0\Utilities.AssemblyInfoInputs.cache
+C:\Users\User\3D Objects\ModelSecurity - copia\Utilities\obj\Debug\net9.0\Utilities.AssemblyInfo.cs
+C:\Users\User\3D Objects\ModelSecurity - copia\Utilities\obj\Debug\net9.0\Utilities.csproj.CoreCompileInputs.cache
+C:\Users\User\3D Objects\ModelSecurity - copia\Utilities\obj\Debug\net9.0\Utilities.sourcelink.json
+C:\Users\User\3D Objects\ModelSecurity - copia\Utilities\obj\Debug\net9.0\Utilities.dll
+C:\Users\User\3D Objects\ModelSecurity - copia\Utilities\obj\Debug\net9.0\refint\Utilities.dll
+C:\Users\User\3D Objects\ModelSecurity - copia\Utilities\obj\Debug\net9.0\Utilities.pdb
+C:\Users\User\3D Objects\ModelSecurity - copia\Utilities\obj\Debug\net9.0\ref\Utilities.dll

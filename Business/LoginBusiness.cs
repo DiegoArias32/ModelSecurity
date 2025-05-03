@@ -96,6 +96,27 @@ namespace Business
             }
         }
 
+        public async Task<bool> PermanentDeleteAsync(int id)
+{
+    try
+    {
+        var login = await _loginData.GetByIdAsync(id);
+        if (login == null)
+        {
+            _logger.LogWarning("Login no encontrado para eliminación permanente.");
+            return false;
+        }
+
+        return await _loginData.PermanentDeleteAsync(id);
+    }
+    catch (Exception ex)
+    {
+        _logger.LogError(ex, "Error al eliminar permanentemente el login con ID {LoginId}.", id);
+        return false;
+    }
+}
+
+
         public async Task<bool> DeleteAsync(int id)
         {
             try

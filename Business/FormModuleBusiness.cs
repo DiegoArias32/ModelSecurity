@@ -37,7 +37,6 @@ public class FormModuleBusiness
 
             var formModule = MapToEntity(formModuleDto);
             formModule.CreateAt = DateTime.UtcNow;
-            formModule.DeleteAt = DateTime.MinValue;
 
             var createdFormModule = await _formModuleData.CreateAsync(formModule);
 
@@ -144,7 +143,6 @@ public class FormModuleBusiness
             Id = formModule.Id,
             ModuleId = formModule.ModuleId,
             FormId = formModule.FormId,
-            CreateAt = formModule.CreateAt
         };
     }
 
@@ -155,7 +153,6 @@ public class FormModuleBusiness
             Id = formModuleDto.Id,
             ModuleId = formModuleDto.ModuleId,
             FormId = formModuleDto.FormId,
-            CreateAt = formModuleDto.CreateAt,
         };
     }
 

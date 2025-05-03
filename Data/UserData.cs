@@ -65,6 +65,8 @@ namespace Data
     }
 }
 
+
+
         /// <summary>
         /// Obtiene todos los users almacenados en la base de datos.
         /// </summary>
@@ -101,6 +103,28 @@ namespace Data
     {
         _logger.LogError("Error al obtener usuario con ID {UserId}", id);
         throw;
+    }
+}
+
+public async Task<bool> PermanentDeleteAsync(int id)
+{
+    try
+    {
+        var user = await _context.Set<User>()
+            .FirstOrDefaultAsync(u => u.Id == id);
+            
+        if (user == null)
+            return false;
+
+        // Eliminación física
+        _context.Set<User>().Remove(user);
+        await _context.SaveChangesAsync();
+        return true;
+    }
+    catch (Exception ex)
+    {
+        _logger.LogError("Error al eliminar permanentemente el usuario: {Message}", ex.Message);
+        return false;
     }
 }
 

@@ -28,6 +28,23 @@ namespace Business
             return MapToDTO(createdPermission);
         }
 
+        public async Task<bool> PermanentDeleteAsync(int id)
+{
+    try
+    {
+        var permission = await _permissionData.GetByIdAsync(id);
+        if (permission == null)
+            return false;
+
+        return await _permissionData.PermanentDeleteAsync(id);
+    }
+    catch (Exception ex)
+    {
+        _logger.LogError(ex, "Error al eliminar permanentemente el permiso.");
+        return false;
+    }
+}
+
         public async Task<IEnumerable<PermissionDto>> GetAllAsync()
         {
             var permissions = await _permissionData.GetAllAsync();

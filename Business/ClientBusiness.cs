@@ -167,6 +167,41 @@ namespace Business
             }
         }
 
+        public async Task<bool> PermanentDeleteClientAsync(int id)
+{
+    if (id <= 0)
+    {
+        _logger.LogWarning("Se intentó eliminar permanentemente un cliente con ID inválido: {ClientId}", id);
+        throw new ValidationException("id", "El ID del cliente debe ser mayor que cero");
+    }
+
+    try
+    {
+        // Verificar si el cliente existe
+        var clienteExistente = await _clientData.GetByIdAsync(id);
+        if (clienteExistente == null)
+        {
+            _logger.LogInformation("No se encontró ningún cliente con ID: {ClientId}", id);
+            throw new EntityNotFoundException("Cliente", id);
+        }
+
+        return await _clientData.PermanentDeleteAsync(id);
+    }
+    catch (EntityNotFoundException)
+    {
+        throw;
+    }
+    catch (ValidationException)
+    {
+        throw;
+    }
+    catch (Exception ex)
+    {
+        _logger.LogError(ex, "Error al eliminar permanentemente el cliente con ID: {ClientId}", id);
+        throw new ExternalServiceException("Base de datos", $"Error al eliminar permanentemente el cliente con ID {id}", ex);
+    }
+}
+
         private void ValidateClient(ClientDto clientDto)
         {
             if (clientDto == null)

@@ -72,6 +72,23 @@ namespace Business
             }
         }
 
+        public async Task<bool> PermanentDeleteAsync(int id)
+{
+    try
+    {
+        var pqr = await _pqrData.GetByIdAsync(id);
+        if (pqr == null)
+            return false;
+
+        return await _pqrData.PermanentDeleteAsync(id);
+    }
+    catch (Exception ex)
+    {
+        _logger.LogError(ex, "Error al eliminar permanentemente el PQR.");
+        return false;
+    }
+}
+
         /// <summary>
         /// Actualiza un PQR.
         /// </summary>
@@ -114,7 +131,6 @@ namespace Business
                 PqrId = dto.PqrId,
                 PqrType = dto.PqrType,
                 Description = dto.Description,
-                CreationDate = dto.CreationDate,
                 PqrStatus = dto.PqrStatus,
                 ResolutionDate = dto.ResolutionDate,
                 WorkerId = dto.WorkerId,
@@ -130,7 +146,6 @@ namespace Business
                 PqrId = entity.PqrId,
                 PqrType = entity.PqrType,
                 Description = entity.Description,
-                CreationDate = entity.CreationDate,
                 PqrStatus = entity.PqrStatus,
                 ResolutionDate = entity.ResolutionDate,
                 WorkerId = entity.WorkerId,

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Seguridad - Login</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Sistema de Gestión de Seguridad</h1>
+        </header>
+        
+        <main>
+            <div class="card">
+                <h2>Iniciar Sesión</h2>
+                
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="username">Nombre de Usuario:</label>
+                        <input type="text" id="username" name="username" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Contraseña:</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <button type="submit" class="button primary">Iniciar Sesión</button>
+                    </div>
+                    
+                    <div id="loginMessage" class="message"></div>
+                </form>
+                
+                <div class="links">
+                    <a href="register-user.html">¿No tiene una cuenta? Regístrese como usuario</a>
+                    <a href="register-admin.html">¿Es administrador? Regístrese con código de empresa</a>
+                    <a href="index.html">Volver al Inicio</a>
+                </div>
+            </div>
+        </main>
+        
+        <footer>
+            <p>&copy; 2025 Sistema de Seguridad. Todos los derechos reservados.</p>
+        </footer>
+    </div>
+    
+    <script src="../js/config.js"></script>
+    <script src="../js/login.js"></script>
+</body>
+</html>

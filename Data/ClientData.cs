@@ -128,5 +128,24 @@ namespace Data
                 return false;
             }
         }
+
+        public async Task<bool> PermanentDeleteAsync(int id)
+{
+    try
+    {
+        var client = await _context.Set<Client>().FindAsync(id);
+        if (client == null) return false;
+
+        _context.Set<Client>().Remove(client);
+        await _context.SaveChangesAsync();
+        return true;
+    }
+    catch (Exception ex)
+    {
+        _logger.LogError(ex, "Error al eliminar permanentemente el cliente con ID {ClientId}: {ErrorMessage}", id, ex.Message);
+        return false;
+    }
+}
+
     }
 }

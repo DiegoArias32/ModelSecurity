@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Utilities.Exceptions;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace WebApplication1.Controllers
 {
@@ -204,6 +205,89 @@ namespace WebApplication1.Controllers
             catch (ExternalServiceException ex)
             {
                 _logger.LogError(ex, "Error al eliminar permiso de formulario para rol con ID: {PermissionId}", id);
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
+        // PATCH api/RolFormPermission/{id}
+        [HttpPatch("{id}")]
+        [ProducesResponseType(typeof(RolFormPermissionDto), 200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> PartialUpdateRolFormPermission(int id, [FromBody] JsonPatchDocument<RolFormPermissionDto> patchDoc)
+        {
+            if (patchDoc == null)
+            {
+                return BadRequest(new { message = "El objeto patch no puede ser nulo" });
+            }
+
+            // Validar que solo se quiere modificar los campos permitidos
+            var allowedPaths = new[] { "/RolId", "/FormId" };
+
+            foreach (var op in patchDoc.Operations)
+            {
+                // Asegúrate de que el 'path' no tiene espacios adicionales
+                var trimmedPath = op.path.Trim();
+
+                // Verificamos si la propiedad está permitida (ignorando mayúsculas/minúsculas)
+                if (!allowedPaths.Contains(trimmedPath, StringComparer.OrdinalIgnoreCase))
+                {
+                    return BadRequest(new { message = $"Solo se permite modificar los siguientes campos: {string.Join(", ", allowedPaths)}" });
+                }
+            }
+
+            try
+            {
+                var existingPermission = await _rolFormPermissionBusiness.GetRolFormPermissionByIdAsync(id);
+
+                patchDoc.ApplyTo(existingPermission, error =>
+                {
+                    ModelState.AddModelError(error.Operation.path, error.ErrorMessage);
+                });
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                var updatedPermission = await _rolFormPermissionBusiness.UpdateRolFormPermissionAsync(existingPermission);
+
+                return Ok(updatedPermission);
+            }
+            catch (EntityNotFoundException ex)
+            {
+                _logger.LogInformation(ex, "Permiso de formulario para rol no encontrado con ID: {PermissionId}", id);
+                return NotFound(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al actualizar parcialmente permiso de formulario para rol");
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
+        // DELETE PERMANENTE api/RolFormPermission/permanent/{id}
+        [HttpDelete("permanent/{id}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> PermanentDeleteRolFormPermission(int id)
+        {
+            try
+            {
+                var deleted = await _rolFormPermissionBusiness.PermanentDeleteRolFormPermissionAsync(id);
+                if (!deleted)
+                {
+                    return NotFound(new { message = "No se encontró el permiso de formulario para rol a eliminar permanentemente" });
+                }
+
+                return NoContent();
+            }
+            catch (ExternalServiceException ex)
+            {
+                _logger.LogError(ex, "Error al eliminar permanentemente permiso de formulario para rol con ID: {PermissionId}", id);
                 return StatusCode(500, new { message = ex.Message });
             }
         }

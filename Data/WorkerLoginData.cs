@@ -73,11 +73,47 @@ namespace Data
             {
                 return await _context.Set<WorkerLogin>()
                     .Include(w => w.Worker)
-                    .FirstOrDefaultAsync(w => w.LoginId == id);
+                    .FirstOrDefaultAsync(w => w.id == id);
             }
             catch (Exception ex)
             {
-                _logger.LogError("Error al obtener WorkerLogin con ID {LoginId}: {Message}", id, ex.Message);
+                _logger.LogError("Error al obtener WorkerLogin con ID {Id}: {Message}", id, ex.Message);
+                throw;
+            }
+        }
+
+        public async Task<bool> PermanentDeleteAsync(int id)
+{
+    try
+    {
+        var workerLogin = await _context.Set<WorkerLogin>()
+            .FirstOrDefaultAsync(wl => wl.id == id);
+
+        if (workerLogin == null)
+            return false;
+
+        _context.Set<WorkerLogin>().Remove(workerLogin);
+        await _context.SaveChangesAsync();
+        return true;
+    }
+    catch (Exception ex)
+    {
+        _logger.LogError("Error al eliminar permanentemente el login de trabajador: {Message}", ex.Message);
+        return false;
+    }
+}
+
+        public async Task<WorkerLogin?> GetByLoginIdAsync(int loginId)
+        {
+            try
+            {
+                return await _context.Set<WorkerLogin>()
+                    .Include(w => w.Worker)
+                    .FirstOrDefaultAsync(w => w.LoginId == loginId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error al obtener WorkerLogin con LoginId {LoginId}: {Message}", loginId, ex.Message);
                 throw;
             }
         }
@@ -88,7 +124,7 @@ namespace Data
             {
                 // Validar duplicado por username
                 var existing = await _context.Set<WorkerLogin>()
-                    .FirstOrDefaultAsync(l => l.Username == login.Username && l.LoginId != login.LoginId);
+                    .FirstOrDefaultAsync(l => l.Username == login.Username && l.id != login.id);
 
                 if (existing != null)
                 {
@@ -116,7 +152,7 @@ namespace Data
             try
             {
                 var login = await _context.Set<WorkerLogin>()
-                    .FirstOrDefaultAsync(l => l.LoginId == id);
+                    .FirstOrDefaultAsync(l => l.id == id);
 
                 if (login == null)
                     return false;

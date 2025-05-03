@@ -29,6 +29,8 @@ namespace Data
         {
             try
             {
+                module.CreateAt = DateTime.UtcNow; // Establece la fecha actual en UTC
+                
                 await _context.Set<Module>().AddAsync(module);
                 await _context.SaveChangesAsync();
                 return module;
@@ -58,6 +60,25 @@ namespace Data
             }
         }
 
+public async Task<bool> PermanentDeleteAsync(int id)
+{
+    try
+    {
+        var module = await _context.Set<Module>().FindAsync(id);
+        if (module == null)
+            return false;
+
+        _context.Set<Module>().Remove(module);
+        await _context.SaveChangesAsync();
+        return true;
+    }
+    catch (Exception ex)
+    {
+        _logger.LogError(ex, "Error al eliminar permanentemente el módulo: {ErrorMessage}", ex.Message);
+        return false;
+    }
+}
+
         public async Task<bool> UpdateAsync(Module module)
         {
             try
@@ -72,24 +93,25 @@ namespace Data
                 return false;
             }
         }
+public async Task<bool> DeleteAsync(int id)
+{
+    try
+    {
+        var module = await _context.Set<Module>().FindAsync(id);
+        if (module == null)
+            return false;
 
-        public async Task<bool> DeleteAsync(int id)
-        {
-            try
-            {
-                var module = await _context.Set<Module>().FindAsync(id);
-                if (module == null)
-                    return false;
+        module.DeleteAt = DateTime.UtcNow; // ✅ Soft delete
+        _context.Set<Module>().Update(module);
+        await _context.SaveChangesAsync();
+        return true;
+    }
+    catch (Exception ex)
+    {
+        _logger.LogError(ex, "Error al eliminar el módulo: {ErrorMessage}", ex.Message);
+        return false;
+    }
+}
 
-                _context.Set<Module>().Remove(module);
-                await _context.SaveChangesAsync();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error al eliminar el módulo: {ErrorMessage}", ex.Message);
-                return false;
-            }
-        }
     }
 }

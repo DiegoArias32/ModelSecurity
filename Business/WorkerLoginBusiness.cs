@@ -78,7 +78,7 @@ namespace Business
         /// <summary>
         /// Obtiene un login de trabajador específico por su identificador.
         /// </summary>
-        /// <param name="id">Identificador del login.</param>
+        /// <param name="id">Identificador del login (clave primaria).</param>
         /// <returns>El DTO <see cref="WorkerLoginDto"/> encontrado o null si no existe.</returns>
         public async Task<WorkerLoginDto?> GetByIdAsync(int id)
         {
@@ -89,7 +89,26 @@ namespace Business
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al obtener el login del trabajador con ID {LoginId}.", id);
+                _logger.LogError(ex, "Error al obtener el login del trabajador con ID {Id}.", id);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Obtiene un login de trabajador específico por su LoginId (clave foránea).
+        /// </summary>
+        /// <param name="loginId">LoginId del registro.</param>
+        /// <returns>El DTO <see cref="WorkerLoginDto"/> encontrado o null si no existe.</returns>
+        public async Task<WorkerLoginDto?> GetByLoginIdAsync(int loginId)
+        {
+            try
+            {
+                var login = await _loginData.GetByLoginIdAsync(loginId);
+                return login != null ? MapToDTO(login) : null;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al obtener el login del trabajador con LoginId {LoginId}.", loginId);
                 throw;
             }
         }
@@ -109,7 +128,7 @@ namespace Business
                     throw new ArgumentException("El nombre de usuario no puede estar vacío.");
                 }
 
-                var existingLogin = await _loginData.GetByIdAsync(loginDto.LoginId);
+                var existingLogin = await _loginData.GetByIdAsync(loginDto.id);
                 if (existingLogin == null)
                 {
                     _logger.LogWarning("Login de trabajador no encontrado para actualizar.");
@@ -123,7 +142,7 @@ namespace Business
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al actualizar el login del trabajador con ID {LoginId}.", loginDto.LoginId);
+                _logger.LogError(ex, "Error al actualizar el login del trabajador con ID {Id}.", loginDto.id);
                 return false;
             }
         }
@@ -131,7 +150,7 @@ namespace Business
         /// <summary>
         /// Elimina un login de trabajador.
         /// </summary>
-        /// <param name="id">Identificador del login a eliminar.</param>
+        /// <param name="id">Identificador del login a eliminar (clave primaria).</param>
         /// <returns>True si la eliminación fue exitosa, False si no.</returns>
         public async Task<bool> DeleteAsync(int id)
         {
@@ -148,10 +167,30 @@ namespace Business
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al eliminar el login del trabajador con ID {LoginId}.", id);
+                _logger.LogError(ex, "Error al eliminar el login del trabajador con ID {Id}.", id);
                 return false;
             }
         }
+
+        public async Task<bool> PermanentDeleteAsync(int id)
+{
+    try
+    {
+        var login = await _loginData.GetByIdAsync(id);
+        if (login == null)
+        {
+            _logger.LogWarning("Login de trabajador no encontrado para eliminación permanente.");
+            return false;
+        }
+
+        return await _loginData.PermanentDeleteAsync(id);
+    }
+    catch (Exception ex)
+    {
+        _logger.LogError(ex, "Error al eliminar permanentemente el login del trabajador con ID {Id}.", id);
+        return false;
+    }
+}
 
         // Método para mapear de WorkerLogin a WorkerLoginDto
         private WorkerLoginDto MapToDTO(WorkerLogin workerLogin)
@@ -163,7 +202,6 @@ namespace Business
                 WorkerId = workerLogin.WorkerId,
                 Username = workerLogin.Username,
                 Password = workerLogin.Password,
-                CreationDate = workerLogin.CreationDate,
                 Status = workerLogin.Status
             };
         }
@@ -178,7 +216,6 @@ namespace Business
                 WorkerId = WorkerLoginDto.WorkerId,
                 Username = WorkerLoginDto.Username,
                 Password = WorkerLoginDto.Password,
-                CreationDate = WorkerLoginDto.CreationDate,
                 Status = WorkerLoginDto.Status
             };
         }
@@ -186,8 +223,11 @@ namespace Business
         // Método para mapear de WorkerLoginDto a WorkerLogin cuando ya tenemos la entidad
         private void MapToEntity(WorkerLoginDto dto, WorkerLogin login)
         {
+            // No actualizamos el id ya que es clave primaria
+            login.LoginId = dto.LoginId;
             login.WorkerId = dto.WorkerId;
             login.Username = dto.Username;
+            login.Password = dto.Password; // Considera si debes actualizar la contraseña aquí
             login.Status = dto.Status;
         }
 

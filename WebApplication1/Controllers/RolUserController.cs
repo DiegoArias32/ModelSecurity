@@ -1,10 +1,13 @@
 using Business;
 using Entity.DTOs;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System;
+using Utilities.Exceptions;
 
 namespace WebApplication1.Controllers
 {
@@ -182,6 +185,110 @@ namespace WebApplication1.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al eliminar relación Rol-User con ID: {RolUserId}", id);
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
+        // PATCH api/RolUser/{id}
+        [HttpPatch("{id}")]
+        [ProducesResponseType(typeof(RolUserDto), 200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> PartialUpdateRolUser(int id, [FromBody] JsonPatchDocument<RolUserDto> patchDoc)
+        {
+            if (patchDoc == null)
+            {
+                return BadRequest(new { message = "El objeto patch no puede ser nulo" });
+            }
+
+            // Validar campos permitidos para modificar
+            var allowedPaths = new[] { "/UserId", "/RolId" };
+
+            foreach (var op in patchDoc.Operations)
+            {
+                // Asegúrate de que el 'path' no tiene espacios adicionales
+                var trimmedPath = op.path.Trim();
+
+                // Verificamos si la propiedad está permitida (ignorando mayúsculas/minúsculas)
+                if (!allowedPaths.Contains(trimmedPath, StringComparer.OrdinalIgnoreCase))
+                {
+                    return BadRequest(new { message = $"Solo se permite modificar los siguientes campos: {string.Join(", ", allowedPaths)}" });
+                }
+            }
+
+            try
+            {
+                var existingRolUser = await _rolUserBusiness.GetByIdAsync(id);
+                if (existingRolUser == null)
+                {
+                    return NotFound(new { message = $"No se encontró la relación Rol-User con ID: {id}" });
+                }
+
+                patchDoc.ApplyTo(existingRolUser, error =>
+                {
+                    ModelState.AddModelError(error.Operation.path, error.ErrorMessage);
+                });
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                // Validaciones adicionales
+                if (existingRolUser.UserId <= 0 || existingRolUser.RolId <= 0)
+                {
+                    return BadRequest(new { message = "El ID de usuario y rol deben ser mayores que cero." });
+                }
+
+                var success = await _rolUserBusiness.UpdateAsync(existingRolUser);
+                if (!success)
+                {
+                    return NotFound(new { message = $"No se encontró la relación Rol-User con ID: {id}" });
+                }
+
+                // Obtener la entidad actualizada
+                var updatedRolUser = await _rolUserBusiness.GetByIdAsync(id);
+                return Ok(updatedRolUser);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al actualizar parcialmente la relación Rol-User");
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
+        // DELETE PERMANENTE api/RolUser/permanent/{id}
+        [HttpDelete("permanent/{id}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> PermanentDeleteRolUser(int id)
+        {
+            try
+            {
+                if (id <= 0)
+                {
+                    _logger.LogWarning("ID de relación Rol-User inválido: {RolUserId}", id);
+                    return BadRequest(new { message = "El ID debe ser mayor que cero." });
+                }
+
+                var deleted = await _rolUserBusiness.PermanentDeleteAsync(id);
+                if (!deleted)
+                {
+                    return NotFound(new { message = $"No se encontró la relación Rol-User con ID: {id} para eliminar permanentemente" });
+                }
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al eliminar permanentemente la relación Rol-User con ID: {RolUserId}", id);
                 return StatusCode(500, new { message = ex.Message });
             }
         }

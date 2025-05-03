@@ -1,45 +1,39 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\User\\3D Objects\\ModelSecurity - copia\\webapplication1\\WebApplication1.csproj": {}
+    "C:\\Users\\SENA\\Desktop\\ModelSecurity\\webapplication1\\WebApplication1.csproj": {}
   },
   "projects": {
-    "C:\\Users\\User\\3D Objects\\ModelSecurity - copia\\Business\\Business.csproj": {
+    "C:\\Users\\SENA\\Desktop\\ModelSecurity\\Business\\Business.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\User\\3D Objects\\ModelSecurity - copia\\Business\\Business.csproj",
+        "projectUniqueName": "C:\\Users\\SENA\\Desktop\\ModelSecurity\\Business\\Business.csproj",
         "projectName": "Business",
-        "projectPath": "C:\\Users\\User\\3D Objects\\ModelSecurity - copia\\Business\\Business.csproj",
-        "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\User\\3D Objects\\ModelSecurity - copia\\Business\\obj\\",
+        "projectPath": "C:\\Users\\SENA\\Desktop\\ModelSecurity\\Business\\Business.csproj",
+        "packagesPath": "C:\\Users\\SENA\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\SENA\\Desktop\\ModelSecurity\\Business\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\SENA\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\Users\\User\\3D Objects\\ModelSecurity - copia\\Data\\Data.csproj": {
-                "projectPath": "C:\\Users\\User\\3D Objects\\ModelSecurity - copia\\Data\\Data.csproj"
+              "C:\\Users\\SENA\\Desktop\\ModelSecurity\\Data\\Data.csproj": {
+                "projectPath": "C:\\Users\\SENA\\Desktop\\ModelSecurity\\Data\\Data.csproj"
               },
-              "C:\\Users\\User\\3D Objects\\ModelSecurity - copia\\Entity\\Entity.csproj": {
-                "projectPath": "C:\\Users\\User\\3D Objects\\ModelSecurity - copia\\Entity\\Entity.csproj"
+              "C:\\Users\\SENA\\Desktop\\ModelSecurity\\Entity\\Entity.csproj": {
+                "projectPath": "C:\\Users\\SENA\\Desktop\\ModelSecurity\\Entity\\Entity.csproj"
               },
-              "C:\\Users\\User\\3D Objects\\ModelSecurity - copia\\Utilities\\Utilities.csproj": {
-                "projectPath": "C:\\Users\\User\\3D Objects\\ModelSecurity - copia\\Utilities\\Utilities.csproj"
+              "C:\\Users\\SENA\\Desktop\\ModelSecurity\\Utilities\\Utilities.csproj": {
+                "projectPath": "C:\\Users\\SENA\\Desktop\\ModelSecurity\\Utilities\\Utilities.csproj"
               }
             }
           }
@@ -85,40 +79,34 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.201/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.203/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\User\\3D Objects\\ModelSecurity - copia\\Data\\Data.csproj": {
+    "C:\\Users\\SENA\\Desktop\\ModelSecurity\\Data\\Data.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\User\\3D Objects\\ModelSecurity - copia\\Data\\Data.csproj",
+        "projectUniqueName": "C:\\Users\\SENA\\Desktop\\ModelSecurity\\Data\\Data.csproj",
         "projectName": "Data",
-        "projectPath": "C:\\Users\\User\\3D Objects\\ModelSecurity - copia\\Data\\Data.csproj",
-        "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\User\\3D Objects\\ModelSecurity - copia\\Data\\obj\\",
+        "projectPath": "C:\\Users\\SENA\\Desktop\\ModelSecurity\\Data\\Data.csproj",
+        "packagesPath": "C:\\Users\\SENA\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\SENA\\Desktop\\ModelSecurity\\Data\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\SENA\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\Users\\User\\3D Objects\\ModelSecurity - copia\\Entity\\Entity.csproj": {
-                "projectPath": "C:\\Users\\User\\3D Objects\\ModelSecurity - copia\\Entity\\Entity.csproj"
+              "C:\\Users\\SENA\\Desktop\\ModelSecurity\\Entity\\Entity.csproj": {
+                "projectPath": "C:\\Users\\SENA\\Desktop\\ModelSecurity\\Entity\\Entity.csproj"
               }
             }
           }
@@ -174,32 +162,26 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.201/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.203/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\User\\3D Objects\\ModelSecurity - copia\\Entity\\Entity.csproj": {
+    "C:\\Users\\SENA\\Desktop\\ModelSecurity\\Entity\\Entity.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\User\\3D Objects\\ModelSecurity - copia\\Entity\\Entity.csproj",
+        "projectUniqueName": "C:\\Users\\SENA\\Desktop\\ModelSecurity\\Entity\\Entity.csproj",
         "projectName": "Entity",
-        "projectPath": "C:\\Users\\User\\3D Objects\\ModelSecurity - copia\\Entity\\Entity.csproj",
-        "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\User\\3D Objects\\ModelSecurity - copia\\Entity\\obj\\",
+        "projectPath": "C:\\Users\\SENA\\Desktop\\ModelSecurity\\Entity\\Entity.csproj",
+        "packagesPath": "C:\\Users\\SENA\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\SENA\\Desktop\\ModelSecurity\\Entity\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\SENA\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -267,32 +249,26 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.201/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.203/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\User\\3D Objects\\ModelSecurity - copia\\Utilities\\Utilities.csproj": {
+    "C:\\Users\\SENA\\Desktop\\ModelSecurity\\Utilities\\Utilities.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\User\\3D Objects\\ModelSecurity - copia\\Utilities\\Utilities.csproj",
+        "projectUniqueName": "C:\\Users\\SENA\\Desktop\\ModelSecurity\\Utilities\\Utilities.csproj",
         "projectName": "Utilities",
-        "projectPath": "C:\\Users\\User\\3D Objects\\ModelSecurity - copia\\Utilities\\Utilities.csproj",
-        "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\User\\3D Objects\\ModelSecurity - copia\\Utilities\\obj\\",
+        "projectPath": "C:\\Users\\SENA\\Desktop\\ModelSecurity\\Utilities\\Utilities.csproj",
+        "packagesPath": "C:\\Users\\SENA\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\SENA\\Desktop\\ModelSecurity\\Utilities\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\SENA\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -332,46 +308,40 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.201/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.203/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\User\\3D Objects\\ModelSecurity - copia\\webapplication1\\WebApplication1.csproj": {
+    "C:\\Users\\SENA\\Desktop\\ModelSecurity\\webapplication1\\WebApplication1.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\User\\3D Objects\\ModelSecurity - copia\\webapplication1\\WebApplication1.csproj",
+        "projectUniqueName": "C:\\Users\\SENA\\Desktop\\ModelSecurity\\webapplication1\\WebApplication1.csproj",
         "projectName": "WebApplication1",
-        "projectPath": "C:\\Users\\User\\3D Objects\\ModelSecurity - copia\\webapplication1\\WebApplication1.csproj",
-        "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\User\\3D Objects\\ModelSecurity - copia\\webapplication1\\obj\\",
+        "projectPath": "C:\\Users\\SENA\\Desktop\\ModelSecurity\\webapplication1\\WebApplication1.csproj",
+        "packagesPath": "C:\\Users\\SENA\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\SENA\\Desktop\\ModelSecurity\\webapplication1\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\SENA\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\Users\\User\\3D Objects\\ModelSecurity - copia\\Business\\Business.csproj": {
-                "projectPath": "C:\\Users\\User\\3D Objects\\ModelSecurity - copia\\Business\\Business.csproj"
+              "C:\\Users\\SENA\\Desktop\\ModelSecurity\\Business\\Business.csproj": {
+                "projectPath": "C:\\Users\\SENA\\Desktop\\ModelSecurity\\Business\\Business.csproj"
               },
-              "C:\\Users\\User\\3D Objects\\ModelSecurity - copia\\Entity\\Entity.csproj": {
-                "projectPath": "C:\\Users\\User\\3D Objects\\ModelSecurity - copia\\Entity\\Entity.csproj"
+              "C:\\Users\\SENA\\Desktop\\ModelSecurity\\Entity\\Entity.csproj": {
+                "projectPath": "C:\\Users\\SENA\\Desktop\\ModelSecurity\\Entity\\Entity.csproj"
               },
-              "C:\\Users\\User\\3D Objects\\ModelSecurity - copia\\Utilities\\Utilities.csproj": {
-                "projectPath": "C:\\Users\\User\\3D Objects\\ModelSecurity - copia\\Utilities\\Utilities.csproj"
+              "C:\\Users\\SENA\\Desktop\\ModelSecurity\\Utilities\\Utilities.csproj": {
+                "projectPath": "C:\\Users\\SENA\\Desktop\\ModelSecurity\\Utilities\\Utilities.csproj"
               }
             }
           }
@@ -438,7 +408,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.201/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.203/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

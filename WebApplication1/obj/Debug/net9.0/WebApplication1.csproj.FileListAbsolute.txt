@@ -932,3 +932,5 @@ C:\Users\User\3D Objects\ModelSecurity - copia\webapplication1\obj\Debug\net9.0\
 C:\Users\User\3D Objects\ModelSecurity - copia\webapplication1\obj\Debug\net9.0\WebApplication1.pdb
 C:\Users\User\3D Objects\ModelSecurity - copia\webapplication1\obj\Debug\net9.0\WebApplication1.genruntimeconfig.cache
 C:\Users\User\3D Objects\ModelSecurity - copia\webapplication1\obj\Debug\net9.0\ref\WebApplication1.dll
+C:\Users\User\3D Objects\ModelSecurity\webapplication1\bin\Debug\net9.0\System.Formats.Asn1.dll
+C:\Users\User\3D Objects\ModelSecurity\webapplication1\bin\Debug\net9.0\System.Text.Json.dll

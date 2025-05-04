@@ -23,7 +23,6 @@ namespace Entity.Contexts
 
         // DBSETS
         public DbSet<Rol> Roles { get; set; }
-        public DbSet<Client> Clients { get; set; }
         public DbSet<Form> Forms { get; set; }
         public DbSet<Module> Modules { get; set; }
         public DbSet<FormModule> FormModules { get; set; }
@@ -33,7 +32,7 @@ namespace Entity.Contexts
         public DbSet<WorkerLogin> WorkerLogins { get; set; }
         public DbSet<Permission> Permissions { get; set; }
         public DbSet<RolUser> RolUsers { get; set; }
-        public DbSet<Pqr> Pqr { get; set;}
+
         public DbSet<RolFormPermission> RolFormPermissions { get; set;}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

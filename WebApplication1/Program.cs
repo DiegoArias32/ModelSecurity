@@ -34,9 +34,6 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddScoped<RolData>();
 builder.Services.AddScoped<RolBusiness>();
 
-builder.Services.AddScoped<ClientData>();
-builder.Services.AddScoped<ClientBusiness>();
-
 builder.Services.AddScoped<FormData>();
 builder.Services.AddScoped<FormBusiness>();
 
@@ -54,9 +51,6 @@ builder.Services.AddScoped<PermissionBusiness>();
 
 builder.Services.AddScoped<WorkerData>();
 builder.Services.AddScoped<WorkerBusiness>();
-
-builder.Services.AddScoped<PqrData>();
-builder.Services.AddScoped<PqrBusiness>();
 
 builder.Services.AddScoped<RolUserData>();
 builder.Services.AddScoped<RolUserBusiness>();

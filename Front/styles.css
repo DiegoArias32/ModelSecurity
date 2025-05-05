@@ -1,0 +1,78 @@
+body {
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+.sidebar {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+}
+
+.sidebar .nav-link {
+    color: #efefef;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    margin-bottom: 0.2rem;
+    transition: all 0.3s;
+}
+
+.sidebar .nav-link:hover, .sidebar .nav-link.active {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.dropdown-menu {
+    background-color: #343a40;
+}
+
+.dropdown-item {
+    color: #efefef;
+}
+
+.dropdown-item:hover, .dropdown-item.active {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.main-content {
+    padding-top: 2rem;
+}
+
+table {
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.page-header {
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #dee2e6;
+}
+
+/* Estilo para mostrar errores en forma bonita */
+.api-error {
+    padding: 1rem;
+    margin: 1rem 0;
+    border-radius: 0.25rem;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+}
+
+.api-error h4 {
+    margin-top: 0;
+    color: inherit;
+}
+
+.api-error hr {
+    border-top-color: #f1b0b7;
+}
+
+.api-error .error-details {
+    max-height: 200px;
+    overflow-y: auto;
+    background-color: #f2f2f2;
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    font-family: monospace;
+}

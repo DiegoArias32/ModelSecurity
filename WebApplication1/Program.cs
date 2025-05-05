@@ -61,6 +61,9 @@ builder.Services.AddScoped<RolFormPermissionBusiness>();
 builder.Services.AddScoped<LoginData>();
 builder.Services.AddScoped<LoginBusiness>();
 
+builder.Services.AddScoped<MenuData>();
+builder.Services.AddScoped<MenuBusiness>();
+
 builder.Services.AddScoped<WorkerLoginData>();
 builder.Services.AddScoped<WorkerLoginBusiness>();
 

@@ -36,7 +36,8 @@ namespace Data
             try
             {
                 rolUser.CreateAt = DateTime.UtcNow;
-                rolUser.DeleteAt = DateTime.MinValue; // Indicamos que no está eliminado
+                // Inicializar DeleteAt con valor nulo en lugar de DateTime.MinValue
+                rolUser.DeleteAt = null;
                 
                 await _context.Set<RolUser>().AddAsync(rolUser);
                 await _context.SaveChangesAsync();
@@ -55,11 +56,18 @@ namespace Data
         /// <returns>Lista de relaciones Rol-User activas.</returns>
         public async Task<IEnumerable<RolUser>> GetAllAsync()
         {
-            return await _context.Set<RolUser>()
-                .Include(ru => ru.User)
-                .Include(ru => ru.Rol)
-                .Where(ru => ru.DeleteAt == DateTime.MinValue || ru.DeleteAt > DateTime.UtcNow) // Solo los activos
-                .ToListAsync();
+            try {
+                return await _context.Set<RolUser>()
+                    .Include(ru => ru.User)
+                    .Include(ru => ru.Rol)
+                    .Where(ru => ru.DeleteAt == null) // Solo los activos (no eliminados)
+                    .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al obtener las relaciones Rol-User: {ErrorMessage}", ex.Message);
+                throw;
+            }
         }
 
         /// <summary>
@@ -68,10 +76,17 @@ namespace Data
         /// <returns>Lista completa de relaciones Rol-User.</returns>
         public async Task<IEnumerable<RolUser>> GetAllIncludingDeletedAsync()
         {
-            return await _context.Set<RolUser>()
-                .Include(ru => ru.User)
-                .Include(ru => ru.Rol)
-                .ToListAsync();
+            try {
+                return await _context.Set<RolUser>()
+                    .Include(ru => ru.User)
+                    .Include(ru => ru.Rol)
+                    .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al obtener todas las relaciones Rol-User (incluyendo eliminadas): {ErrorMessage}", ex.Message);
+                throw;
+            }
         }
 
         /// <summary>
@@ -86,8 +101,7 @@ namespace Data
                 return await _context.Set<RolUser>()
                     .Include(ru => ru.User)
                     .Include(ru => ru.Rol)
-                    .FirstOrDefaultAsync(ru => ru.Id == id && 
-                                              (ru.DeleteAt == DateTime.MinValue || ru.DeleteAt > DateTime.UtcNow));
+                    .FirstOrDefaultAsync(ru => ru.Id == id && ru.DeleteAt == null);
             }
             catch (Exception ex)
             {
@@ -107,8 +121,7 @@ namespace Data
             {
                 return await _context.Set<RolUser>()
                     .Include(ru => ru.Rol)
-                    .Where(ru => ru.UserId == userId && 
-                                (ru.DeleteAt == DateTime.MinValue || ru.DeleteAt > DateTime.UtcNow))
+                    .Where(ru => ru.UserId == userId && ru.DeleteAt == null)
                     .ToListAsync();
             }
             catch (Exception ex)
@@ -129,8 +142,7 @@ namespace Data
             {
                 return await _context.Set<RolUser>()
                     .Include(ru => ru.User)
-                    .Where(ru => ru.RolId == rolId && 
-                                (ru.DeleteAt == DateTime.MinValue || ru.DeleteAt > DateTime.UtcNow))
+                    .Where(ru => ru.RolId == rolId && ru.DeleteAt == null)
                     .ToListAsync();
             }
             catch (Exception ex)

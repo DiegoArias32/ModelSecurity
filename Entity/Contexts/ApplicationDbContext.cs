@@ -31,6 +31,7 @@ namespace Entity.Contexts
         public DbSet<Login> Logins { get; set; }
         public DbSet<WorkerLogin> WorkerLogins { get; set; }
         public DbSet<Permission> Permissions { get; set; }
+        public DbSet<ActivityLog> ActivityLogs { get; set; }
         public DbSet<RolUser> RolUsers { get; set; }
 
         public DbSet<RolFormPermission> RolFormPermissions { get; set;}

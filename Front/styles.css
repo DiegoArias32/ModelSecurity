@@ -76,3 +76,98 @@ table {
     border-radius: 0.25rem;
     font-family: monospace;
 }
+
+/* Estilos para los logs de actividad */
+.activity-log {
+    margin-bottom: 2rem;
+}
+
+.activity-log-entry {
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+    border-left: 4px solid #ccc;
+    background-color: #f8f9fa;
+    transition: all 0.2s;
+}
+
+.activity-log-entry:hover {
+    background-color: #e9ecef;
+}
+
+.activity-log-entry.create {
+    border-left-color: #28a745;
+}
+
+.activity-log-entry.update {
+    border-left-color: #17a2b8;
+}
+
+.activity-log-entry.delete {
+    border-left-color: #dc3545;
+}
+
+.activity-log-entry .timestamp {
+    color: #6c757d;
+    font-size: 0.85rem;
+}
+
+.activity-log-entry .user {
+    font-weight: bold;
+}
+
+.activity-log-entry .action {
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    font-weight: bold;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    color: white;
+}
+
+.activity-log-entry .action.create {
+    background-color: #28a745;
+}
+
+.activity-log-entry .action.update {
+    background-color: #17a2b8;
+}
+
+.activity-log-entry .action.delete {
+    background-color: #dc3545;
+}
+
+.activity-log-entry .entity {
+    font-style: italic;
+}
+
+.activity-log-filters {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border-radius: 0.25rem;
+    background-color: #f8f9fa;
+}
+
+/* Paginación para los logs */
+.logs-pagination {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+}
+
+/* Botón de carga más logs */
+.load-more-logs {
+    margin-top: 1rem;
+    display: block;
+    width: 100%;
+    padding: 0.5rem;
+    text-align: center;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.load-more-logs:hover {
+    background-color: #e9ecef;
+}

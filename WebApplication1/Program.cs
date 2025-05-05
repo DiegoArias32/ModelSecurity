@@ -67,6 +67,12 @@ builder.Services.AddScoped<MenuBusiness>();
 builder.Services.AddScoped<WorkerLoginData>();
 builder.Services.AddScoped<WorkerLoginBusiness>();
 
+// Registrar los servicios para ActivityLog
+builder.Services.AddScoped<ActivityLogData>();
+builder.Services.AddScoped<ActivityLogBusiness>();
+
+// Agregar el HttpContextAccessor para obtener la IP del cliente
+builder.Services.AddHttpContextAccessor();
 
 // 🔹 Logging (opcional si lo vas a usar)
 builder.Services.AddLogging();

@@ -131,3 +131,18 @@ C:\Users\User\3D Objects\ModelSecurity - copia\Entity\obj\Debug\net9.0\refint\En
 C:\Users\User\3D Objects\ModelSecurity - copia\Entity\obj\Debug\net9.0\Entity.pdb
 C:\Users\User\3D Objects\ModelSecurity - copia\Entity\obj\Debug\net9.0\Entity.genruntimeconfig.cache
 C:\Users\User\3D Objects\ModelSecurity - copia\Entity\obj\Debug\net9.0\ref\Entity.dll
+C:\Users\SENA\Pictures\ModelSecurity\Entity\bin\Debug\net9.0\Entity.deps.json
+C:\Users\SENA\Pictures\ModelSecurity\Entity\bin\Debug\net9.0\Entity.runtimeconfig.json
+C:\Users\SENA\Pictures\ModelSecurity\Entity\bin\Debug\net9.0\Entity.dll
+C:\Users\SENA\Pictures\ModelSecurity\Entity\bin\Debug\net9.0\Entity.pdb
+C:\Users\SENA\Pictures\ModelSecurity\Entity\obj\Debug\net9.0\Entity.csproj.AssemblyReference.cache
+C:\Users\SENA\Pictures\ModelSecurity\Entity\obj\Debug\net9.0\Entity.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\SENA\Pictures\ModelSecurity\Entity\obj\Debug\net9.0\Entity.AssemblyInfoInputs.cache
+C:\Users\SENA\Pictures\ModelSecurity\Entity\obj\Debug\net9.0\Entity.AssemblyInfo.cs
+C:\Users\SENA\Pictures\ModelSecurity\Entity\obj\Debug\net9.0\Entity.csproj.CoreCompileInputs.cache
+C:\Users\SENA\Pictures\ModelSecurity\Entity\obj\Debug\net9.0\Entity.sourcelink.json
+C:\Users\SENA\Pictures\ModelSecurity\Entity\obj\Debug\net9.0\Entity.dll
+C:\Users\SENA\Pictures\ModelSecurity\Entity\obj\Debug\net9.0\refint\Entity.dll
+C:\Users\SENA\Pictures\ModelSecurity\Entity\obj\Debug\net9.0\Entity.pdb
+C:\Users\SENA\Pictures\ModelSecurity\Entity\obj\Debug\net9.0\Entity.genruntimeconfig.cache
+C:\Users\SENA\Pictures\ModelSecurity\Entity\obj\Debug\net9.0\ref\Entity.dll

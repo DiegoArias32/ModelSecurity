@@ -98,3 +98,23 @@ C:\Users\User\3D Objects\ModelSecurity - copia\Business\obj\Debug\net9.0\Busines
 C:\Users\User\3D Objects\ModelSecurity - copia\Business\obj\Debug\net9.0\refint\Business.dll
 C:\Users\User\3D Objects\ModelSecurity - copia\Business\obj\Debug\net9.0\Business.pdb
 C:\Users\User\3D Objects\ModelSecurity - copia\Business\obj\Debug\net9.0\ref\Business.dll
+C:\Users\SENA\Pictures\ModelSecurity\Business\bin\Debug\net9.0\Business.deps.json
+C:\Users\SENA\Pictures\ModelSecurity\Business\bin\Debug\net9.0\Business.dll
+C:\Users\SENA\Pictures\ModelSecurity\Business\bin\Debug\net9.0\Business.pdb
+C:\Users\SENA\Pictures\ModelSecurity\Business\bin\Debug\net9.0\Data.dll
+C:\Users\SENA\Pictures\ModelSecurity\Business\bin\Debug\net9.0\Entity.dll
+C:\Users\SENA\Pictures\ModelSecurity\Business\bin\Debug\net9.0\Utilities.dll
+C:\Users\SENA\Pictures\ModelSecurity\Business\bin\Debug\net9.0\Data.pdb
+C:\Users\SENA\Pictures\ModelSecurity\Business\bin\Debug\net9.0\Entity.pdb
+C:\Users\SENA\Pictures\ModelSecurity\Business\bin\Debug\net9.0\Utilities.pdb
+C:\Users\SENA\Pictures\ModelSecurity\Business\obj\Debug\net9.0\Business.csproj.AssemblyReference.cache
+C:\Users\SENA\Pictures\ModelSecurity\Business\obj\Debug\net9.0\Business.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\SENA\Pictures\ModelSecurity\Business\obj\Debug\net9.0\Business.AssemblyInfoInputs.cache
+C:\Users\SENA\Pictures\ModelSecurity\Business\obj\Debug\net9.0\Business.AssemblyInfo.cs
+C:\Users\SENA\Pictures\ModelSecurity\Business\obj\Debug\net9.0\Business.csproj.CoreCompileInputs.cache
+C:\Users\SENA\Pictures\ModelSecurity\Business\obj\Debug\net9.0\Business.sourcelink.json
+C:\Users\SENA\Pictures\ModelSecurity\Business\obj\Debug\net9.0\Business.csproj.Up2Date
+C:\Users\SENA\Pictures\ModelSecurity\Business\obj\Debug\net9.0\Business.dll
+C:\Users\SENA\Pictures\ModelSecurity\Business\obj\Debug\net9.0\refint\Business.dll
+C:\Users\SENA\Pictures\ModelSecurity\Business\obj\Debug\net9.0\Business.pdb
+C:\Users\SENA\Pictures\ModelSecurity\Business\obj\Debug\net9.0\ref\Business.dll

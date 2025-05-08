@@ -1,173 +1,352 @@
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
-    min-height: 100vh;
-    overflow-x: hidden;
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    color: #333;
+    line-height: 1.6;
 }
 
-.sidebar {
-    position: sticky;
-    top: 0;
-    height: 100vh;
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
 }
 
-.sidebar .nav-link {
-    color: #efefef;
-    padding: 0.5rem 1rem;
-    border-radius: 0.25rem;
-    margin-bottom: 0.2rem;
-    transition: all 0.3s;
+/* Estilos para el login */
+.login-box {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    max-width: 450px;
+    margin: 80px auto;
 }
 
-.sidebar .nav-link:hover, .sidebar .nav-link.active {
-    background-color: rgba(255, 255, 255, 0.1);
+.login-box h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #2c3e50;
 }
 
-.dropdown-menu {
-    background-color: #343a40;
+.input-group {
+    margin-bottom: 20px;
 }
 
-.dropdown-item {
-    color: #efefef;
+.input-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
 }
 
-.dropdown-item:hover, .dropdown-item.active {
-    background-color: rgba(255, 255, 255, 0.1);
+.input-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.error-message {
+    color: #e74c3c;
+    margin-bottom: 15px;
+    text-align: center;
+    display: none;
+}
+
+.error-message.active {
+    display: block;
+}
+
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-primary {
+    background-color: #3498db;
     color: white;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.btn-primary:hover {
+    background-color: #2980b9;
+}
+
+.btn-secondary {
+    background-color: #95a5a6;
+    color: white;
+    margin-right: 10px;
+}
+
+.btn-secondary:hover {
+    background-color: #7f8c8d;
+}
+
+.demo-options {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.demo-options p {
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: #7f8c8d;
+}
+
+/* Estilos para el dashboard */
+.dashboard {
+    display: none;
+}
+
+.dashboard.active {
+    display: block;
+}
+
+.header {
+    background-color: #2c3e50;
+    color: white;
+    padding: 15px 0;
+    margin-bottom: 30px;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+}
+
+.user-name {
+    margin-right: 15px;
+}
+
+.logout-btn {
+    background-color: transparent;
+    border: 1px solid white;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
 }
 
 .main-content {
-    padding-top: 2rem;
-}
-
-table {
-    width: 100%;
-    margin-bottom: 1rem;
-}
-
-.page-header {
-    margin-bottom: 1.5rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid #dee2e6;
-}
-
-/* Estilo para mostrar errores en forma bonita */
-.api-error {
-    padding: 1rem;
-    margin: 1rem 0;
-    border-radius: 0.25rem;
-    background-color: #f8d7da;
-    border: 1px solid #f5c6cb;
-    color: #721c24;
-}
-
-.api-error h4 {
-    margin-top: 0;
-    color: inherit;
-}
-
-.api-error hr {
-    border-top-color: #f1b0b7;
-}
-
-.api-error .error-details {
-    max-height: 200px;
-    overflow-y: auto;
-    background-color: #f2f2f2;
-    padding: 0.5rem;
-    border-radius: 0.25rem;
-    font-family: monospace;
-}
-
-/* Estilos para los logs de actividad */
-.activity-log {
-    margin-bottom: 2rem;
-}
-
-.activity-log-entry {
-    padding: 0.5rem;
-    margin-bottom: 0.5rem;
-    border-left: 4px solid #ccc;
-    background-color: #f8f9fa;
-    transition: all 0.2s;
-}
-
-.activity-log-entry:hover {
-    background-color: #e9ecef;
-}
-
-.activity-log-entry.create {
-    border-left-color: #28a745;
-}
-
-.activity-log-entry.update {
-    border-left-color: #17a2b8;
-}
-
-.activity-log-entry.delete {
-    border-left-color: #dc3545;
-}
-
-.activity-log-entry .timestamp {
-    color: #6c757d;
-    font-size: 0.85rem;
-}
-
-.activity-log-entry .user {
-    font-weight: bold;
-}
-
-.activity-log-entry .action {
-    text-transform: uppercase;
-    font-size: 0.75rem;
-    font-weight: bold;
-    padding: 0.25rem 0.5rem;
-    border-radius: 0.25rem;
-    color: white;
-}
-
-.activity-log-entry .action.create {
-    background-color: #28a745;
-}
-
-.activity-log-entry .action.update {
-    background-color: #17a2b8;
-}
-
-.activity-log-entry .action.delete {
-    background-color: #dc3545;
-}
-
-.activity-log-entry .entity {
-    font-style: italic;
-}
-
-.activity-log-filters {
-    margin-bottom: 1rem;
-    padding: 1rem;
-    border-radius: 0.25rem;
-    background-color: #f8f9fa;
-}
-
-/* Paginación para los logs */
-.logs-pagination {
-    margin-top: 1rem;
     display: flex;
-    justify-content: center;
 }
 
-/* Botón de carga más logs */
-.load-more-logs {
-    margin-top: 1rem;
+.sidebar {
+    width: 250px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-right: 30px;
+}
+
+.sidebar-menu {
+    list-style: none;
+}
+
+.sidebar-menu li {
+    margin-bottom: 5px;
+}
+
+.sidebar-menu a {
     display: block;
-    width: 100%;
-    padding: 0.5rem;
-    text-align: center;
-    background-color: #f8f9fa;
-    border: 1px solid #dee2e6;
-    border-radius: 0.25rem;
-    cursor: pointer;
-    transition: all 0.2s;
+    padding: 10px;
+    color: #2c3e50;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s;
 }
 
-.load-more-logs:hover {
-    background-color: #e9ecef;
+.sidebar-menu a:hover, .sidebar-menu a.active {
+    background-color: #ecf0f1;
+}
+
+.sidebar-menu a i {
+    margin-right: 10px;
+}
+
+.content-area {
+    flex: 1;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.module-title {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+/* Tablas */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.data-table th, .data-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.data-table th {
+    background-color: #f9f9f9;
+    font-weight: 600;
+}
+
+.data-table tr:hover {
+    background-color: #f5f5f5;
+}
+
+.action-btn {
+    background: none;
+    border: none;
+    color: #3498db;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.action-btn.delete {
+    color: #e74c3c;
+}
+
+.add-btn {
+    margin-bottom: 20px;
+}
+
+/* Formularios */
+.form-container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.form-row {
+    margin-bottom: 15px;
+}
+
+.form-row label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.form-row input, .form-row select, .form-row textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.form-row textarea {
+    min-height: 100px;
+}
+
+.form-actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.form-actions button {
+    margin-left: 10px;
+}
+
+/* Modal */
+.modal-bg {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-bg.active {
+    display: flex;
+}
+
+.modal {
+    background-color: white;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 600px;
+    padding: 20px;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.modal-body {
+    margin-bottom: 20px;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.modal-footer button {
+    margin-left: 10px;
+}
+
+/* Checkboxes de permisos */
+.permission-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.permission-item {
+    display: flex;
+    align-items: center;
+}
+
+.permission-item input {
+    margin-right: 8px;
 }

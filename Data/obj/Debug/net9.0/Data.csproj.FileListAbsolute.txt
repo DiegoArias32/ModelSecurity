@@ -176,3 +176,5 @@ C:\Users\SENA\Pictures\ModelSecurity\Data\obj\Debug\net9.0\refint\Data.dll
 C:\Users\SENA\Pictures\ModelSecurity\Data\obj\Debug\net9.0\Data.pdb
 C:\Users\SENA\Pictures\ModelSecurity\Data\obj\Debug\net9.0\Data.genruntimeconfig.cache
 C:\Users\SENA\Pictures\ModelSecurity\Data\obj\Debug\net9.0\ref\Data.dll
+C:\Users\User\3D Objects\ModelSecurity\Data\bin\Debug\net9.0\Utilities.dll
+C:\Users\User\3D Objects\ModelSecurity\Data\bin\Debug\net9.0\Utilities.pdb

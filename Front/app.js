@@ -360,43 +360,91 @@ function loadModuleContent(moduleId) {
     const currentUser = auth.getCurrentUser();
     const isAdmin = currentUser && currentUser.roles.includes('Admin');
     
-    // El resto de tu código actual para cargar el contenido del módulo
-    switch (moduleId) {
-        case 'dashboard':
-            moduleContentEl.innerHTML = generateDashboardContent();
-            loadDashboardStats();
-            break;
-        case 'usuarios':
-            loadUsersModule(moduleContentEl);
-            break;
-        case 'roles':
-            // Asegúrate de que esta función exista y esté implementada correctamente
-            loadRolesModule(moduleContentEl);
-            break;
-        case 'modulos':
-            loadModulesModule(moduleContentEl);
-            break;
-        case 'formularios':
-            loadFormsModule(moduleContentEl);
-            break;
-        case 'permisos':
-            loadPermissionsModule(moduleContentEl);
-            break;
-        case 'rolformpermisos':
-            loadRolFormPermissionsModule(moduleContentEl);
-            break;
-        case 'formmodulos':
-            loadFormModulesModule(moduleContentEl);
-            break;
-        case 'perfil':
-            moduleContentEl.innerHTML = generateProfileContent(currentUser);
-            setupProfileModule();
-            break;
-        default:
-            moduleContentEl.innerHTML = `<h2 class="module-title">Módulo no encontrado: ${moduleId}</h2>
-                                        <p>El módulo que intentas cargar no está disponible o no existe.</p>`;
-            console.error(`Módulo no encontrado: ${moduleId}`);
-    }
+// Add to your app.js file where you have the switch statement in loadModuleContent function
+
+switch (moduleId) {
+    case 'dashboard':
+        moduleContentEl.innerHTML = generateDashboardContent();
+        loadDashboardStats();
+        break;
+        
+    // Standard Spanish module names your code likely already has
+    case 'usuarios':
+        loadUsersModule(moduleContentEl);
+        break;
+    case 'roles':
+        loadRolesModule(moduleContentEl);
+        break;
+    case 'modulos':
+        loadModulesModule(moduleContentEl);
+        break;
+    case 'formularios':
+        loadFormsModule(moduleContentEl);
+        break;
+    case 'permisos':
+        loadPermissionsModule(moduleContentEl);
+        break;
+    case 'rolformpermisos':
+        loadRolFormPermissionsModule(moduleContentEl);
+        break;
+    case 'formmodulos':
+        loadFormModulesModule(moduleContentEl);
+        break;
+    case 'perfil':
+        moduleContentEl.innerHTML = generateProfileContent(currentUser);
+        setupProfileModule();
+        break;
+        
+    // Add handlers for English/plural names from your API/database
+    case 'forms':
+        loadFormsModule(moduleContentEl); // Reuse the same function
+        break;
+    case 'modules':
+        loadModulesModule(moduleContentEl); // Reuse the same function
+        break;
+    case 'permissions':
+        loadPermissionsModule(moduleContentEl); // Reuse the same function
+        break;
+    case 'users':
+        loadUsersModule(moduleContentEl); // Reuse the same function
+        break;
+    case 'workers':
+        // Create a worker module handler if needed
+        moduleContentEl.innerHTML = `<h2 class="module-title">Gestión de Trabajadores</h2>
+                                    <p>Módulo de trabajadores en desarrollo.</p>`;
+        break;
+    case 'logins':
+        // Create a login module handler if needed
+        moduleContentEl.innerHTML = `<h2 class="module-title">Gestión de Credenciales</h2>
+                                    <p>Módulo de credenciales en desarrollo.</p>`;
+        break;
+    case 'workerlogins':
+        // Create a worker login module handler if needed
+        moduleContentEl.innerHTML = `<h2 class="module-title">Gestión de Credenciales de Trabajadores</h2>
+                                    <p>Módulo de credenciales de trabajadores en desarrollo.</p>`;
+        break;
+    case 'rolusers':
+        // Create a rol-user module handler if needed
+        moduleContentEl.innerHTML = `<h2 class="module-title">Asignación de Roles a Usuarios</h2>
+                                    <p>Módulo de asignación de roles en desarrollo.</p>`;
+        break;
+    case 'rolformpermissions':
+        loadRolFormPermissionsModule(moduleContentEl); // Reuse the same function
+        break;
+    case 'activitylogs':
+        // Create an activity logs module handler if needed
+        moduleContentEl.innerHTML = `<h2 class="module-title">Registros de Actividad</h2>
+                                    <p>Módulo de registros de actividad en desarrollo.</p>`;
+        break;
+    case 'formmodules':
+        loadFormModulesModule(moduleContentEl); // Reuse the same function
+        break;
+        
+    default:
+        moduleContentEl.innerHTML = `<h2 class="module-title">Módulo no encontrado: ${moduleId}</h2>
+                                    <p>El módulo que intentas cargar no está disponible o no existe.</p>`;
+        console.error(`Módulo no encontrado: ${moduleId}`);
+}
 }
 
 // Verificar que la función loadRolesModule esté correctamente implementada
@@ -570,9 +618,10 @@ async function loadUsersModule(containerEl) {
                     <td>${user.id}</td>
                     <td>${user.name}</td>
                     <td>${user.email}</td>
-                    <td>
+                    <td class="action-buttons">
                         <button class="action-btn edit-user" data-id="${user.id}">Editar</button>
                         <button class="action-btn delete delete-user" data-id="${user.id}">Eliminar</button>
+                        <button class="action-btn permanent-delete permanent-delete-user" data-id="${user.id}">Eliminar Permanente</button>
                     </td>
                 </tr>
             `).join('');
@@ -589,11 +638,12 @@ async function loadUsersModule(containerEl) {
     }
 }
 
-// Configurar eventos para los botones de editar y eliminar usuarios
+// Función corregida para setupUsersEvents
 function setupUsersEvents() {
     const editButtons = document.querySelectorAll('.edit-user');
     const deleteButtons = document.querySelectorAll('.delete-user');
     
+    // Configurar eventos para los botones de editar
     editButtons.forEach(btn => {
         btn.addEventListener('click', async () => {
             const userId = btn.getAttribute('data-id');
@@ -612,12 +662,13 @@ function setupUsersEvents() {
         });
     });
     
+    // Configurar eventos para los botones de eliminar (lógico)
     deleteButtons.forEach(btn => {
         btn.addEventListener('click', () => {
             const userId = btn.getAttribute('data-id');
             showConfirmModal(
                 'Confirmar eliminación',
-                `¿Está seguro de que desea eliminar el usuario con ID ${userId}?`,
+                `¿Está seguro de que desea eliminar el usuario con ID ${userId}? Esta es una eliminación lógica y podrá ser recuperado.`,
                 async () => {
                     try {
                         // Eliminar usuario a través de la API
@@ -627,6 +678,49 @@ function setupUsersEvents() {
                     } catch (error) {
                         console.error('Error al eliminar usuario:', error);
                         showErrorModal('Error', `No se pudo eliminar el usuario: ${error.message}`);
+                    }
+                }
+            );
+        });
+    });
+    
+    // Añadir botones de eliminación permanente y configurar sus eventos
+    // Primero modificamos el HTML de las filas para incluir estos botones
+    const userRows = document.querySelectorAll('#users-table-body tr');
+    userRows.forEach(row => {
+        const actionCell = row.querySelector('td:last-child');
+        if (actionCell) {
+            const userId = actionCell.querySelector('.edit-user')?.getAttribute('data-id');
+            if (userId && !actionCell.querySelector('.permanent-delete-user')) {
+                // Solo añadir si no existe ya y tenemos un ID válido
+                const permanentDeleteBtn = document.createElement('button');
+                permanentDeleteBtn.className = 'action-btn permanent-delete permanent-delete-user';
+                permanentDeleteBtn.setAttribute('data-id', userId);
+                permanentDeleteBtn.textContent = 'Eliminar Permanente';
+                actionCell.appendChild(permanentDeleteBtn);
+            }
+        }
+    });
+    
+    // Ahora seleccionamos los botones que acabamos de añadir
+    const permanentDeleteButtons = document.querySelectorAll('.permanent-delete-user');
+    
+    // Configurar eventos para los botones de eliminación permanente
+    permanentDeleteButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const userId = btn.getAttribute('data-id');
+            showConfirmModal(
+                'Confirmar eliminación permanente',
+                `¡ADVERTENCIA! ¿Está seguro de que desea eliminar PERMANENTEMENTE el usuario con ID ${userId}? Esta acción no se puede deshacer.`,
+                async () => {
+                    try {
+                        // Eliminar usuario permanentemente a través de la API
+                        await api.users.permanentDelete(userId);
+                        // Recargar lista de usuarios
+                        loadModuleContent('usuarios');
+                    } catch (error) {
+                        console.error('Error al eliminar permanentemente usuario:', error);
+                        showErrorModal('Error', `No se pudo eliminar permanentemente el usuario: ${error.message}`);
                     }
                 }
             );
@@ -2002,7 +2096,7 @@ function closeModal() {
     }
 }
 
-// Mostrar modal de confirmación
+// Modificar la función showConfirmModal en app.js
 function showConfirmModal(title, message, confirmCallback) {
     const content = `<p>${message}</p>`;
     
@@ -2016,6 +2110,11 @@ function showConfirmModal(title, message, confirmCallback) {
         document.body.appendChild(modalBg);
     }
     
+    // Determinar si es una eliminación permanente para cambiar la clase del botón
+    const isPermanentDelete = title.toLowerCase().includes('permanente');
+    const buttonClass = isPermanentDelete ? 'btn-danger' : 'btn-primary delete';
+    const buttonText = isPermanentDelete ? 'Eliminar Permanentemente' : 'Eliminar';
+    
     // Crear contenido del modal
     modalBg.innerHTML = `
         <div class="modal">
@@ -2028,7 +2127,7 @@ function showConfirmModal(title, message, confirmCallback) {
             </div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" id="modal-cancel-btn">Cancelar</button>
-                <button class="btn btn-primary delete" id="modal-confirm-btn">Eliminar</button>
+                <button class="btn ${buttonClass}" id="modal-confirm-btn">${buttonText}</button>
             </div>
         </div>
     `;

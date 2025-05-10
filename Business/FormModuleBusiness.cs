@@ -1,163 +1,49 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+// Business/FormModuleBusiness.cs
 using Entity.DTOs;
 using Entity.Model;
 using Microsoft.Extensions.Logging;
-using Data;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Utilities.Interfaces;
 
-public class FormModuleBusiness
+namespace Business
 {
-    private readonly FormModuleData _formModuleData;
-    private readonly ILogger<FormModuleBusiness> _logger;
-
-    public FormModuleBusiness(FormModuleData formModuleData, ILogger<FormModuleBusiness> logger)
+    public class FormModuleBusiness : BaseBusiness<FormModule, FormModuleDto>
     {
-        _formModuleData = formModuleData ?? throw new ArgumentNullException(nameof(formModuleData));
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-    }
-
-    public async Task<FormModuleDto> CreateAsync(FormModuleDto formModuleDto)
-    {
-        try
+        public FormModuleBusiness(IService<FormModule, FormModuleDto> service, ILogger<FormModuleBusiness> logger)
+            : base(service, logger)
         {
-            if (formModuleDto.ModuleId <= 0 || formModuleDto.FormId <= 0)
-            {
-                _logger.LogWarning("ModuleId o FormId no válidos.");
-                throw new ArgumentException("El ModuleId o FormId no es válido.");
-            }
-
-            var existingAssignment = await _formModuleData.GetByModuleIdAndFormIdAsync(formModuleDto.ModuleId, formModuleDto.FormId);
-            if (existingAssignment != null)
-            {
-                _logger.LogWarning("La asignación de formulario a módulo ya existe.");
-                throw new InvalidOperationException("La asignación ya existe.");
-            }
-
-            var formModule = MapToEntity(formModuleDto);
-            formModule.CreateAt = DateTime.UtcNow;
-
-            var createdFormModule = await _formModuleData.CreateAsync(formModule);
-
-            return MapToDTO(createdFormModule);
         }
-        catch (Exception ex)
+
+        public async Task<FormModuleDto> CreateAsync(FormModuleDto formModuleDto)
         {
-            _logger.LogError(ex, "Error al crear la asignación de formulario a módulo.");
-            throw;
+            return await base.CreateAsync(formModuleDto);
         }
-    }
 
-    public async Task<IEnumerable<FormModuleDto>> GetAllAsync()
-    {
-        try
+        public async Task<IEnumerable<FormModuleDto>> GetAllAsync()
         {
-            var formModules = await _formModuleData.GetAllAsync();
-            return MapToDTOList(formModules);
+            return await base.GetAllAsync();
         }
-        catch (Exception ex)
+
+        public async Task<FormModuleDto> GetByIdAsync(int id)
         {
-            _logger.LogError(ex, "Error al obtener las asignaciones de formulario a módulo.");
-            throw;
+            return await base.GetByIdAsync(id);
         }
-    }
 
-    public async Task<FormModuleDto> GetByIdAsync(int id)
-    {
-        try
+        public async Task<bool> UpdateAsync(FormModuleDto formModuleDto)
         {
-            var formModule = await _formModuleData.GetByIdAsync(id);
-
-            if (formModule == null)
-            {
-                _logger.LogWarning("Asignación de formulario a módulo con ID {Id} no encontrada.", id);
-                return null;
-            }
-
-            return MapToDTO(formModule);
+            await base.UpdateAsync(formModuleDto);
+            return true;
         }
-        catch (Exception ex)
+
+        public async Task<bool> DeleteAsync(int id)
         {
-            _logger.LogError(ex, "Error al obtener la asignación de formulario a módulo con ID {Id}.", id);
-            throw;
+            return await base.DeleteAsync(id);
         }
-    }
 
-    public async Task<bool> UpdateAsync(FormModuleDto formModuleDto)
-    {
-        try
+        public async Task<bool> PermanentDeleteAsync(int id)
         {
-            if (formModuleDto.ModuleId <= 0 || formModuleDto.FormId <= 0)
-            {
-                _logger.LogWarning("ModuleId o FormId no válidos.");
-                throw new ArgumentException("El ModuleId o FormId no es válido.");
-            }
-
-            var formModule = MapToEntity(formModuleDto);
-            formModule.DeleteAt = DateTime.MinValue;
-
-            return await _formModuleData.UpdateAsync(formModule);
+            return await base.PermanentDeleteAsync(id);
         }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error al actualizar la asignación de formulario a módulo.");
-            return false;
-        }
-    }
-
-    public async Task<bool> DeleteAsync(int id)
-    {
-        try
-        {
-            return await _formModuleData.DeleteAsync(id);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error al eliminar la asignación de formulario a módulo.");
-            return false;
-        }
-    }
-
-    public async Task<bool> PermanentDeleteAsync(int id)
-    {
-        try
-        {
-            return await _formModuleData.PermanentDeleteAsync(id);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error al eliminar permanentemente la asignación de formulario a módulo.");
-            return false;
-        }
-    }
-
-    // ----------------------
-    // Métodos de mapeo
-    // ----------------------
-
-    private FormModuleDto MapToDTO(FormModule formModule)
-    {
-        return new FormModuleDto
-        {
-            Id = formModule.Id,
-            ModuleId = formModule.ModuleId,
-            FormId = formModule.FormId,
-        };
-    }
-
-    private FormModule MapToEntity(FormModuleDto formModuleDto)
-    {
-        return new FormModule
-        {
-            Id = formModuleDto.Id,
-            ModuleId = formModuleDto.ModuleId,
-            FormId = formModuleDto.FormId,
-        };
-    }
-
-    private IEnumerable<FormModuleDto> MapToDTOList(IEnumerable<FormModule> formModules)
-    {
-        return formModules.Select(MapToDTO).ToList();
     }
 }

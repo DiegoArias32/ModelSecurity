@@ -1,123 +1,55 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using Entity.Contexts;
+// Data/PermissionData.cs
 using Entity.Model;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Utilities.Interfaces;
 
 namespace Data
 {
-    public class PermissionData
+    public class PermissionData : BaseData<Permission>
     {
-        private readonly ApplicationDbContext _context;
-        private readonly ILogger<PermissionData> _logger;
-
-        public PermissionData(ApplicationDbContext context, ILogger<PermissionData> logger)
+        public PermissionData(IRepository<Permission> repository, ILogger<PermissionData> logger)
+            : base(repository, logger)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<Permission> CreateAsync(Permission permission)
+        // Sobrescribir GetAllAsync para incluir solo permissions activos
+        public override async Task<IEnumerable<Permission>> GetAllAsync()
         {
             try
             {
-                await _context.Set<Permission>().AddAsync(permission);
-                await _context.SaveChangesAsync();
-                return permission;
+                var permissions = await base.GetAllAsync();
+                return permissions.Where(p => p.DeleteAt == null);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al crear el permiso: {ErrorMessage}", ex.Message);
+                _logger.LogError(ex, "Error al obtener los permisos");
                 throw;
             }
         }
 
-        public async Task<IEnumerable<Permission>> GetAllAsync()
-{
-    try
-    {
-        return await _context.Set<Permission>()
-                             .Where(p => p.DeleteAt == null)
-                             .ToListAsync();
-    }
-    catch (Exception ex)
-    {
-        _logger.LogError(ex, "Error al obtener los permisos");
-        throw;
-    }
-}
-
-
-        public async Task<Permission?> GetByIdAsync(int id)
+        // Sobrescribir DeleteAsync para implementar borrado lógico
+        public override async Task<bool> DeleteAsync(object id)
         {
             try
             {
-                return await _context.Set<Permission>().FindAsync(id);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error al obtener permiso con ID {PermissionId}", id);
-                throw;
-            }
-        }
+                var permission = await GetByIdAsync(id);
+                if (permission == null)
+                    return false;
 
-        public async Task<bool> UpdateAsync(Permission permission)
-        {
-            try
-            {
-                _context.Set<Permission>().Update(permission);
-                await _context.SaveChangesAsync();
-                return true;
+                // Borrado lógico: establecer la fecha actual
+                permission.DeleteAt = DateTime.UtcNow;
+                
+                return await UpdateAsync(permission);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al actualizar el permiso: {ErrorMessage}", ex.Message);
+                _logger.LogError(ex, "Error al eliminar el permiso: {ErrorMessage}", ex.Message);
                 return false;
             }
         }
-
-        public async Task<bool> PermanentDeleteAsync(int id)
-{
-    try
-    {
-        var permission = await _context.Set<Permission>().FindAsync(id);
-        if (permission == null)
-            return false;
-
-        _context.Set<Permission>().Remove(permission);
-        await _context.SaveChangesAsync();
-        return true;
-    }
-    catch (Exception ex)
-    {
-        _logger.LogError(ex, "Error al eliminar permanentemente el permiso: {ErrorMessage}", ex.Message);
-        return false;
-    }
-}
-
-        public async Task<bool> DeleteAsync(int id)
-{
-    try
-    {
-        var permission = await _context.Set<Permission>().FindAsync(id);
-        if (permission == null)
-            return false;
-
-        // Borrado lógico: establecer la fecha actual
-        permission.DeleteAt = DateTime.UtcNow;
-
-        _context.Set<Permission>().Update(permission);
-        await _context.SaveChangesAsync();
-        return true;
-    }
-    catch (Exception ex)
-    {
-        _logger.LogError(ex, "Error al eliminar el permiso: {ErrorMessage}", ex.Message);
-        return false;
-    }
-}
-
     }
 }

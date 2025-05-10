@@ -1120,3 +1120,5 @@ C:\Users\SENA\Pictures\ModelSecurity\webapplication1\obj\Debug\net9.0\refint\Web
 C:\Users\SENA\Pictures\ModelSecurity\webapplication1\obj\Debug\net9.0\WebApplication1.pdb
 C:\Users\SENA\Pictures\ModelSecurity\webapplication1\obj\Debug\net9.0\WebApplication1.genruntimeconfig.cache
 C:\Users\SENA\Pictures\ModelSecurity\webapplication1\obj\Debug\net9.0\ref\WebApplication1.dll
+C:\Users\User\3D Objects\ModelSecurity\webapplication1\bin\Debug\net9.0\AutoMapper.dll
+C:\Users\User\3D Objects\ModelSecurity\webapplication1\bin\Debug\net9.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll

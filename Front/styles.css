@@ -19,6 +19,31 @@ body {
     padding: 20px;
 }
 
+/* Añadir a styles.css */
+.action-btn.delete {
+    color: #e74c3c;
+}
+
+.action-btn.permanent-delete {
+    color: #c0392b;
+    font-weight: bold;
+}
+
+/* Añadir a styles.css */
+.btn-danger {
+    background-color: #c0392b;
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #a93226;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+}
+
 /* Estilos para el login */
 .login-box {
     background-color: #fff;

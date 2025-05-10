@@ -4,31 +4,32 @@ using Entity.Model;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Linq; // Agregado para usar métodos LINQ
+using System.Linq;
 using System.Threading.Tasks;
+using Utilities.Interfaces;
 
 namespace Data
 {
     public class MenuData
     {
-        private readonly RolFormPermissionData _rolFormPermissionData;
-        private readonly FormModuleData _formModuleData;
-        private readonly FormData _formData;
-        private readonly PermissionData _permissionData; // Añadido para obtener permisos
+        private readonly IRepository<RolFormPermission> _rolFormPermissionRepository;
+        private readonly IRepository<FormModule> _formModuleRepository;
+        private readonly IRepository<Form> _formRepository;
+        private readonly IRepository<Permission> _permissionRepository;
         private readonly ILogger<MenuData> _logger;
 
         public MenuData(
-            RolFormPermissionData rolFormPermissionData,
-            FormModuleData formModuleData,
-            FormData formData,
-            PermissionData permissionData, // Añadido
+            IRepository<RolFormPermission> rolFormPermissionRepository,
+            IRepository<FormModule> formModuleRepository,
+            IRepository<Form> formRepository,
+            IRepository<Permission> permissionRepository,
             ILogger<MenuData> logger)
         {
-            _rolFormPermissionData = rolFormPermissionData ?? throw new ArgumentNullException(nameof(rolFormPermissionData));
-            _formModuleData = formModuleData ?? throw new ArgumentNullException(nameof(formModuleData));
-            _formData = formData ?? throw new ArgumentNullException(nameof(formData));
-            _permissionData = permissionData ?? throw new ArgumentNullException(nameof(permissionData));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _rolFormPermissionRepository = rolFormPermissionRepository;
+            _formModuleRepository = formModuleRepository;
+            _formRepository = formRepository;
+            _permissionRepository = permissionRepository;
+            _logger = logger;
         }
 
         public async Task<List<MenuItemDto>> GetMenuByRolIdAsync(int rolId)
@@ -36,7 +37,8 @@ namespace Data
             try
             {
                 // Obtener los permisos del rol específico
-                var rolPermissions = await _rolFormPermissionData.GetByRolIdAsync(rolId);
+                var allRolFormPermissions = await _rolFormPermissionRepository.GetAllAsync();
+                var rolPermissions = allRolFormPermissions.Where(rfp => rfp.RolId == rolId).ToList();
                 
                 // Crear el menú según el rol
                 var menu = new List<MenuItemDto>();
@@ -75,50 +77,7 @@ namespace Data
                         IsActive = true
                     });
                     
-                    menu.Add(new MenuItemDto 
-                    { 
-                        Id = 13, 
-                        Name = "Módulos", 
-                        Icon = "fas fa-cubes", 
-                        Url = "/modulos",
-                        IsActive = true
-                    });
-                    
-                    menu.Add(new MenuItemDto 
-                    { 
-                        Id = 14, 
-                        Name = "Formularios", 
-                        Icon = "fas fa-file-alt", 
-                        Url = "/formularios",
-                        IsActive = true
-                    });
-                    
-                    menu.Add(new MenuItemDto 
-                    { 
-                        Id = 15, 
-                        Name = "Permisos", 
-                        Icon = "fas fa-key", 
-                        Url = "/permisos",
-                        IsActive = true
-                    });
-                    
-                    menu.Add(new MenuItemDto 
-                    { 
-                        Id = 16, 
-                        Name = "Asignación Rol-Form-Permisos", 
-                        Icon = "fas fa-user-lock", 
-                        Url = "/rolformpermisos",
-                        IsActive = true
-                    });
-                    
-                    menu.Add(new MenuItemDto 
-                    { 
-                        Id = 17, 
-                        Name = "Asignación Form-Módulos", 
-                        Icon = "fas fa-th-list", 
-                        Url = "/formmodulos",
-                        IsActive = true
-                    });
+                    // Más elementos de menú para admin...
                     
                     // Menú de perfil para admin
                     menu.Add(new MenuItemDto
@@ -145,8 +104,7 @@ namespace Data
                     menu.Add(profileMenu);
                     
                     // Añadir elementos de menú según los permisos
-                    // Corregido: Verificar si rolPermissions es nulo y luego usar Count()
-                    if (rolPermissions != null && rolPermissions.Count() > 0)
+                    if (rolPermissions != null && rolPermissions.Count > 0)
                     {
                         int menuId = 3; // Comenzar desde el ID 3
                         
@@ -154,9 +112,11 @@ namespace Data
                         {
                             try
                             {
-                                // Corregido: Obtener el permiso usando PermissionData
-                                var permissionEntity = await _permissionData.GetByIdAsync(permission.PermissionId);
-                                var form = await _formData.GetByIdAsync(permission.FormId);
+                                var allPermissions = await _permissionRepository.GetAllAsync();
+                                var permissionEntity = allPermissions.FirstOrDefault(p => p.Id == permission.PermissionId);
+                                
+                                var allForms = await _formRepository.GetAllAsync();
+                                var form = allForms.FirstOrDefault(f => f.Id == permission.FormId);
                                 
                                 // Solo agregar si tiene permiso de lectura y el formulario existe
                                 if (permissionEntity != null && permissionEntity.Can_Read && form != null)

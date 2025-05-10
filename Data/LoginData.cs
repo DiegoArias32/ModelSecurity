@@ -1,41 +1,28 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using Entity.Contexts;
+// Data/LoginData.cs
 using Entity.Model;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Utilities.Interfaces;
 
 namespace Data
 {
-    public class LoginData
+    public class LoginData : BaseData<Login>
     {
-        private readonly ApplicationDbContext _context;
-        private readonly ILogger<LoginData> _logger;
-
-        /// <summary>
-        /// Constructor que recibe el contexto de base de datos y el logger.
-        /// </summary>
-        /// <param name="context">Instancia del <see cref="ApplicationDbContext"/> para acceso a datos.</param>
-        /// <param name="logger">Instancia del <see cref="ILogger"/> para registrar eventos.</param>
-        public LoginData(ApplicationDbContext context, ILogger<LoginData> logger)
+        public LoginData(IRepository<Login> repository, ILogger<LoginData> logger)
+            : base(repository, logger)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        /// <summary>
-        /// Crea un nuevo registro de login en la base de datos.
-        /// </summary>
-        /// <param name="login">Instancia de <see cref="Login"/> a crear.</param>
-        /// <returns>El login creado.</returns>
-        public async Task<Login> CreateAsync(Login login)
+        // Sobrescribir CreateAsync para validar username único
+        public override async Task<Login> CreateAsync(Login login)
         {
             try
             {
                 // Validación opcional: evitar duplicados por nombre de usuario
-                var existingLogin = await _context.Set<Login>()
-                    .FirstOrDefaultAsync(l => l.Username == login.Username);
+                var allLogins = await base.GetAllAsync();
+                var existingLogin = allLogins.FirstOrDefault(l => l.Username == login.Username);
 
                 if (existingLogin != null)
                 {
@@ -43,9 +30,7 @@ namespace Data
                     throw new InvalidOperationException($"Ya existe un login con el username '{login.Username}'");
                 }
 
-                await _context.Set<Login>().AddAsync(login);
-                await _context.SaveChangesAsync();
-                return login;
+                return await base.CreateAsync(login);
             }
             catch (InvalidOperationException)
             {
@@ -58,75 +43,14 @@ namespace Data
             }
         }
 
-        /// <summary>
-        /// Obtiene todos los registros de login.
-        /// </summary>
-        /// <returns>Lista de objetos <see cref="Login"/>.</returns>
-        public async Task<IEnumerable<Login>> GetAllAsync()
-        {
-            try
-            {
-                return await _context.Set<Login>().ToListAsync();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError("Error al obtener logins: {Message}", ex.Message);
-                throw;
-            }
-        }
-
-        /// <summary>
-        /// Obtiene un login por su ID.
-        /// </summary>
-        /// <param name="id">Identificador del login.</param>
-        /// <returns>Objeto <see cref="Login"/> o null si no se encuentra.</returns>
-        public async Task<Login?> GetByIdAsync(int id)
-        {
-            try
-            {
-                return await _context.Set<Login>()
-                    .FirstOrDefaultAsync(l => l.LoginId == id);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError("Error al obtener login por ID {Id}: {Message}", id, ex.Message);
-                throw;
-            }
-        }
-
-public async Task<bool> PermanentDeleteAsync(int id)
-{
-    try
-    {
-        var login = await _context.Set<Login>()
-            .FirstOrDefaultAsync(l => l.LoginId == id);
-
-        if (login == null)
-            return false;
-
-        _context.Set<Login>().Remove(login);
-        await _context.SaveChangesAsync();
-        return true;
-    }
-    catch (Exception ex)
-    {
-        _logger.LogError("Error al eliminar permanentemente el login: {Message}", ex.Message);
-        return false;
-    }
-}
-
-        /// <summary>
-        /// Actualiza un login existente.
-        /// </summary>
-        /// <param name="login">Instancia con los nuevos datos.</param>
-        /// <returns>True si la operación fue exitosa, False si no.</returns>
-        public async Task<bool> UpdateAsync(Login login)
+        // Sobrescribir UpdateAsync para validar username único
+        public override async Task<bool> UpdateAsync(Login login)
         {
             try
             {
                 // Validar duplicado (opcional)
-                var existingLogin = await _context.Set<Login>()
-                    .FirstOrDefaultAsync(l => l.Username == login.Username && l.LoginId != login.LoginId);
+                var allLogins = await base.GetAllAsync();
+                var existingLogin = allLogins.FirstOrDefault(l => l.Username == login.Username && l.LoginId != login.LoginId);
 
                 if (existingLogin != null)
                 {
@@ -134,9 +58,7 @@ public async Task<bool> PermanentDeleteAsync(int id)
                     throw new InvalidOperationException($"Ya existe un login con el username '{login.Username}'");
                 }
 
-                _context.Set<Login>().Update(login);
-                await _context.SaveChangesAsync();
-                return true;
+                return await base.UpdateAsync(login);
             }
             catch (InvalidOperationException)
             {
@@ -145,32 +67,6 @@ public async Task<bool> PermanentDeleteAsync(int id)
             catch (Exception ex)
             {
                 _logger.LogError("Error al actualizar login: {Message}", ex.Message);
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// Elimina un login por su ID.
-        /// </summary>
-        /// <param name="id">ID del login a eliminar.</param>
-        /// <returns>True si se eliminó correctamente, False si no se encontró.</returns>
-        public async Task<bool> DeleteAsync(int id)
-        {
-            try
-            {
-                var login = await _context.Set<Login>()
-                    .FirstOrDefaultAsync(l => l.LoginId == id);
-
-                if (login == null)
-                    return false;
-
-                _context.Set<Login>().Remove(login);
-                await _context.SaveChangesAsync();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError("Error al eliminar login: {Message}", ex.Message);
                 return false;
             }
         }

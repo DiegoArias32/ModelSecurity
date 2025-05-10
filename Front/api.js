@@ -1,5 +1,5 @@
 // API service para manejar todas las solicitudes HTTP
-const API_BASE_URL = 'http://172.30.7.157:5163/api';
+const API_BASE_URL = 'http://localhost:5163/api';
 
 const api = {
     // Función auxiliar para realizar solicitudes

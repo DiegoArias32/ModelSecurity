@@ -2,6 +2,7 @@ using Business;
 using Data;
 using Entity.Contexts;
 using Entity.DTOs;
+using Entity.Model;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +15,6 @@ var builder = WebApplication.CreateBuilder(args);
 // 🔹 Agregar servicios de Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
 
 // Agregar CORS
 var OrigenesPermitidos = builder.Configuration.GetValue<string>("OrigenesPermitidos")!.Split(",");
@@ -30,7 +30,8 @@ builder.Services.AddCors(opciones =>
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// 🔹 Registrar servicios de negocio y datos
+// 🔹 Registrar implementaciones específicas
+// Implementaciones regulares existentes
 builder.Services.AddScoped<RolData>();
 builder.Services.AddScoped<RolBusiness>();
 
@@ -67,9 +68,14 @@ builder.Services.AddScoped<MenuBusiness>();
 builder.Services.AddScoped<WorkerLoginData>();
 builder.Services.AddScoped<WorkerLoginBusiness>();
 
-// Registrar los servicios para ActivityLog
 builder.Services.AddScoped<ActivityLogData>();
 builder.Services.AddScoped<ActivityLogBusiness>();
+
+// 🔹 Registrar implementaciones genéricas para cada entidad
+// Form
+builder.Services.AddScoped<IGenericData<Form>, FormData>();
+builder.Services.AddScoped<IGenericBusiness<FormDto, Form>, FormBusiness>();
+
 
 // Agregar el HttpContextAccessor para obtener la IP del cliente
 builder.Services.AddHttpContextAccessor();
@@ -84,7 +90,6 @@ builder.WebHost.ConfigureKestrel(serverOptions =>
 {
     serverOptions.ListenAnyIP(5163); // Habilita escucha en todas las IPs en el puerto 5163
 });
-
 
 var app = builder.Build();
 

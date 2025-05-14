@@ -80,6 +80,11 @@ builder.Services.AddLogging();
 // 🔹 Agregar controladores
 builder.Services.AddControllers().AddNewtonsoftJson();
 
+builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+    serverOptions.ListenAnyIP(5163); // Habilita escucha en todas las IPs en el puerto 5163
+});
+
 
 var app = builder.Build();
 

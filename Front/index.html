@@ -3,109 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Menús por Roles</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome para iconos -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Sistema de Gestión - Login</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Sidebar / Menú lateral -->
-            <div class="col-md-3 col-lg-2 p-0 bg-dark sidebar">
-                <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
-                    <div class="w-100 mb-3 border-bottom pb-2">
-                        <div class="form-group">
-                            <label for="roleSelect" class="form-label">Seleccionar Rol:</label>
-                            <select id="roleSelect" class="form-select">
-                                <!-- Las opciones de roles se cargarán dinámicamente -->
-                            </select>
-                        </div>
+    <div class="container" id="app">
+        <!-- El contenido se cargará dinámicamente -->
+        <div id="login-container">
+            <div class="login-box">
+                <h2>Iniciar Sesión</h2>
+                <div id="error-message" class="error-message"></div>
+                <form id="login-form">
+                    <div class="input-group">
+                        <label for="username">Usuario</label>
+                        <input type="text" id="username" name="username" required>
                     </div>
-                    
-                    <ul id="sidebarMenu" class="nav nav-pills flex-column mb-auto w-100">
-                        <!-- Los elementos del menú se cargarán dinámicamente -->
-                        <li class="nav-item">
-                            <div class="text-center p-3">
-                                <div class="spinner-border text-light" role="status"></div>
-                                <div class="mt-2">Cargando menú...</div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            
-            <!-- Contenido principal -->
-            <div class="col-md-9 col-lg-10 ms-sm-auto px-4 main-content">
-                <div id="pageContent" class="pt-3">
-                    <div class="text-center mt-5">
-                        <div class="spinner-border" role="status"></div>
-                        <div class="mt-2">Cargando contenido...</div>
+                    <div class="input-group">
+                        <label for="password">Contraseña</label>
+                        <input type="password" id="password" name="password" required>
                     </div>
+                    <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+                </form>
+                <div class="demo-options">
+                    <p>Opciones de demostración:</p>
+                    <button id="admin-demo" class="btn btn-secondary">Ingresar como Admin</button>
+                    <button id="user-demo" class="btn btn-secondary">Ingresar como Usuario</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal para mensajes -->
-    <div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="messageModalLabel">Mensaje</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body" id="messageModalBody">
-                    <!-- Contenido dinámico -->
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Aceptar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Modal de confirmación -->
-    <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="confirmModalLabel">Confirmar Acción</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body" id="confirmModalBody">
-                    <!-- Contenido dinámico -->
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-danger" id="confirmButton">Confirmar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal para detalles de logs -->
-    <div class="modal fade" id="logDetailModal" tabindex="-1" aria-labelledby="logDetailModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="logDetailModalLabel">Detalles del Registro</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body" id="logDetailModalBody">
-                    <!-- Contenido dinámico -->
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Bootstrap JS y Popper.js -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="script.js"></script>
+    <script src="api.js"></script>
+    <script src="auth.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>

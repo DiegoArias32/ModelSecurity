@@ -9,232 +9,118 @@ using Entity.DTOs;
 
 namespace Business
 {
-    public class WorkerLoginBusiness
+    public class WorkerLoginBusiness : GenericBusiness<WorkerLoginDto, WorkerLogin>
     {
         private readonly WorkerLoginData _loginData;
-        private readonly ILogger<WorkerLoginBusiness> _logger;
 
-        /// <summary>
-        /// Constructor que recibe la instancia de WorkerLoginData y el logger.
-        /// </summary>
-        /// <param name="loginData">Instancia de <see cref="WorkerLoginData"/> para acceder a la capa de datos.</param>
-        /// <param name="logger">Instancia de <see cref="ILogger"/> para registrar eventos.</param>
         public WorkerLoginBusiness(WorkerLoginData loginData, ILogger<WorkerLoginBusiness> logger)
+            : base(loginData, logger)
         {
-            _loginData = loginData ?? throw new ArgumentNullException(nameof(loginData));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _loginData = loginData;
         }
 
-        /// <summary>
-        /// Crea un nuevo login de trabajador tras realizar validaciones de negocio.
-        /// </summary>
-        /// <param name="loginDto">Instancia de <see cref="WorkerLoginDto"/> a crear.</param>
-        /// <returns>La instancia del login creado.</returns>
-        public async Task<WorkerLoginDto> CreateAsync(WorkerLoginDto loginDto)
+        // Sobrescribimos la creación para validar username único
+        public override async Task<WorkerLoginDto> CreateAsync(WorkerLoginDto loginDto)
         {
             try
             {
-                // Validaciones de negocio antes de crear
-                if (string.IsNullOrWhiteSpace(loginDto.Username))
+                ValidateDto(loginDto);
+                
+                // Verificar si ya existe un username
+                if (await _loginData.ExistsUsernameAsync(loginDto.Username))
                 {
-                    _logger.LogWarning("El nombre de usuario no puede estar vacío.");
-                    throw new ArgumentException("El nombre de usuario no puede estar vacío.");
+                    throw new InvalidOperationException($"Ya existe un login con el username '{loginDto.Username}'");
                 }
 
-                // Mapeo DTO -> Entidad
                 var login = MapToEntity(loginDto);
-
-                // Llamar al método de la capa de datos para crear el login
+                login.CreationDate = DateTime.Now;
+                
                 var createdLogin = await _loginData.CreateAsync(login);
-
-                // Mapeo de la entidad creada a DTO
-                return MapToDTO(createdLogin);
+                return MapToDto(createdLogin);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al crear el login del trabajador.");
+                _logger.LogError(ex, "Error al crear el login del trabajador");
                 throw;
             }
         }
 
-        /// <summary>
-        /// Obtiene todos los logins de trabajadores.
-        /// </summary>
-        /// <returns>Lista de DTOs <see cref="WorkerLoginDto"/>.</returns>
-        public async Task<IEnumerable<WorkerLoginDto>> GetAllAsync()
+        // Sobrescribimos para validar username único
+        public override async Task<bool> UpdateAsync(WorkerLoginDto loginDto)
         {
             try
             {
-                var logins = await _loginData.GetAllAsync();
-                return MapToDTOList(logins);
+                ValidateDto(loginDto);
+                
+                // Verificar si ya existe otro login con el mismo username
+                if (await _loginData.ExistsUsernameAsync(loginDto.Username, loginDto.id))
+                {
+                    throw new InvalidOperationException($"Ya existe un login con el username '{loginDto.Username}'");
+                }
+
+                var login = MapToEntity(loginDto);
+                return await _loginData.UpdateAsync(login);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al obtener todos los logins de trabajadores.");
-                throw;
+                _logger.LogError(ex, "Error al actualizar el login del trabajador");
+                return false;
             }
         }
 
-        /// <summary>
-        /// Obtiene un login de trabajador específico por su identificador.
-        /// </summary>
-        /// <param name="id">Identificador del login (clave primaria).</param>
-        /// <returns>El DTO <see cref="WorkerLoginDto"/> encontrado o null si no existe.</returns>
-        public async Task<WorkerLoginDto?> GetByIdAsync(int id)
-        {
-            try
-            {
-                var login = await _loginData.GetByIdAsync(id);
-                return login != null ? MapToDTO(login) : null;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error al obtener el login del trabajador con ID {Id}.", id);
-                throw;
-            }
-        }
-
-        /// <summary>
-        /// Obtiene un login de trabajador específico por su LoginId (clave foránea).
-        /// </summary>
-        /// <param name="loginId">LoginId del registro.</param>
-        /// <returns>El DTO <see cref="WorkerLoginDto"/> encontrado o null si no existe.</returns>
-        public async Task<WorkerLoginDto?> GetByLoginIdAsync(int loginId)
+        // Método adicional específico
+        public async Task<WorkerLoginDto> GetByLoginIdAsync(int loginId)
         {
             try
             {
                 var login = await _loginData.GetByLoginIdAsync(loginId);
-                return login != null ? MapToDTO(login) : null;
+                return login != null ? MapToDto(login) : null;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al obtener el login del trabajador con LoginId {LoginId}.", loginId);
+                _logger.LogError(ex, "Error al obtener el login del trabajador con LoginId {LoginId}", loginId);
                 throw;
             }
         }
 
-        /// <summary>
-        /// Actualiza un login de trabajador existente.
-        /// </summary>
-        /// <param name="loginDto">DTO con la información actualizada.</param>
-        /// <returns>True si la operación fue exitosa, False si no.</returns>
-        public async Task<bool> UpdateAsync(WorkerLoginDto loginDto)
+        protected override void ValidateDto(WorkerLoginDto dto)
         {
-            try
-            {
-                if (string.IsNullOrWhiteSpace(loginDto.Username))
-                {
-                    _logger.LogWarning("El nombre de usuario no puede estar vacío.");
-                    throw new ArgumentException("El nombre de usuario no puede estar vacío.");
-                }
-
-                var existingLogin = await _loginData.GetByIdAsync(loginDto.id);
-                if (existingLogin == null)
-                {
-                    _logger.LogWarning("Login de trabajador no encontrado para actualizar.");
-                    return false;
-                }
-
-                MapToEntity(loginDto, existingLogin);
-
-                var updated = await _loginData.UpdateAsync(existingLogin);
-                return updated;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error al actualizar el login del trabajador con ID {Id}.", loginDto.id);
-                return false;
-            }
+            if (dto == null)
+                throw new ArgumentException("El objeto login no puede ser nulo");
+                
+            if (string.IsNullOrWhiteSpace(dto.Username))
+                throw new ArgumentException("El nombre de usuario es obligatorio");
         }
 
-        /// <summary>
-        /// Elimina un login de trabajador.
-        /// </summary>
-        /// <param name="id">Identificador del login a eliminar (clave primaria).</param>
-        /// <returns>True si la eliminación fue exitosa, False si no.</returns>
-        public async Task<bool> DeleteAsync(int id)
-        {
-            try
-            {
-                var login = await _loginData.GetByIdAsync(id);
-                if (login == null)
-                {
-                    _logger.LogWarning("Login de trabajador no encontrado para eliminar.");
-                    return false;
-                }
-
-                return await _loginData.DeleteAsync(id);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error al eliminar el login del trabajador con ID {Id}.", id);
-                return false;
-            }
-        }
-
-        public async Task<bool> PermanentDeleteAsync(int id)
-{
-    try
-    {
-        var login = await _loginData.GetByIdAsync(id);
-        if (login == null)
-        {
-            _logger.LogWarning("Login de trabajador no encontrado para eliminación permanente.");
-            return false;
-        }
-
-        return await _loginData.PermanentDeleteAsync(id);
-    }
-    catch (Exception ex)
-    {
-        _logger.LogError(ex, "Error al eliminar permanentemente el login del trabajador con ID {Id}.", id);
-        return false;
-    }
-}
-
-        // Método para mapear de WorkerLogin a WorkerLoginDto
-        private WorkerLoginDto MapToDTO(WorkerLogin workerLogin)
-        {
-            return new WorkerLoginDto
-            {
-                id = workerLogin.id,
-                LoginId = workerLogin.LoginId,
-                WorkerId = workerLogin.WorkerId,
-                Username = workerLogin.Username,
-                Password = workerLogin.Password,
-                Status = workerLogin.Status
-            };
-        }
-
-        // Método para mapear de WorkerLoginDto a WorkerLogin
-        private WorkerLogin MapToEntity(WorkerLoginDto WorkerLoginDto)
+        protected override WorkerLogin MapToEntity(WorkerLoginDto dto)
         {
             return new WorkerLogin
             {
-                id = WorkerLoginDto.id,
-                LoginId = WorkerLoginDto.LoginId,
-                WorkerId = WorkerLoginDto.WorkerId,
-                Username = WorkerLoginDto.Username,
-                Password = WorkerLoginDto.Password,
-                Status = WorkerLoginDto.Status
+                id = dto.id,
+                LoginId = dto.LoginId,
+                WorkerId = dto.WorkerId,
+                Username = dto.Username,
+                Password = dto.Password,
+                Status = dto.Status
             };
         }
 
-        // Método para mapear de WorkerLoginDto a WorkerLogin cuando ya tenemos la entidad
-        private void MapToEntity(WorkerLoginDto dto, WorkerLogin login)
+        protected override WorkerLoginDto MapToDto(WorkerLogin entity)
         {
-            // No actualizamos el id ya que es clave primaria
-            login.LoginId = dto.LoginId;
-            login.WorkerId = dto.WorkerId;
-            login.Username = dto.Username;
-            login.Password = dto.Password; // Considera si debes actualizar la contraseña aquí
-            login.Status = dto.Status;
+            return new WorkerLoginDto
+            {
+                id = entity.id,
+                LoginId = entity.LoginId,
+                WorkerId = entity.WorkerId,
+                Username = entity.Username,
+                Password = entity.Password,
+                Status = entity.Status
+            };
         }
 
-        // Método para mapear lista de entidades a lista de DTOs
-        private IEnumerable<WorkerLoginDto> MapToDTOList(IEnumerable<WorkerLogin> logins)
+        protected override IEnumerable<WorkerLoginDto> MapToDtoList(IEnumerable<WorkerLogin> entities)
         {
-            return logins.Select(login => MapToDTO(login)).ToList();
+            return entities.Select(MapToDto).ToList();
         }
     }
 }

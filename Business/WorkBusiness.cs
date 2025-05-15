@@ -9,218 +9,117 @@ using Entity.DTOs;
 
 namespace Business
 {
-    public class WorkerBusiness
+    public class WorkerBusiness : GenericBusiness<WorkerDto, Worker>
     {
         private readonly WorkerData _workerData;
-        private readonly ILogger<WorkerBusiness> _logger;
 
-        /// <summary>
-        /// Constructor que recibe la instancia de WorkerData y el logger.
-        /// </summary>
-        /// <param name="workerData">Instancia de <see cref="WorkerData"/> para acceder a la capa de datos.</param>
-        /// <param name="logger">Instancia de <see cref="ILogger"/> para registrar eventos.</param>
         public WorkerBusiness(WorkerData workerData, ILogger<WorkerBusiness> logger)
+            : base(workerData, logger)
         {
-            _workerData = workerData ?? throw new ArgumentNullException(nameof(workerData));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _workerData = workerData;
         }
 
-        /// <summary>
-        /// Crea un nuevo trabajador tras realizar validaciones de negocio.
-        /// </summary>
-        /// <param name="workerDto">Instancia de <see cref="WorkerDto"/> a crear.</param>
-        /// <returns>La instancia del trabajador creado.</returns>
-        public async Task<WorkerDto> CreateAsync(WorkerDto workerDto)
+        // Sobrescribimos la creación para validar documento único
+        public override async Task<WorkerDto> CreateAsync(WorkerDto workerDto)
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(workerDto.FirstName) ||
-                    string.IsNullOrWhiteSpace(workerDto.LastName) ||
-                    string.IsNullOrWhiteSpace(workerDto.IdentityDocument) ||
-                    string.IsNullOrWhiteSpace(workerDto.JobTitle) ||
-                    string.IsNullOrWhiteSpace(workerDto.Email))
+                ValidateDto(workerDto);
+                
+                // Verificar si ya existe un documento
+                if (await _workerData.ExistsIdentityDocumentAsync(workerDto.IdentityDocument))
                 {
-                    _logger.LogWarning("Los campos obligatorios no pueden estar vacíos.");
-                    throw new ArgumentException("Los campos obligatorios no pueden estar vacíos.");
+                    throw new InvalidOperationException($"Ya existe un trabajador con el documento '{workerDto.IdentityDocument}'");
                 }
 
                 var worker = MapToEntity(workerDto);
                 var createdWorker = await _workerData.CreateAsync(worker);
-                return MapToDTO(createdWorker);
+                return MapToDto(createdWorker);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al crear el trabajador.");
+                _logger.LogError(ex, "Error al crear el trabajador");
                 throw;
             }
         }
 
-        /// <summary>
-        /// Obtiene todos los trabajadores registrados.
-        /// </summary>
-        /// <returns>Lista de DTOs workerDto.</returns>
-        public async Task<IEnumerable<WorkerDto>> GetAllAsync()
+        // Sobrescribimos para validar documento único
+        public override async Task<bool> UpdateAsync(WorkerDto workerDto)
         {
             try
             {
-                var workers = await _workerData.GetAllAsync();
-                return MapToDTOList(workers);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error al obtener todos los trabajadores.");
-                throw;
-            }
-        }
-
-        /// <summary>
-        /// Obtiene un trabajador específico por su identificador.
-        /// </summary>
-        /// <param name="id">Identificador del trabajador.</param>
-        /// <returns>El DTO WorkerDto encontrado o null si no existe.</returns>
-        public async Task<WorkerDto?> GetByIdAsync(int id)
-        {
-            try
-            {
-                var worker = await _workerData.GetByIdAsync(id);
-                return worker != null ? MapToDTO(worker) : null;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error al obtener el trabajador con ID {WorkerId}.", id);
-                throw;
-            }
-        }
-
-        /// <summary>
-        /// Actualiza un trabajador existente.
-        /// </summary>
-        /// <param name="workerDto">DTO con la información actualizada del trabajador.</param>
-        /// <returns>True si la operación fue exitosa, False si no.</returns>
-        public async Task<bool> UpdateAsync(WorkerDto workerDto)
-        {
-            try
-            {
-                if (string.IsNullOrWhiteSpace(workerDto.FirstName) ||
-                    string.IsNullOrWhiteSpace(workerDto.LastName) ||
-                    string.IsNullOrWhiteSpace(workerDto.IdentityDocument) ||
-                    string.IsNullOrWhiteSpace(workerDto.JobTitle) ||
-                    string.IsNullOrWhiteSpace(workerDto.Email))
+                ValidateDto(workerDto);
+                
+                // Verificar si ya existe otro trabajador con el mismo documento
+                if (await _workerData.ExistsIdentityDocumentAsync(workerDto.IdentityDocument, workerDto.WorkerId))
                 {
-                    _logger.LogWarning("Los campos obligatorios no pueden estar vacíos.");
-                    throw new ArgumentException("Los campos obligatorios no pueden estar vacíos.");
+                    throw new InvalidOperationException($"Ya existe un trabajador con el documento '{workerDto.IdentityDocument}'");
                 }
 
-                var existingWorker = await _workerData.GetByIdAsync(workerDto.WorkerId);
-                if (existingWorker == null)
-                {
-                    _logger.LogWarning("Trabajador no encontrado para actualizar.");
-                    return false;
-                }
-
-                MapToEntity(workerDto, existingWorker);
-                return await _workerData.UpdateAsync(existingWorker);
+                var worker = MapToEntity(workerDto);
+                return await _workerData.UpdateAsync(worker);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al actualizar el trabajador con ID {WorkerId}.", workerDto.WorkerId);
+                _logger.LogError(ex, "Error al actualizar el trabajador");
                 return false;
             }
         }
 
-        public async Task<bool> PermanentDeleteAsync(int id)
-{
-    try
-    {
-        var existing = await _workerData.GetByIdAsync(id);
-        if (existing == null)
+        protected override void ValidateDto(WorkerDto dto)
         {
-            _logger.LogWarning("Trabajador no encontrado para eliminación permanente.");
-            return false;
+            if (dto == null)
+                throw new ArgumentException("El objeto trabajador no puede ser nulo");
+                
+            if (string.IsNullOrWhiteSpace(dto.FirstName))
+                throw new ArgumentException("El nombre del trabajador es obligatorio");
+                
+            if (string.IsNullOrWhiteSpace(dto.LastName))
+                throw new ArgumentException("El apellido del trabajador es obligatorio");
+                
+            if (string.IsNullOrWhiteSpace(dto.IdentityDocument))
+                throw new ArgumentException("El documento de identidad es obligatorio");
+                
+            if (string.IsNullOrWhiteSpace(dto.JobTitle))
+                throw new ArgumentException("El cargo es obligatorio");
+                
+            if (string.IsNullOrWhiteSpace(dto.Email))
+                throw new ArgumentException("El email es obligatorio");
         }
 
-        return await _workerData.PermanentDeleteAsync(id);
-    }
-    catch (Exception ex)
-    {
-        _logger.LogError(ex, "Error al eliminar permanentemente el trabajador con ID {WorkerId}.", id);
-        return false;
-    }
-}
-
-        /// <summary>
-        /// Elimina un trabajador.
-        /// </summary>
-        /// <param name="id">Identificador del trabajador a eliminar.</param>
-        /// <returns>True si la eliminación fue exitosa, False si no.</returns>
-        public async Task<bool> DeleteAsync(int id)
-        {
-            try
-            {
-                var existing = await _workerData.GetByIdAsync(id);
-                if (existing == null)
-                {
-                    _logger.LogWarning("Trabajador no encontrado para eliminar.");
-                    return false;
-                }
-
-                return await _workerData.DeleteAsync(id);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error al eliminar el trabajador con ID {WorkerId}.", id);
-                return false;
-            }
-        }
-
-        // Método para mapear de Worker a WorkerDto
-        private WorkerDto MapToDTO(Worker worker)
-        {
-            return new WorkerDto
-            {
-                WorkerId = worker.WorkerId,
-                FirstName = worker.FirstName,
-                LastName = worker.LastName,
-                IdentityDocument = worker.IdentityDocument,
-                JobTitle = worker.JobTitle,
-                Email = worker.Email,
-                Phone = worker.Phone,
-                HireDate = worker.HireDate
-            };
-        }
-
-        // Método para mapear de WorkerDto a Worker
-        private Worker MapToEntity(WorkerDto workerDto)
+        protected override Worker MapToEntity(WorkerDto dto)
         {
             return new Worker
             {
-                WorkerId = workerDto.WorkerId,
-                FirstName = workerDto.FirstName,
-                LastName = workerDto.LastName,
-                IdentityDocument = workerDto.IdentityDocument,
-                JobTitle = workerDto.JobTitle,
-                Email = workerDto.Email,
-                Phone = workerDto.Phone,
-                HireDate = workerDto.HireDate
+                WorkerId = dto.WorkerId,
+                FirstName = dto.FirstName,
+                LastName = dto.LastName,
+                IdentityDocument = dto.IdentityDocument,
+                JobTitle = dto.JobTitle,
+                Email = dto.Email,
+                Phone = dto.Phone,
+                HireDate = dto.HireDate
             };
         }
 
-        // Método para mapear de WorkerDto a Worker (cuando ya tenemos un trabajador)
-        private void MapToEntity(WorkerDto workerDto, Worker entity)
+        protected override WorkerDto MapToDto(Worker entity)
         {
-            entity.FirstName = workerDto.FirstName;
-            entity.LastName = workerDto.LastName;
-            entity.IdentityDocument = workerDto.IdentityDocument;
-            entity.JobTitle = workerDto.JobTitle;
-            entity.Email = workerDto.Email;
-            entity.Phone = workerDto.Phone;
-            entity.HireDate = workerDto.HireDate;
+            return new WorkerDto
+            {
+                WorkerId = entity.WorkerId,
+                FirstName = entity.FirstName,
+                LastName = entity.LastName,
+                IdentityDocument = entity.IdentityDocument,
+                JobTitle = entity.JobTitle,
+                Email = entity.Email,
+                Phone = entity.Phone,
+                HireDate = entity.HireDate
+            };
         }
 
-        // Método para mapear una lista de Worker a una lista de WorkerDto
-        private IEnumerable<WorkerDto> MapToDTOList(IEnumerable<Worker> workers)
+        protected override IEnumerable<WorkerDto> MapToDtoList(IEnumerable<Worker> entities)
         {
-            return workers.Select(worker => MapToDTO(worker)).ToList();
+            return entities.Select(MapToDto).ToList();
         }
     }
 }

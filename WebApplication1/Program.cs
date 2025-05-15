@@ -88,6 +88,21 @@ builder.Services.AddScoped<IGenericBusiness<ModuleDto, Module>>(sp => sp.GetRequ
 builder.Services.AddScoped<IGenericData<Permission>>(sp => sp.GetRequiredService<PermissionData>());
 builder.Services.AddScoped<IGenericBusiness<PermissionDto, Permission>>(sp => sp.GetRequiredService<PermissionBusiness>());
 
+builder.Services.AddScoped<IGenericData<RolFormPermission>>(sp => sp.GetRequiredService<RolFormPermissionData>());
+builder.Services.AddScoped<IGenericBusiness<RolFormPermissionDto, RolFormPermission>>(sp => sp.GetRequiredService<RolFormPermissionBusiness>());
+
+builder.Services.AddScoped<IGenericData<RolUser>>(sp => sp.GetRequiredService<RolUserData>());
+builder.Services.AddScoped<IGenericBusiness<RolUserDto, RolUser>>(sp => sp.GetRequiredService<RolUserBusiness>());
+
+builder.Services.AddScoped<IGenericData<User>>(sp => sp.GetRequiredService<UserData>());
+builder.Services.AddScoped<IGenericBusiness<UserDto, User>>(sp => sp.GetRequiredService<UserBusiness>());
+
+builder.Services.AddScoped<IGenericData<Worker>>(sp => sp.GetRequiredService<WorkerData>());
+builder.Services.AddScoped<IGenericBusiness<WorkerDto, Worker>>(sp => sp.GetRequiredService<WorkerBusiness>());
+
+builder.Services.AddScoped<IGenericData<WorkerLogin>>(sp => sp.GetRequiredService<WorkerLoginData>());
+builder.Services.AddScoped<IGenericBusiness<WorkerLoginDto, WorkerLogin>>(sp => sp.GetRequiredService<WorkerLoginBusiness>());
+
 // Agregar el HttpContextAccessor para obtener la IP del cliente
 builder.Services.AddHttpContextAccessor();
 

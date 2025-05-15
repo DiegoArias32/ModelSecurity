@@ -9,163 +9,52 @@ using Entity.DTOs;
 
 namespace Business
 {
-    public class LoginBusiness
+    public class LoginBusiness : GenericBusiness<LoginDto, Login>
     {
-        private readonly LoginData _loginData;
-        private readonly ILogger<LoginBusiness> _logger;
-
-        public LoginBusiness(LoginData loginData, ILogger<LoginBusiness> logger)
+        public LoginBusiness(IGenericData<Login> data, ILogger<LoginBusiness> logger)
+            : base(data, logger)
         {
-            _loginData = loginData ?? throw new ArgumentNullException(nameof(loginData));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<LoginDto> CreateAsync(LoginDto loginDto)
+        // Sobrescribimos el método de validación según las reglas específicas de Login
+        protected override void ValidateDto(LoginDto dto)
         {
-            try
-            {
-                if (string.IsNullOrWhiteSpace(loginDto.Username) || string.IsNullOrWhiteSpace(loginDto.Password))
-                {
-                    _logger.LogWarning("Username o Password no pueden estar vacíos.");
-                    throw new ArgumentException("Username o Password no pueden estar vacíos.");
-                }
-
-                var login = MapToEntity(loginDto);
-                var createdLogin = await _loginData.CreateAsync(login);
-                return MapToDto(createdLogin);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error al crear el login.");
-                throw;
-            }
+            if (dto == null)
+                throw new ArgumentException("El objeto login no puede ser nulo.");
+                
+            if (string.IsNullOrWhiteSpace(dto.Username))
+                throw new ArgumentException("El nombre de usuario no puede estar vacío.");
+                
+            if (string.IsNullOrWhiteSpace(dto.Password))
+                throw new ArgumentException("La contraseña no puede estar vacía.");
         }
 
-        public async Task<IEnumerable<LoginDto>> GetAllAsync()
-        {
-            try
-            {
-                var logins = await _loginData.GetAllAsync();
-                return MapToDtoList(logins);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error al obtener todos los logins.");
-                throw;
-            }
-        }
-
-        public async Task<LoginDto?> GetByIdAsync(int id)
-        {
-            try
-            {
-                var login = await _loginData.GetByIdAsync(id);
-                return login != null ? MapToDto(login) : null;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error al obtener el login con ID {LoginId}.", id);
-                throw;
-            }
-        }
-
-        public async Task<bool> UpdateAsync(LoginDto loginDto)
-        {
-            try
-            {
-                if (string.IsNullOrWhiteSpace(loginDto.Username) || string.IsNullOrWhiteSpace(loginDto.Password))
-                {
-                    _logger.LogWarning("Username o Password no pueden estar vacíos.");
-                    throw new ArgumentException("Username o Password no pueden estar vacíos.");
-                }
-
-                var login = await _loginData.GetByIdAsync(loginDto.LoginId);
-                if (login == null)
-                {
-                    _logger.LogWarning("Login no encontrado para actualizar.");
-                    return false;
-                }
-
-                MapToEntity(loginDto, login);
-                return await _loginData.UpdateAsync(login);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error al actualizar el login con ID {LoginId}.", loginDto.LoginId);
-                return false;
-            }
-        }
-
-        public async Task<bool> PermanentDeleteAsync(int id)
-{
-    try
-    {
-        var login = await _loginData.GetByIdAsync(id);
-        if (login == null)
-        {
-            _logger.LogWarning("Login no encontrado para eliminación permanente.");
-            return false;
-        }
-
-        return await _loginData.PermanentDeleteAsync(id);
-    }
-    catch (Exception ex)
-    {
-        _logger.LogError(ex, "Error al eliminar permanentemente el login con ID {LoginId}.", id);
-        return false;
-    }
-}
-
-
-        public async Task<bool> DeleteAsync(int id)
-        {
-            try
-            {
-                var login = await _loginData.GetByIdAsync(id);
-                if (login == null)
-                {
-                    _logger.LogWarning("Login no encontrado para eliminar.");
-                    return false;
-                }
-
-                return await _loginData.DeleteAsync(id);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error al eliminar el login con ID {LoginId}.", id);
-                return false;
-            }
-        }
-
-        private LoginDto MapToDto(Login login)
-        {
-            return new LoginDto
-            {
-                LoginId = login.LoginId,
-                Username = login.Username,
-                Password = login.Password,
-            };
-        }
-
-        private Login MapToEntity(LoginDto loginDto)
+        // Implementamos los mapeos requeridos por la clase base
+        protected override Login MapToEntity(LoginDto dto)
         {
             return new Login
             {
-                LoginId = loginDto.LoginId,
-                Username = loginDto.Username,
-                Password = loginDto.Password
+                LoginId = dto.LoginId,
+                Username = dto.Username,
+                Password = dto.Password
             };
         }
 
-        private void MapToEntity(LoginDto loginDto, Login login)
+        protected override LoginDto MapToDto(Login entity)
         {
-            login.Username = loginDto.Username;
-            login.Password = loginDto.Password;
+            return new LoginDto
+            {
+                LoginId = entity.LoginId,
+                Username = entity.Username,
+                Password = entity.Password,
+            };
         }
 
-        private IEnumerable<LoginDto> MapToDtoList(IEnumerable<Login> logins)
+        protected override IEnumerable<LoginDto> MapToDtoList(IEnumerable<Login> entities)
         {
-            return logins.Select(login => MapToDto(login)).ToList();
+            return entities.Select(MapToDto).ToList();
         }
+
+        // Si se necesitan métodos específicos para Login, se pueden añadir aquí
     }
 }

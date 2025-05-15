@@ -76,6 +76,17 @@ builder.Services.AddScoped<ActivityLogBusiness>();
 builder.Services.AddScoped<IGenericData<Form>, FormData>();
 builder.Services.AddScoped<IGenericBusiness<FormDto, Form>, FormBusiness>();
 
+builder.Services.AddScoped<IGenericData<FormModule>>(sp => sp.GetRequiredService<FormModuleData>());
+builder.Services.AddScoped<IGenericBusiness<FormModuleDto, FormModule>>(sp => sp.GetRequiredService<FormModuleBusiness>());
+
+builder.Services.AddScoped<IGenericData<Login>>(sp => sp.GetRequiredService<LoginData>());
+builder.Services.AddScoped<IGenericBusiness<LoginDto, Login>>(sp => sp.GetRequiredService<LoginBusiness>());
+
+builder.Services.AddScoped<IGenericData<Module>>(sp => sp.GetRequiredService<ModuleData>());
+builder.Services.AddScoped<IGenericBusiness<ModuleDto, Module>>(sp => sp.GetRequiredService<ModuleBusiness>());
+
+builder.Services.AddScoped<IGenericData<Permission>>(sp => sp.GetRequiredService<PermissionData>());
+builder.Services.AddScoped<IGenericBusiness<PermissionDto, Permission>>(sp => sp.GetRequiredService<PermissionBusiness>());
 
 // Agregar el HttpContextAccessor para obtener la IP del cliente
 builder.Services.AddHttpContextAccessor();
